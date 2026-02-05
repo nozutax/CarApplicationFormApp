@@ -164,85 +164,38 @@
         const page = pdfDoc.getPages()[0];
         
         // ======================= ▼▼▼ ここから修正 ▼▼▼ =======================
-
-        const pageRotation = page.getRotation().angle;
-        // getSize()は回転を考慮しない、PDF内部のページの幅と高さを返します
-        const { width: internalWidth, height: internalHeight } = page.getSize();
-
-        /**
-         * ページの回転を考慮して正しく文字を描画する関数
-         * @param {string} text - 描画するテキスト
-         * @param {number} x - 見た目上の用紙の「左下」を原点としたX座標
-         * @param {number} y - 見た目上の用紙の「左下」を原点としたY座標
-         * @param {number} size - フォントサイズ
-         * @param {number} spacing - 文字間隔（マス目入力用）
-         */
-        const drawText = (text, x, y, size = 10, spacing = 0) => {
+        // --- 描画関数 ---
+        // rotateオプションに-90度を指定して、強制的に左へ90度回転させます
+        const drawText = (text, x, y, size = 10, spacing = 0, angle = 0) => {
             if (!text) return;
 
-            let transformedX, transformedY, textRotation;
+            // ページの回転を打ち消すために、すべての文字を-90度回転させます
+            const rotationAngle = -90; 
 
-            // ページの回転角度に応じて、座標と文字の回転を決定する
-            switch (pageRotation) {
-                // 90度時計回り（=270度反時計回り）: よくある縦書きPDFのパターン
-                case 270:
-                    transformedX = y;
-                    transformedY = internalHeight - x;
-                    textRotation = degrees(90); // 90度反時計回りに文字を回転させて正立させる
-                    break;
-                
-                // 90度反時計回り
-                case 90:
-                    transformedX = internalWidth - y;
-                    transformedY = x;
-                    textRotation = degrees(-90); // 90度時計回りに文字を回転させて正立させる
-                    break;
-
-                // 180度回転
-                case 180:
-                    transformedX = internalWidth - x;
-                    transformedY = internalHeight - y;
-                    textRotation = degrees(180); // 180度回転させて正立させる
-                    break;
-                
-                // 回転なし
-                default:
-                    transformedX = x;
-                    transformedY = y;
-                    textRotation = degrees(0);
-                    break;
-            }
-
-            const options = {
-                size: size,
-                font: customFont,
-                color: rgb(0, 0, 0),
-                rotate: textRotation,
-            };
-
-            if (spacing > 0 && text.length > 0) {
-                // マス目入力（文字間隔を考慮）
-                const chars = Array.from(text);
-                chars.forEach((char, i) => {
-                    let charX = transformedX;
-                    let charY = transformedY;
-
-                    // 見た目上のX軸（横）方向へ文字間隔を適用するための座標補正
-                    switch (pageRotation) {
-                        case 270: charY -= (i * spacing); break;
-                        case 90:  charY += (i * spacing); break;
-                        case 180: charX -= (i * spacing); break;
-                        default:  charX += (i * spacing); break;
-                    }
-                    
-                    page.drawText(char, { ...options, x: charX, y: charY });
-                });
+            if (spacing > 0) {
+                // マス目入力
+                for (let i = 0; i < text.length; i++) {
+                    page.drawText(text[i], {
+                        x: x + (i * spacing),
+                        y: y,
+                        size: size,
+                        font: customFont,
+                        color: rgb(0, 0, 0),
+                        rotate: degrees(rotationAngle + angle), // 角度指定
+                    });
+                }
             } else {
                 // 通常入力
-                page.drawText(text, { ...options, x: transformedX, y: transformedY });
+                page.drawText(text, { 
+                    x: x, 
+                    y: y, 
+                    size: size, 
+                    font: customFont, 
+                    color: rgb(0, 0, 0),
+                    rotate: degrees(rotationAngle + angle), // 角度指定
+                });
             }
         };
-        
         // ======================= ▲▲▲ ここまで修正 ▲▲▲ =======================
 
         const v = (id) => document.getElementById(id).value;
@@ -283,6 +236,7 @@
 
 
         // --- 5. 氏名・住所エリア (通常の横書き) ---
+        // ※座標を前回のアプリ(横書き版)のものに戻しました
         const NAME_LEFT_X = 50; 
         const NAME_SIZE = 10;
         
