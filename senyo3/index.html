@@ -20,7 +20,6 @@
         /* レイアウト用 */
         .row { display: flex; gap: 10px; align-items: flex-end; }
         .col { flex: 1; }
-        .col-small { flex: 0.5; }
         .hyphen { font-weight: bold; padding: 0 5px; align-self: center; }
         
         /* 区分け線 */
@@ -47,7 +46,6 @@
             <div class="col"><div class="form-group"><label>制限解除(17)</label><input type="text" id="restriction" maxlength="1" inputmode="numeric"></div></div>
             <div class="col"><div class="form-group"><label>NOx・PM(19)</label><input type="text" id="nox" maxlength="1" inputmode="numeric"></div></div>
             <div class="col"><div class="form-group"><label>証明書指示(20)</label><input type="text" id="cert_instruction" maxlength="1" inputmode="numeric"></div></div>
-            <!-- 空白でレイアウト調整 -->
             <div class="col"></div> 
         </div>
 
@@ -85,24 +83,24 @@
 
         <div class="section-divider"></div>
 
-        <!-- 下段：氏名・住所 -->
+        <!-- 下段：氏名・住所（縦書きになります） -->
         <div class="form-group">
-            <label>申請者（使用者）氏名又は名称</label>
+            <label>申請者（使用者）氏名又は名称 <span style="font-size:0.8em; color:red;">※縦書き</span></label>
             <input type="text" id="applicant_name" placeholder="山田 太郎">
         </div>
         <div class="form-group">
-            <label>申請者 住所</label>
+            <label>申請者 住所 <span style="font-size:0.8em; color:red;">※縦書き</span></label>
             <input type="text" id="applicant_address" placeholder="東京都...">
         </div>
         
         <!-- 受検者（履歴機能付き） -->
         <div class="form-group">
-            <label>受検者 氏名又は名称</label>
+            <label>受検者 氏名又は名称 <span style="font-size:0.8em; color:red;">※縦書き</span></label>
             <input type="text" id="examinee_name" list="examinee_name_list" autocomplete="off" placeholder="履歴候補が出ます">
             <datalist id="examinee_name_list"></datalist>
         </div>
         <div class="form-group">
-            <label>受検者 住所</label>
+            <label>受検者 住所 <span style="font-size:0.8em; color:red;">※縦書き</span></label>
             <input type="text" id="examinee_address" list="examinee_address_list" autocomplete="off" placeholder="履歴候補が出ます">
             <datalist id="examinee_address_list"></datalist>
         </div>
@@ -115,7 +113,7 @@
     const { PDFDocument, rgb } = PDFLib;
 
     // --- 履歴保存機能 ---
-    const STORAGE_KEY_NAME = 'examinee_name_history_form3'; // キーを変更して混在を防ぐ
+    const STORAGE_KEY_NAME = 'examinee_name_history_form3'; 
     const STORAGE_KEY_ADDR = 'examinee_address_history_form3';
 
     window.onload = function() {
@@ -145,12 +143,11 @@
     // ------------------
 
     async function generatePDF() {
-        // 1. テンプレートPDFとフォントの読み込み
         let pdfBytes, fontBytes;
         
         try {
-            const pdfUrl = 'template.pdf'; // 専用3号様式のPDFファイル
-            const fontUrl = 'font.ttf';    // 日本語フォント
+            const pdfUrl = 'template.pdf'; 
+            const fontUrl = 'font.ttf'; 
             
             [pdfBytes, fontBytes] = await Promise.all([
                 fetch(pdfUrl).then(res => res.arrayBuffer()),
@@ -161,17 +158,15 @@
             return;
         }
 
-        // 2. PDFドキュメントの生成
         const pdfDoc = await PDFDocument.load(pdfBytes);
         pdfDoc.registerFontkit(fontkit);
         const customFont = await pdfDoc.embedFont(fontBytes);
         const page = pdfDoc.getPages()[0];
         
-        // 描画関数 (マス目対応)
+        // --- 通常の横書き描画関数 ---
         const drawText = (text, x, y, size = 10, spacing = 0) => {
             if (!text) return;
             if (spacing > 0) {
-                // マス目入力
                 for (let i = 0; i < text.length; i++) {
                     page.drawText(text[i], {
                         x: x + (i * spacing),
@@ -182,70 +177,82 @@
                     });
                 }
             } else {
-                // 通常入力
                 page.drawText(text, { x, y, size, font: customFont, color: rgb(0, 0, 0) });
+            }
+        };
+
+        // --- ★縦書き描画関数（追加） ---
+        // 文字を回転させず、一文字ずつ下に配置します
+        const drawVerticalText = (text, x, y, size = 10) => {
+            if (!text) return;
+            // 行間（文字の高さ + アルファ）
+            const lineHeight = size * 1.1; 
+            for (let i = 0; i < text.length; i++) {
+                page.drawText(text[i], {
+                    x: x,
+                    y: y - (i * lineHeight), // Y座標を減らして下へ
+                    size: size,
+                    font: customFont,
+                    color: rgb(0, 0, 0),
+                });
             }
         };
 
         const v = (id) => document.getElementById(id).value;
 
         // =========================================================
-        // 座標のマッピング (要微調整エリア)
-        // PDFの原点は左下(0,0)です。Yが大きいほど上になります。
-        // 専用3号様式のレイアウトに合わせて仮置きしています。
+        // 座標のマッピング
         // =========================================================
 
-        const ROW_1_Y = 760; // 最上段 (業務種別など)
-        const ROW_2_Y = 660; // 車両番号など
-        const BOX_SIZE = 12; // 文字サイズ
+        const ROW_1_Y = 760; 
+        const ROW_2_Y = 660; 
+        const BOX_SIZE = 12; 
 
-        // --- 1. 上部チェック・数字項目 ---
-        // ※左からのX座標を指定してください
-        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         // (1)業務種別
-        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             // (2)手数料
-        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        // (7)有効期間
-        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        // (9)出張
-        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         // (11)処理
+        // 1. 上部チェック・数字項目
+        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
+        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             
+        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        
+        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        
+        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         
         
-        drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       // (16)例外
-        drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     // (17)制限解除
-        drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             // (19)NOx
-        drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);// (20)証明書指示
+        drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
+        drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
+        drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
+        drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
 
-        // --- 2. 自動車登録番号 (21) ---
-        // 位置調整: BOX_WIDTH はマス目の幅
+        // 2. 自動車登録番号
         const BOX_WIDTH = 17; 
-        
-        // 地域名 (40付近)
         drawText(v('car_num_1'), 40, ROW_2_Y, 12, 28); 
-        // 分類 (150付近)
         drawText(v('car_num_2'), 150, ROW_2_Y, 12, BOX_WIDTH);
-        // かな (220付近)
         drawText(v('car_num_3'), 220, ROW_2_Y, 12);
-        // 一連指定番号 (260付近)
         drawText(v('car_num_4'), 260, ROW_2_Y, 12, BOX_WIDTH);
 
-        // --- 3. 車台番号 (22) ---
-        // 360付近
+        // 3. 車台番号
         drawText(v('chassis_num'), 360, ROW_2_Y, 12, BOX_WIDTH);
 
-        // --- 4. 整備工場コード (28) ---
-        // 2桁 (660付近)
+        // 4. 整備工場コード
         drawText(v('factory_code_1'), 660, ROW_2_Y, 12, BOX_WIDTH);
-        // 5桁 (705付近 - ハイフン分あける)
         drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
 
 
-        // --- 5. 氏名・住所エリア ---
-        const NAME_LEFT_X = 50; // インデント
+        // --- 5. 氏名・住所エリア (縦書きに変更) ---
+        // 縦書きの場合、y座標は「書き始め（上）」の位置になります。
+        // 横書きの時よりY座標を少し上(大きく)にする必要があります。
         
-        // 申請者 (Y座標を前回のアプリに合わせて調整)
-        drawText(v('applicant_name'), NAME_LEFT_X, 420, 10);
-        drawText(v('applicant_address'), NAME_LEFT_X, 390, 10);
+        const NAME_LEFT_X = 50; 
+        const NAME_SIZE = 10;
+        
+        // 申請者
+        // 氏名 (Y=440あたりから下に書く)
+        drawVerticalText(v('applicant_name'), NAME_LEFT_X, 440, NAME_SIZE);
+        // 住所 (Y=400あたりから下に書く)
+        drawVerticalText(v('applicant_address'), NAME_LEFT_X, 400, NAME_SIZE);
 
         // 受検者
-        drawText(v('examinee_name'), NAME_LEFT_X, 320, 10);
-        drawText(v('examinee_address'), NAME_LEFT_X, 290, 10);
+        // 氏名
+        drawVerticalText(v('examinee_name'), NAME_LEFT_X, 330, NAME_SIZE);
+        // 住所
+        drawVerticalText(v('examinee_address'), NAME_LEFT_X, 290, NAME_SIZE);
 
         // =========================================================
 
