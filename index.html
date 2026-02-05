@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>継続検査申請書作成ツール</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .btn {
+            display: block;
+            padding: 20px;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        /* 軽自動車用の色（青系） */
+        .btn-kei {
+            background-color: #007bff;
+        }
+        /* 普通車（専用3号）用の色（緑系） */
+        .btn-senyo {
+            background-color: #28a745;
+        }
+        .icon {
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>継続検査申請書 作成ポータル</h1>
+    <p>作成したい様式を選択してください。</p>
+
+    <div class="btn-container">
+        <!-- 軽専用2号様式へのリンク -->
+        <a href="kei2/index.html" class="btn btn-kei">
+            <span class="icon">🚙</span>軽専用 第2号様式
+            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">軽自動車の継続検査用</div>
+        </a>
+
+        <!-- 専用3号様式へのリンク -->
+        <a href="senyo3/index.html" class="btn btn-senyo">
+            <span class="icon">🚗</span>専用 第3号様式
+            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">登録自動車の継続検査用</div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
