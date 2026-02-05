@@ -175,12 +175,16 @@
         const customFont = await pdfDoc.embedFont(fontBytes);
         const page = pdfDoc.getPages()[0];
 
+        // 文字を常に横書きで描画（回転0度を明示）
+        const ROTATE_NONE = { type: 'degrees', angle: 0 };
+
         // 描画関数 (マス目対応)
         const drawText = (text, x, y, size = 10, spacing = 0) => {
             if (!text) return;
             const textOptions = {
                 font: customFont,
                 color: rgb(0, 0, 0),
+                rotate: ROTATE_NONE,
             };
             if (spacing > 0) {
                 // マス目入力
