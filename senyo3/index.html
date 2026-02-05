@@ -1,3 +1,6 @@
+
+PDFにデータを入力するアプリを作っています。以下のコードを書いていますが、出力される文字が背景に対して90度右に回転した状態で出力されてしまします。（添付画像参照）。修正案を考えてください。
+#現状コード
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -16,262 +19,258 @@
         .box-input { letter-spacing: 5px; }
         button { display: block; width: 100%; padding: 15px; background-color: #007BFF; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer; margin-top: 30px; }
         button:hover { background-color: #0056b3; }
-        
-        /* レイアウト用 */
-        .row { display: flex; gap: 10px; align-items: flex-end; }
-        .col { flex: 1; }
-        .hyphen { font-weight: bold; padding: 0 5px; align-self: center; }
-        
-        /* 区分け線 */
-        .section-divider { margin: 20px 0; border-top: 1px dashed #ccc; }
-    </style>
+code
+Code
+/* レイアウト用 */
+    .row { display: flex; gap: 10px; align-items: flex-end; }
+    .col { flex: 1; }
+    .hyphen { font-weight: bold; padding: 0 5px; align-self: center; }
+code
+Code
+/* 区分け線 */
+.section-divider { margin: 20px 0; border-top: 1px dashed #ccc; }
+</style>
 </head>
 <body>
-
 <div class="container">
     <h1>継続検査用データ入力アプリ（専用３号様式）</h1>
     <form id="pdfForm">
-        
-        <!-- 上段：コード入力エリア -->
-        <div class="row">
-            <div class="col"><div class="form-group"><label>業務種別(1)</label><input type="text" id="biz_type" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>手数料(2)</label><input type="text" id="fee" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>有効期間(7)</label><input type="text" id="validity" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>出張(9)</label><input type="text" id="dispatch" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>処理(11)</label><input type="text" id="process" maxlength="1" inputmode="numeric"></div></div>
-        </div>
-
-        <div class="row">
-            <div class="col"><div class="form-group"><label>例外(16)</label><input type="text" id="exception" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>制限解除(17)</label><input type="text" id="restriction" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>NOx・PM(19)</label><input type="text" id="nox" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"><div class="form-group"><label>証明書指示(20)</label><input type="text" id="cert_instruction" maxlength="1" inputmode="numeric"></div></div>
-            <div class="col"></div> 
-        </div>
-
-        <div class="section-divider"></div>
-
-        <!-- 中段：車両情報 -->
-        <div class="form-group">
-            <label>自動車登録番号 (21)</label>
-            <div class="row">
-                <input type="text" id="car_num_1" placeholder="地域名" style="flex:2">
-                <input type="text" id="car_num_2" placeholder="分類(3桁)" style="flex:1.5">
-                <input type="text" id="car_num_3" placeholder="かな" style="flex:0.8">
-                <input type="text" id="car_num_4" placeholder="一連指定番号" style="flex:2">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col" style="flex: 1.5;">
-                <div class="form-group">
-                    <label>車台番号 下7桁 (22)</label>
-                    <input type="text" id="chassis_num" maxlength="7" class="box-input" placeholder="例: 1234567">
-                </div>
-            </div>
-            <div class="col" style="flex: 2;">
-                <div class="form-group">
-                    <label>整備工場コード (28)</label>
-                    <div class="row" style="gap:5px;">
-                        <input type="text" id="factory_code_1" maxlength="2" inputmode="numeric" placeholder="2桁" style="flex:1">
-                        <span class="hyphen">-</span>
-                        <input type="text" id="factory_code_2" maxlength="5" inputmode="numeric" placeholder="5桁" style="flex:2">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-divider"></div>
-
-        <!-- 下段：氏名・住所（通常の横書き） -->
-        <div class="form-group">
-            <label>申請者（使用者）氏名又は名称</label>
-            <input type="text" id="applicant_name" placeholder="山田 太郎">
-        </div>
-        <div class="form-group">
-            <label>申請者 住所</label>
-            <input type="text" id="applicant_address" placeholder="東京都...">
-        </div>
-        
-        <!-- 受検者（履歴機能付き） -->
-        <div class="form-group">
-            <label>受検者 氏名又は名称</label>
-            <input type="text" id="examinee_name" list="examinee_name_list" autocomplete="off" placeholder="履歴候補が出ます">
-            <datalist id="examinee_name_list"></datalist>
-        </div>
-        <div class="form-group">
-            <label>受検者 住所</label>
-            <input type="text" id="examinee_address" list="examinee_address_list" autocomplete="off" placeholder="履歴候補が出ます">
-            <datalist id="examinee_address_list"></datalist>
-        </div>
-
-        <button type="button" onclick="generatePDF()">PDFを作成してダウンロード</button>
-    </form>
+code
+Code
+<!-- 上段：コード入力エリア -->
+    <div class="row">
+        <div class="col"><div class="form-group"><label>業務種別(1)</label><input type="text" id="biz_type" maxlength="1" inputmode="numeric"></div></div>
+        <div class="col"><div class="form-group"><label>手数料(2)</label><input type="text" id="fee" maxlength="1" inputmode="numeric"></div></div>
+        <div class="col"><div class="form-group"><label>有効期間(7)</label><input type="text" id="validity" maxlength="1" inputmode="numeric"></div></div>
+        <div class="col"><div class="form-group"><label>出張(9)</label><input type="text" id="dispatch" maxlength="1" inputmode="numeric"></div></div>
+        <div class="col"><div class="form-group"><label>処理(11)</label><input type="text" id="process" maxlength="1" inputmode="numeric"></div></div>
+    </div>
+code
+Code
+<div class="row">
+    <div class="col"><div class="form-group"><label>例外(16)</label><input type="text" id="exception" maxlength="1" inputmode="numeric"></div></div>
+    <div class="col"><div class="form-group"><label>制限解除(17)</label><input type="text" id="restriction" maxlength="1" inputmode="numeric"></div></div>
+    <div class="col"><div class="form-group"><label>NOx・PM(19)</label><input type="text" id="nox" maxlength="1" inputmode="numeric"></div></div>
+    <div class="col"><div class="form-group"><label>証明書指示(20)</label><input type="text" id="cert_instruction" maxlength="1" inputmode="numeric"></div></div>
+    <div class="col"></div> 
 </div>
 
+<div class="section-divider"></div>
+
+<!-- 中段：車両情報 -->
+<div class="form-group">
+    <label>自動車登録番号 (21)</label>
+    <div class="row">
+        <input type="text" id="car_num_1" placeholder="地域名" style="flex:2">
+        <input type="text" id="car_num_2" placeholder="分類(3桁)" style="flex:1.5">
+        <input type="text" id="car_num_3" placeholder="かな" style="flex:0.8">
+        <input type="text" id="car_num_4" placeholder="一連指定番号" style="flex:2">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col" style="flex: 1.5;">
+        <div class="form-group">
+            <label>車台番号 下7桁 (22)</label>
+            <input type="text" id="chassis_num" maxlength="7" class="box-input" placeholder="例: 1234567">
+        </div>
+    </div>
+    <div class="col" style="flex: 2;">
+        <div class="form-group">
+            <label>整備工場コード (28)</label>
+            <div class="row" style="gap:5px;">
+                <input type="text" id="factory_code_1" maxlength="2" inputmode="numeric" placeholder="2桁" style="flex:1">
+                <span class="hyphen">-</span>
+                <input type="text" id="factory_code_2" maxlength="5" inputmode="numeric" placeholder="5桁" style="flex:2">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- 下段：氏名・住所（通常の横書き） -->
+<div class="form-group">
+    <label>申請者（使用者）氏名又は名称</label>
+    <input type="text" id="applicant_name" placeholder="山田 太郎">
+</div>
+<div class="form-group">
+    <label>申請者 住所</label>
+    <input type="text" id="applicant_address" placeholder="東京都...">
+</div>
+
+<!-- 受検者（履歴機能付き） -->
+<div class="form-group">
+    <label>受検者 氏名又は名称</label>
+    <input type="text" id="examinee_name" list="examinee_name_list" autocomplete="off" placeholder="履歴候補が出ます">
+    <datalist id="examinee_name_list"></datalist>
+</div>
+<div class="form-group">
+    <label>受検者 住所</label>
+    <input type="text" id="examinee_address" list="examinee_address_list" autocomplete="off" placeholder="履歴候補が出ます">
+    <datalist id="examinee_address_list"></datalist>
+</div>
+
+<button type="button" onclick="generatePDF()">PDFを作成してダウンロード</button>
+</form>
+</div>
 <script>
     const { PDFDocument, rgb, degrees } = PDFLib;
+code
+Code
+// --- 履歴保存機能 ---
+const STORAGE_KEY_NAME = 'examinee_name_history_form3'; 
+const STORAGE_KEY_ADDR = 'examinee_address_history_form3';
 
-    // --- 履歴保存機能 ---
-    const STORAGE_KEY_NAME = 'examinee_name_history_form3'; 
-    const STORAGE_KEY_ADDR = 'examinee_address_history_form3';
+window.onload = function() {
+    loadHistory(STORAGE_KEY_NAME, 'examinee_name_list');
+    loadHistory(STORAGE_KEY_ADDR, 'examinee_address_list');
+};
 
-    window.onload = function() {
-        loadHistory(STORAGE_KEY_NAME, 'examinee_name_list');
-        loadHistory(STORAGE_KEY_ADDR, 'examinee_address_list');
-    };
+function loadHistory(key, datalistId) {
+    const history = JSON.parse(localStorage.getItem(key) || '[]');
+    const datalist = document.getElementById(datalistId);
+    datalist.innerHTML = '';
+    history.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        datalist.appendChild(option);
+    });
+}
 
-    function loadHistory(key, datalistId) {
-        const history = JSON.parse(localStorage.getItem(key) || '[]');
-        const datalist = document.getElementById(datalistId);
-        datalist.innerHTML = '';
-        history.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item;
-            datalist.appendChild(option);
-        });
+function saveHistory(key, value) {
+    if (!value) return;
+    let history = JSON.parse(localStorage.getItem(key) || '[]');
+    history = history.filter(item => item !== value);
+    history.unshift(value);
+    if (history.length > 20) history.pop();
+    localStorage.setItem(key, JSON.stringify(history));
+}
+// ------------------
+
+async function generatePDF() {
+    let pdfBytes, fontBytes;
+    
+    try {
+        const pdfUrl = 'template.pdf'; 
+        const fontUrl = 'font.ttf'; 
+        
+        [pdfBytes, fontBytes] = await Promise.all([
+            fetch(pdfUrl).then(res => res.arrayBuffer()),
+            fetch(fontUrl).then(res => res.arrayBuffer())
+        ]);
+    } catch (e) {
+        alert("ファイルの読み込みに失敗しました。template.pdf と font.ttf が同じフォルダにあるか確認してください。");
+        return;
     }
 
-    function saveHistory(key, value) {
-        if (!value) return;
-        let history = JSON.parse(localStorage.getItem(key) || '[]');
-        history = history.filter(item => item !== value);
-        history.unshift(value);
-        if (history.length > 20) history.pop();
-        localStorage.setItem(key, JSON.stringify(history));
-    }
-    // ------------------
-
-    async function generatePDF() {
-        let pdfBytes, fontBytes;
-        
-        try {
-            const pdfUrl = 'template.pdf'; 
-            const fontUrl = 'font.ttf'; 
-            
-            [pdfBytes, fontBytes] = await Promise.all([
-                fetch(pdfUrl).then(res => res.arrayBuffer()),
-                fetch(fontUrl).then(res => res.arrayBuffer())
-            ]);
-        } catch (e) {
-            alert("ファイルの読み込みに失敗しました。template.pdf と font.ttf が同じフォルダにあるか確認してください。");
-            return;
-        }
-
-        const pdfDoc = await PDFDocument.load(pdfBytes);
-        pdfDoc.registerFontkit(fontkit);
-        const customFont = await pdfDoc.embedFont(fontBytes);
-        const page = pdfDoc.getPages()[0];
-        
-        // ======================= ▼▼▼ ここから修正 ▼▼▼ =======================
-        // --- 描画関数 ---
-        // rotateオプションに-90度を指定して、強制的に左へ90度回転させます
-        const drawText = (text, x, y, size = 10, spacing = 0, angle = 0) => {
-            if (!text) return;
-
-            // ページの回転を打ち消すために、すべての文字を-90度回転させます
-            const rotationAngle = -90; 
-
-            if (spacing > 0) {
-                // マス目入力
-                for (let i = 0; i < text.length; i++) {
-                    page.drawText(text[i], {
-                        x: x + (i * spacing),
-                        y: y,
-                        size: size,
-                        font: customFont,
-                        color: rgb(0, 0, 0),
-                        rotate: degrees(rotationAngle + angle), // 角度指定
-                    });
-                }
-            } else {
-                // 通常入力
-                page.drawText(text, { 
-                    x: x, 
-                    y: y, 
-                    size: size, 
-                    font: customFont, 
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    pdfDoc.registerFontkit(fontkit);
+    const customFont = await pdfDoc.embedFont(fontBytes);
+    const page = pdfDoc.getPages()[0];
+    
+    // --- 描画関数 ---
+    // rotate: degrees(0) を明示的に指定して、回転を防ぎます
+    const drawText = (text, x, y, size = 10, spacing = 0, angle = 0) => {
+        if (!text) return;
+        if (spacing > 0) {
+            // マス目入力
+            for (let i = 0; i < text.length; i++) {
+                page.drawText(text[i], {
+                    x: x + (i * spacing),
+                    y: y,
+                    size: size,
+                    font: customFont,
                     color: rgb(0, 0, 0),
-                    rotate: degrees(rotationAngle + angle), // 角度指定
+                    rotate: degrees(angle), // 角度指定
                 });
             }
-        };
-        // ======================= ▲▲▲ ここまで修正 ▲▲▲ =======================
+        } else {
+            // 通常入力
+            page.drawText(text, { 
+                x: x, 
+                y: y, 
+                size: size, 
+                font: customFont, 
+                color: rgb(0, 0, 0),
+                rotate: degrees(angle), // 角度指定
+            });
+        }
+    };
 
-        const v = (id) => document.getElementById(id).value;
+    const v = (id) => document.getElementById(id).value;
 
-        // =========================================================
-        // 座標のマッピング（このセクションは変更不要です）
-        // =========================================================
+    // =========================================================
+    // 座標のマッピング
+    // =========================================================
 
-        const ROW_1_Y = 760; 
-        const ROW_2_Y = 660; 
-        const BOX_SIZE = 12; 
+    const ROW_1_Y = 760; 
+    const ROW_2_Y = 660; 
+    const BOX_SIZE = 12; 
 
-        // 1. 上部チェック・数字項目
-        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
-        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             
-        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        
-        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        
-        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         
-        
-        drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
-        drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
-        drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
-        drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
+    // 1. 上部チェック・数字項目
+    drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
+    drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             
+    drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        
+    drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        
+    drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         
+    
+    drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
+    drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
+    drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
+    drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
 
-        // 2. 自動車登録番号
-        const BOX_WIDTH = 17; 
-        drawText(v('car_num_1'), 40, ROW_2_Y, 12, 28); 
-        drawText(v('car_num_2'), 150, ROW_2_Y, 12, BOX_WIDTH);
-        drawText(v('car_num_3'), 220, ROW_2_Y, 12);
-        drawText(v('car_num_4'), 260, ROW_2_Y, 12, BOX_WIDTH);
+    // 2. 自動車登録番号
+    const BOX_WIDTH = 17; 
+    drawText(v('car_num_1'), 40, ROW_2_Y, 12, 28); 
+    drawText(v('car_num_2'), 150, ROW_2_Y, 12, BOX_WIDTH);
+    drawText(v('car_num_3'), 220, ROW_2_Y, 12);
+    drawText(v('car_num_4'), 260, ROW_2_Y, 12, BOX_WIDTH);
 
-        // 3. 車台番号
-        drawText(v('chassis_num'), 360, ROW_2_Y, 12, BOX_WIDTH);
+    // 3. 車台番号
+    drawText(v('chassis_num'), 360, ROW_2_Y, 12, BOX_WIDTH);
 
-        // 4. 整備工場コード
-        drawText(v('factory_code_1'), 660, ROW_2_Y, 12, BOX_WIDTH);
-        drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
+    // 4. 整備工場コード
+    drawText(v('factory_code_1'), 660, ROW_2_Y, 12, BOX_WIDTH);
+    drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
 
 
-        // --- 5. 氏名・住所エリア (通常の横書き) ---
-        // ※座標を前回のアプリ(横書き版)のものに戻しました
-        const NAME_LEFT_X = 50; 
-        const NAME_SIZE = 10;
-        
-        // 申請者
-        drawText(v('applicant_name'), NAME_LEFT_X, 420, NAME_SIZE);
-        drawText(v('applicant_address'), NAME_LEFT_X, 390, NAME_SIZE);
+    // --- 5. 氏名・住所エリア (通常の横書き) ---
+    // ※座標を前回のアプリ(横書き版)のものに戻しました
+    const NAME_LEFT_X = 50; 
+    const NAME_SIZE = 10;
+    
+    // 申請者
+    drawText(v('applicant_name'), NAME_LEFT_X, 420, NAME_SIZE);
+    drawText(v('applicant_address'), NAME_LEFT_X, 390, NAME_SIZE);
 
-        // 受検者
-        drawText(v('examinee_name'), NAME_LEFT_X, 320, NAME_SIZE);
-        drawText(v('examinee_address'), NAME_LEFT_X, 290, NAME_SIZE);
+    // 受検者
+    drawText(v('examinee_name'), NAME_LEFT_X, 320, NAME_SIZE);
+    drawText(v('examinee_address'), NAME_LEFT_X, 290, NAME_SIZE);
 
-        // =========================================================
+    // =========================================================
 
-        // --- 履歴保存実行 ---
-        saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
-        saveHistory(STORAGE_KEY_ADDR, v('examinee_address'));
-        loadHistory(STORAGE_KEY_NAME, 'examinee_name_list');
-        loadHistory(STORAGE_KEY_ADDR, 'examinee_address_list');
+    // --- 履歴保存実行 ---
+    saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
+    saveHistory(STORAGE_KEY_ADDR, v('examinee_address'));
+    loadHistory(STORAGE_KEY_NAME, 'examinee_name_list');
+    loadHistory(STORAGE_KEY_ADDR, 'examinee_address_list');
 
-        // --- ファイル名生成 ---
-        const now = new Date();
-        const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-        let applicant = v('applicant_name') || '名称未入力';
-        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+    // --- ファイル名生成 ---
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+    let applicant = v('applicant_name') || '名称未入力';
+    applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
 
-        const fileName = `${dateStr}_専用第3号様式_${applicant}.pdf`;
+    const fileName = `${dateStr}_専用第3号様式_${applicant}.pdf`;
 
-        // --- ダウンロード ---
-        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-        const link = document.createElement('a');
-        link.href = pdfDataUri;
-        link.download = fileName;
-        link.click();
-    }
+    // --- ダウンロード ---
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    const link = document.createElement('a');
+    link.href = pdfDataUri;
+    link.download = fileName;
+    link.click();
+}
 </script>
-
 </body>
 </html>
