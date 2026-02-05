@@ -222,36 +222,36 @@
         const v = (id) => document.getElementById(id).value;
 
         // --- 座標マッピング（元のロジックを復元） ---
-        const ROW_1_Y = 540; 
-        const ROW_2_Y = 420; 
+        const ROW_1_Y = 535; 
+        const ROW_2_Y = 440; 
         const BOX_SIZE = 12; 
         const BOX_WIDTH = 17;
 
         drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
-        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             
-        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        
-        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        
-        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         
+        drawText(v('fee'), 200, ROW_1_Y, BOX_SIZE);             
+        drawText(v('validity'), 265, ROW_1_Y, BOX_SIZE);        
+        drawText(v('dispatch'), 345, ROW_1_Y, BOX_SIZE);        
+        drawText(v('process'), 380, ROW_1_Y, BOX_SIZE);         
         drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
         drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
         drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
         drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
 
-        drawText(v('car_num_1'), 40, ROW_2_Y, 12, 28); 
-        drawText(v('car_num_2'), 150, ROW_2_Y, 12, BOX_WIDTH);
-        drawText(v('car_num_3'), 220, ROW_2_Y, 12);
-        drawText(v('car_num_4'), 260, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('car_num_1'), 45, ROW_2_Y, 12, 30); 
+        drawText(v('car_num_2'), 170, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('car_num_3'), 230, ROW_2_Y, 12);
+        drawText(v('car_num_4'), 250, ROW_2_Y, 12, BOX_WIDTH);
 
-        drawText(v('chassis_num'), 360, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('chassis_num'), 365, ROW_2_Y, 12, BOX_WIDTH);
 
-        drawText(v('factory_code_1'), 660, ROW_2_Y, 12, BOX_WIDTH);
-        drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('factory_code_1'), 675, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('factory_code_2'), 720, ROW_2_Y, 12, BOX_WIDTH);
 
         // 氏名・住所（縦書き）
-        drawVerticalText(v('applicant_name'), 100, 280, 10);
-        drawVerticalText(v('applicant_address'), 100, 250, 10);
+        drawVerticalText(v('applicant_name'), 100, 260, 10);
+        drawVerticalText(v('applicant_address'), 100, 240, 10);
         drawVerticalText(v('examinee_name'), 100, 200, 10);
-        drawVerticalText(v('examinee_address'), 100, 170, 10);
+        drawVerticalText(v('examinee_address'), 100, 180, 10);
 
         // 履歴保存
         saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
