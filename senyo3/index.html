@@ -32,24 +32,19 @@ Code
 </style>
 </head>
 <body>
+
 <div class="container">
     <h1>継続検査用データ入力アプリ（専用３号様式）</h1>
     <form id="pdfForm">
-code
-Code
-download
-content_copy
-expand_less
-<!-- 上段：コード入力エリア -->
-code
-Code
-<div class="row">
-    <div class="col"><div class="form-group"><label>業務種別(1)</label><input type="text" id="biz_type" maxlength="1" inputmode="numeric"></div></div>
-    <div class="col"><div class="form-group"><label>手数料(2)</label><input type="text" id="fee" maxlength="1" inputmode="numeric"></div></div>
-    <div class="col"><div class="form-group"><label>有効期間(7)</label><input type="text" id="validity" maxlength="1" inputmode="numeric"></div></div>
-    <div class="col"><div class="form-group"><label>出張(9)</label><input type="text" id="dispatch" maxlength="1" inputmode="numeric"></div></div>
-    <div class="col"><div class="form-group"><label>処理(11)</label><input type="text" id="process" maxlength="1" inputmode="numeric"></div></div>
-</div>
+        
+        <!-- 上段：コード入力エリア -->
+        <div class="row">
+            <div class="col"><div class="form-group"><label>業務種別(1)</label><input type="text" id="biz_type" maxlength="1" inputmode="numeric"></div></div>
+            <div class="col"><div class="form-group"><label>手数料(2)</label><input type="text" id="fee" maxlength="1" inputmode="numeric"></div></div>
+            <div class="col"><div class="form-group"><label>有効期間(7)</label><input type="text" id="validity" maxlength="1" inputmode="numeric"></div></div>
+            <div class="col"><div class="form-group"><label>出張(9)</label><input type="text" id="dispatch" maxlength="1" inputmode="numeric"></div></div>
+            <div class="col"><div class="form-group"><label>処理(11)</label><input type="text" id="process" maxlength="1" inputmode="numeric"></div></div>
+        </div>
 
 <div class="row">
     <div class="col"><div class="form-group"><label>例外(16)</label><input type="text" id="exception" maxlength="1" inputmode="numeric"></div></div>
@@ -59,39 +54,39 @@ Code
     <div class="col"></div> 
 </div>
 
-<div class="section-divider"></div>
+        <div class="section-divider"></div>
 
-<!-- 中段：車両情報 -->
-<div class="form-group">
-    <label>自動車登録番号 (21)</label>
-    <div class="row">
-        <input type="text" id="car_num_1" placeholder="地域名" style="flex:2">
-        <input type="text" id="car_num_2" placeholder="分類(3桁)" style="flex:1.5">
-        <input type="text" id="car_num_3" placeholder="かな" style="flex:0.8">
-        <input type="text" id="car_num_4" placeholder="一連指定番号" style="flex:2">
-    </div>
-</div>
-
-<div class="row">
-    <div class="col" style="flex: 1.5;">
+        <!-- 中段：車両情報 -->
         <div class="form-group">
-            <label>車台番号 下7桁 (22)</label>
-            <input type="text" id="chassis_num" maxlength="7" class="box-input" placeholder="例: 1234567">
-        </div>
-    </div>
-    <div class="col" style="flex: 2;">
-        <div class="form-group">
-            <label>整備工場コード (28)</label>
-            <div class="row" style="gap:5px;">
-                <input type="text" id="factory_code_1" maxlength="2" inputmode="numeric" placeholder="2桁" style="flex:1">
-                <span class="hyphen">-</span>
-                <input type="text" id="factory_code_2" maxlength="5" inputmode="numeric" placeholder="5桁" style="flex:2">
+            <label>自動車登録番号 (21)</label>
+            <div class="row">
+                <input type="text" id="car_num_1" placeholder="地域名" style="flex:2">
+                <input type="text" id="car_num_2" placeholder="分類(3桁)" style="flex:1.5">
+                <input type="text" id="car_num_3" placeholder="かな" style="flex:0.8">
+                <input type="text" id="car_num_4" placeholder="一連指定番号" style="flex:2">
             </div>
         </div>
-    </div>
-</div>
 
-<div class="section-divider"></div>
+        <div class="row">
+            <div class="col" style="flex: 1.5;">
+                <div class="form-group">
+                    <label>車台番号 下7桁 (22)</label>
+                    <input type="text" id="chassis_num" maxlength="7" class="box-input" placeholder="例: 1234567">
+                </div>
+            </div>
+            <div class="col" style="flex: 2;">
+                <div class="form-group">
+                    <label>整備工場コード (28)</label>
+                    <div class="row" style="gap:5px;">
+                        <input type="text" id="factory_code_1" maxlength="2" inputmode="numeric" placeholder="2桁" style="flex:1">
+                        <span class="hyphen">-</span>
+                        <input type="text" id="factory_code_2" maxlength="5" inputmode="numeric" placeholder="5桁" style="flex:2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
 
         <!-- 下段：氏名・住所（縦書きになります） -->
         <div class="form-group">
@@ -115,8 +110,8 @@ Code
             <datalist id="examinee_address_list"></datalist>
         </div>
 
-<button type="button" onclick="generatePDF()">PDFを作成してダウンロード</button>
-</form>
+        <button type="button" onclick="generatePDF()">PDFを作成してダウンロード</button>
+    </form>
 </div>
 <script>
     const { PDFDocument, rgb } = PDFLib;
