@@ -25,13 +25,10 @@
         }
         input::placeholder { color: #aaa; }
 
-        /* レイアウト用 */
         .row { display: flex; gap: 15px; margin-bottom: 15px; }
         .col { flex: 1; }
         
-        /* 区分け線 */
         .section-divider { margin: 30px 0; border-top: 1px solid #aaa; }
-
         .hyphen { align-self: center; font-size: 20px; padding: 0 5px; font-weight: bold; }
         
         button { 
@@ -56,31 +53,32 @@
     <h1>継続検査用データ入力アプリ（専用３号様式）</h1>
     <form id="pdfForm">
         
-        <!-- 上段：3項目 (車両提示、手数料、証明書指示のイメージ) -->
+        <!-- 変更後 1段目 -->
         <div class="row">
-            <div class="col"><div class="form-group"><label>車両提示 (業務種別)</label><input type="text" id="biz_type" maxlength="1" placeholder="1文字"></div></div>
             <div class="col"><div class="form-group"><label>手数料</label><input type="text" id="fee" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>証明書指示</label><input type="text" id="cert_instruction" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>有効期間</label><input type="text" id="validity" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>出張</label><input type="text" id="dispatch" maxlength="1" placeholder="1文字"></div></div>
         </div>
 
-        <!-- 中段：4項目 (処理左右、例外、制限解除のイメージ) -->
+        <!-- 変更後 2段目 -->
         <div class="row">
-            <div class="col"><div class="form-group"><label>処理 (左欄)</label><input type="text" id="process" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>処理 (右欄)</label><input type="text" id="dispatch" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>処理 (左欄)</label><input type="text" id="proc_left" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>処理 (右欄)</label><input type="text" id="proc_right" maxlength="1" placeholder="1文字"></div></div>
             <div class="col"><div class="form-group"><label>例外</label><input type="text" id="exception" maxlength="1" placeholder="1文字"></div></div>
             <div class="col"><div class="form-group"><label>制限解除</label><input type="text" id="restriction" maxlength="1" placeholder="1文字"></div></div>
         </div>
 
-        <!-- 残りの項目 -->
+        <!-- 変更後 3段目 -->
         <div class="row">
-            <div class="col"><div class="form-group"><label>有効期間(7)</label><input type="text" id="validity" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>NOx・PM(19)</label><input type="text" id="nox" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"></div><div class="col"></div>
+            <div class="col"><div class="form-group"><label>NOx・PM</label><input type="text" id="nox" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>証明書指示</label><input type="text" id="cert_instruction" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"></div>
+            <div class="col"></div>
         </div>
 
-        <!-- 自動車登録番号 -->
+        <!-- 車両番号 -->
         <div class="form-group">
-            <label>車両番号 (自動車登録番号)</label>
+            <label>車両番号</label>
             <div class="row">
                 <input type="text" id="car_num_1" placeholder="地域名" style="flex:3">
                 <input type="text" id="car_num_2" placeholder="123" style="flex:2">
@@ -92,13 +90,13 @@
 
         <!-- 車台番号 -->
         <div class="form-group">
-            <label>車台番号 下7桁</label>
+            <label>車台番号 下7桁 (22)</label>
             <input type="text" id="chassis_num" maxlength="7" placeholder="最大７文字（例：ＡＢ３１２３４）">
         </div>
 
         <!-- 整備工場コード -->
         <div class="form-group">
-            <label>整備工場コード</label>
+            <label>整備工場コード (28)</label>
             <div class="row" style="gap:10px;">
                 <input type="text" id="factory_code_1" maxlength="2" placeholder="2桁" style="flex:1">
                 <span class="hyphen">-</span>
@@ -108,7 +106,7 @@
 
         <div class="section-divider"></div>
 
-        <!-- 氏名・住所 -->
+        <!-- 申請者情報 -->
         <div class="form-group">
             <label>申請者（使用者）氏名又は名称</label>
             <input type="text" id="applicant_name" placeholder="山田 太郎">
@@ -118,6 +116,7 @@
             <input type="text" id="applicant_address" placeholder="東京都...">
         </div>
         
+        <!-- 受検者（履歴機能付） -->
         <div class="section-divider"></div>
         <div class="form-group">
             <label>受検者 氏名又は名称</label>
@@ -168,17 +167,15 @@
 
     async function generatePDF() {
         let pdfBytes, fontBytes;
-        
         try {
             const pdfUrl = 'template.pdf'; 
             const fontUrl = 'font.ttf'; 
-            
             [pdfBytes, fontBytes] = await Promise.all([
                 fetch(pdfUrl).then(res => res.arrayBuffer()),
                 fetch(fontUrl).then(res => res.arrayBuffer())
             ]);
         } catch (e) {
-            alert("template.pdf と font.ttf が見つかりません。同じフォルダに配置してください。");
+            alert("ファイル読み込みエラー：template.pdf と font.ttf が必要です。");
             return;
         }
 
@@ -187,18 +184,11 @@
         const customFont = await pdfDoc.embedFont(fontBytes);
         const page = pdfDoc.getPages()[0];
         
-        // --- 描画関数 ---
         const drawText = (text, x, y, size = 10, spacing = 0) => {
             if (!text) return;
             if (spacing > 0) {
                 for (let i = 0; i < text.length; i++) {
-                    page.drawText(text[i], {
-                        x: x + (i * spacing),
-                        y: y,
-                        size: size,
-                        font: customFont,
-                        color: rgb(0, 0, 0),
-                    });
+                    page.drawText(text[i], { x: x + (i * spacing), y, size, font: customFont, color: rgb(0, 0, 0) });
                 }
             } else {
                 page.drawText(text, { x, y, size, font: customFont, color: rgb(0, 0, 0) });
@@ -209,34 +199,30 @@
             if (!text) return;
             const lineHeight = size * 1.1; 
             for (let i = 0; i < text.length; i++) {
-                page.drawText(text[i], {
-                    x: x,
-                    y: y - (i * lineHeight),
-                    size: size,
-                    font: customFont,
-                    color: rgb(0, 0, 0),
-                });
+                page.drawText(text[i], { x, y: y - (i * lineHeight), size, font: customFont, color: rgb(0, 0, 0) });
             }
         };
 
         const v = (id) => document.getElementById(id).value;
 
-        // --- 座標マッピング（元のロジックを復元） ---
+        // --- ご指定の座標マッピング ---
         const ROW_1_Y = 535; 
-        const ROW_2_Y = 450; 
+        const ROW_2_Y = 457; 
         const BOX_SIZE = 12; 
         const BOX_WIDTH = 17;
 
-        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
-        drawText(v('fee'), 200, ROW_1_Y, BOX_SIZE);             
-        drawText(v('validity'), 265, ROW_1_Y, BOX_SIZE);        
-        drawText(v('dispatch'), 345, ROW_1_Y, BOX_SIZE);        
-        drawText(v('process'), 380, ROW_1_Y, BOX_SIZE);         
+        // 上段の9項目を座標に合わせて配置
+        drawText(v('fee'), 45, ROW_1_Y, BOX_SIZE);         
+        drawText(v('validity'), 200, ROW_1_Y, BOX_SIZE);             
+        drawText(v('dispatch'), 265, ROW_1_Y, BOX_SIZE);        
+        drawText(v('proc_left'), 345, ROW_1_Y, BOX_SIZE);        
+        drawText(v('proc_right'), 380, ROW_1_Y, BOX_SIZE);         
         drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
         drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
         drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
         drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
 
+        // 車両・工場情報
         drawText(v('car_num_1'), 45, ROW_2_Y, 12, 30); 
         drawText(v('car_num_2'), 173, ROW_2_Y, 12, BOX_WIDTH);
         drawText(v('car_num_3'), 240, ROW_2_Y, 12);
@@ -253,15 +239,14 @@
         drawVerticalText(v('examinee_name'), 100, 205, 10);
         drawVerticalText(v('examinee_address'), 100, 180, 10);
 
-        // 履歴保存
+        // 履歴保存とダウンロード
         saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
         saveHistory(STORAGE_KEY_ADDR, v('examinee_address'));
 
-        // ダウンロード処理
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');
         link.href = pdfDataUri;
-        link.download = `input_data_${v('applicant_name') || 'export'}.pdf`;
+        link.download = `継続検査データ_${v('applicant_name') || 'export'}.pdf`;
         link.click();
     }
 </script>
