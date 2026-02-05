@@ -222,8 +222,8 @@
         const v = (id) => document.getElementById(id).value;
 
         // --- 座標マッピング（元のロジックを復元） ---
-        const ROW_1_Y = 760; 
-        const ROW_2_Y = 660; 
+        const ROW_1_Y = 600; 
+        const ROW_2_Y = 500; 
         const BOX_SIZE = 12; 
         const BOX_WIDTH = 17;
 
@@ -248,10 +248,10 @@
         drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
 
         // 氏名・住所（縦書き）
-        drawVerticalText(v('applicant_name'), 50, 440, 10);
-        drawVerticalText(v('applicant_address'), 50, 400, 10);
-        drawVerticalText(v('examinee_name'), 50, 330, 10);
-        drawVerticalText(v('examinee_address'), 50, 290, 10);
+        drawVerticalText(v('applicant_name'), 100, 340, 10);
+        drawVerticalText(v('applicant_address'), 100, 300, 10);
+        drawVerticalText(v('examinee_name'), 100, 230, 10);
+        drawVerticalText(v('examinee_address'), 100, 190, 10);
 
         // 履歴保存
         saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
