@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
     <style>
         body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #fcfcfc; color: #333; }
-        .container { background: white; padding: 40px; border-radius: 4px; border: 1px solid #eee; }
+        .container { background: white; padding: 40px; border-radius: 4px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 40px; font-weight: bold; }
         
         .form-group { margin-bottom: 25px; }
@@ -56,49 +56,49 @@
     <h1>継続検査用データ入力アプリ（専用３号様式）</h1>
     <form id="pdfForm">
         
-        <!-- 上段：3項目 -->
+        <!-- 上段：3項目 (車両提示、手数料、証明書指示のイメージ) -->
         <div class="row">
-            <div class="col"><div class="form-group"><label>業務種別(1)</label><input type="text" id="biz_type" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>手数料(2)</label><input type="text" id="fee" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>車両提示 (業務種別)</label><input type="text" id="biz_type" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>手数料</label><input type="text" id="fee" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>証明書指示</label><input type="text" id="cert_instruction" maxlength="1" placeholder="1文字"></div></div>
+        </div>
+
+        <!-- 中段：4項目 (処理左右、例外、制限解除のイメージ) -->
+        <div class="row">
+            <div class="col"><div class="form-group"><label>処理 (左欄)</label><input type="text" id="process" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>処理 (右欄)</label><input type="text" id="dispatch" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>例外</label><input type="text" id="exception" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col"><div class="form-group"><label>制限解除</label><input type="text" id="restriction" maxlength="1" placeholder="1文字"></div></div>
+        </div>
+
+        <!-- 残りの項目 -->
+        <div class="row">
             <div class="col"><div class="form-group"><label>有効期間(7)</label><input type="text" id="validity" maxlength="1" placeholder="1文字"></div></div>
-        </div>
-
-        <!-- 中段：4項目 -->
-        <div class="row">
-            <div class="col"><div class="form-group"><label>出張(9)</label><input type="text" id="dispatch" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>処理(11)</label><input type="text" id="process" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>例外(16)</label><input type="text" id="exception" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>制限解除(17)</label><input type="text" id="restriction" maxlength="1" placeholder="1文字"></div></div>
-        </div>
-
-        <!-- 残りの小項目（コード維持のため追加） -->
-        <div class="row">
             <div class="col"><div class="form-group"><label>NOx・PM(19)</label><input type="text" id="nox" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>証明書指示(20)</label><input type="text" id="cert_instruction" maxlength="1" placeholder="1文字"></div></div>
             <div class="col"></div><div class="col"></div>
         </div>
 
-        <!-- 自動車登録番号 (画像に合わせた5分割レイアウト) -->
+        <!-- 自動車登録番号 -->
         <div class="form-group">
-            <label>自動車登録番号 (21)</label>
+            <label>車両番号 (自動車登録番号)</label>
             <div class="row">
                 <input type="text" id="car_num_1" placeholder="地域名" style="flex:3">
                 <input type="text" id="car_num_2" placeholder="123" style="flex:2">
                 <input type="text" id="car_num_3" placeholder="あ" style="flex:1">
                 <input type="text" id="car_num_4" placeholder="1234" style="flex:4">
-                <input type="text" placeholder="小板" style="flex:1.2; background-color: #fff;" readonly>
+                <input type="text" placeholder="小板" style="flex:1.2; background-color: #f9f9f9;" readonly>
             </div>
         </div>
 
         <!-- 車台番号 -->
         <div class="form-group">
-            <label>車台番号 下7桁 (22)</label>
+            <label>車台番号 下7桁</label>
             <input type="text" id="chassis_num" maxlength="7" placeholder="最大７文字（例：ＡＢ３１２３４）">
         </div>
 
         <!-- 整備工場コード -->
         <div class="form-group">
-            <label>整備工場コード (28)</label>
+            <label>整備工場コード</label>
             <div class="row" style="gap:10px;">
                 <input type="text" id="factory_code_1" maxlength="2" placeholder="2桁" style="flex:1">
                 <span class="hyphen">-</span>
@@ -118,7 +118,6 @@
             <input type="text" id="applicant_address" placeholder="東京都...">
         </div>
         
-        <!-- 受検者（既存の機能維持） -->
         <div class="section-divider"></div>
         <div class="form-group">
             <label>受検者 氏名又は名称</label>
@@ -136,8 +135,9 @@
 </div>
 
 <script>
-    // JS部分はロジックが変わらないため、元のものをそのまま保持
     const { PDFDocument, rgb } = PDFLib;
+
+    // --- 履歴保存機能 ---
     const STORAGE_KEY_NAME = 'examinee_name_history_form3'; 
     const STORAGE_KEY_ADDR = 'examinee_address_history_form3';
 
@@ -168,15 +168,17 @@
 
     async function generatePDF() {
         let pdfBytes, fontBytes;
+        
         try {
             const pdfUrl = 'template.pdf'; 
             const fontUrl = 'font.ttf'; 
+            
             [pdfBytes, fontBytes] = await Promise.all([
                 fetch(pdfUrl).then(res => res.arrayBuffer()),
                 fetch(fontUrl).then(res => res.arrayBuffer())
             ]);
         } catch (e) {
-            alert("template.pdf と font.ttf が必要です。");
+            alert("template.pdf と font.ttf が見つかりません。同じフォルダに配置してください。");
             return;
         }
 
@@ -185,18 +187,81 @@
         const customFont = await pdfDoc.embedFont(fontBytes);
         const page = pdfDoc.getPages()[0];
         
+        // --- 描画関数 ---
+        const drawText = (text, x, y, size = 10, spacing = 0) => {
+            if (!text) return;
+            if (spacing > 0) {
+                for (let i = 0; i < text.length; i++) {
+                    page.drawText(text[i], {
+                        x: x + (i * spacing),
+                        y: y,
+                        size: size,
+                        font: customFont,
+                        color: rgb(0, 0, 0),
+                    });
+                }
+            } else {
+                page.drawText(text, { x, y, size, font: customFont, color: rgb(0, 0, 0) });
+            }
+        };
+
+        const drawVerticalText = (text, x, y, size = 10) => {
+            if (!text) return;
+            const lineHeight = size * 1.1; 
+            for (let i = 0; i < text.length; i++) {
+                page.drawText(text[i], {
+                    x: x,
+                    y: y - (i * lineHeight),
+                    size: size,
+                    font: customFont,
+                    color: rgb(0, 0, 0),
+                });
+            }
+        };
+
         const v = (id) => document.getElementById(id).value;
 
-        // 描画処理... (座標は以前のコードと同様)
-        // ここに以前の drawText などの処理が入ります
-        
+        // --- 座標マッピング（元のロジックを復元） ---
+        const ROW_1_Y = 760; 
+        const ROW_2_Y = 660; 
+        const BOX_SIZE = 12; 
+        const BOX_WIDTH = 17;
+
+        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
+        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             
+        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        
+        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        
+        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         
+        drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
+        drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
+        drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
+        drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
+
+        drawText(v('car_num_1'), 40, ROW_2_Y, 12, 28); 
+        drawText(v('car_num_2'), 150, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('car_num_3'), 220, ROW_2_Y, 12);
+        drawText(v('car_num_4'), 260, ROW_2_Y, 12, BOX_WIDTH);
+
+        drawText(v('chassis_num'), 360, ROW_2_Y, 12, BOX_WIDTH);
+
+        drawText(v('factory_code_1'), 660, ROW_2_Y, 12, BOX_WIDTH);
+        drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
+
+        // 氏名・住所（縦書き）
+        drawVerticalText(v('applicant_name'), 50, 440, 10);
+        drawVerticalText(v('applicant_address'), 50, 400, 10);
+        drawVerticalText(v('examinee_name'), 50, 330, 10);
+        drawVerticalText(v('examinee_address'), 50, 290, 10);
+
+        // 履歴保存
         saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
         saveHistory(STORAGE_KEY_ADDR, v('examinee_address'));
 
+        // ダウンロード処理
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');
         link.href = pdfDataUri;
-        link.download = "input_data.pdf";
+        link.download = `input_data_${v('applicant_name') || 'export'}.pdf`;
         link.click();
     }
 </script>
