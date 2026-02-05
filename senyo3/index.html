@@ -174,16 +174,13 @@
         pdfDoc.registerFontkit(fontkit);
         const customFont = await pdfDoc.embedFont(fontBytes);
         const page = pdfDoc.getPages()[0];
-        // ページの回転を0度に設定（念のため）
-        page.setRotation(0);
-        
+
         // 描画関数 (マス目対応)
         const drawText = (text, x, y, size = 10, spacing = 0) => {
             if (!text) return;
             const textOptions = {
                 font: customFont,
                 color: rgb(0, 0, 0),
-                rotateDegrees: 0, // 回転を0度に明示的に設定
             };
             if (spacing > 0) {
                 // マス目入力
@@ -197,11 +194,11 @@
                 }
             } else {
                 // 通常入力
-                page.drawText(text, { 
-                    x, 
-                    y, 
-                    size, 
-                    ...textOptions 
+                page.drawText(text, {
+                    x,
+                    y,
+                    size,
+                    ...textOptions,
                 });
             }
         };
