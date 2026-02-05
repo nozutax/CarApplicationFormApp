@@ -7,20 +7,12 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
     <style>
-        body { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; writing-mode: horizontal-tb; }
+        body { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; }
         .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 30px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
-        input[type="text"], input[type="number"] {
-            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px;
-            writing-mode: horizontal-tb !important;
-            text-orientation: mixed !important;
-            transform: none !important;
-            direction: ltr !important;
-            unicode-bidi: normal !important;
-            text-transform: none !important;
-        }
+        input[type="text"], input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
         .box-input { letter-spacing: 5px; }
         button { display: block; width: 100%; padding: 15px; background-color: #007BFF; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer; margin-top: 30px; }
         button:hover { background-color: #0056b3; }
@@ -28,7 +20,6 @@
         /* レイアウト用 */
         .row { display: flex; gap: 10px; align-items: flex-end; }
         .col { flex: 1; }
-        .col-small { flex: 0.5; }
         .hyphen { font-weight: bold; padding: 0 5px; align-self: center; }
         
         /* 区分け線 */
@@ -55,7 +46,6 @@
             <div class="col"><div class="form-group"><label>制限解除(17)</label><input type="text" id="restriction" maxlength="1" inputmode="numeric"></div></div>
             <div class="col"><div class="form-group"><label>NOx・PM(19)</label><input type="text" id="nox" maxlength="1" inputmode="numeric"></div></div>
             <div class="col"><div class="form-group"><label>証明書指示(20)</label><input type="text" id="cert_instruction" maxlength="1" inputmode="numeric"></div></div>
-            <!-- 空白でレイアウト調整 -->
             <div class="col"></div> 
         </div>
 
@@ -93,7 +83,7 @@
 
         <div class="section-divider"></div>
 
-        <!-- 下段：氏名・住所 -->
+        <!-- 下段：氏名・住所（通常の横書き） -->
         <div class="form-group">
             <label>申請者（使用者）氏名又は名称</label>
             <input type="text" id="applicant_name" placeholder="山田 太郎">
@@ -120,10 +110,10 @@
 </div>
 
 <script>
-    const { PDFDocument, rgb } = PDFLib;
+    const { PDFDocument, rgb, degrees } = PDFLib;
 
     // --- 履歴保存機能 ---
-    const STORAGE_KEY_NAME = 'examinee_name_history_form3'; // キーを変更して混在を防ぐ
+    const STORAGE_KEY_NAME = 'examinee_name_history_form3'; 
     const STORAGE_KEY_ADDR = 'examinee_address_history_form3';
 
     window.onload = function() {
@@ -153,12 +143,11 @@
     // ------------------
 
     async function generatePDF() {
-        // 1. テンプレートPDFとフォントの読み込み
         let pdfBytes, fontBytes;
         
         try {
-            const pdfUrl = 'template.pdf'; // 専用3号様式のPDFファイル
-            const fontUrl = 'font.ttf';    // 日本語フォント
+            const pdfUrl = 'template.pdf'; 
+            const fontUrl = 'font.ttf'; 
             
             [pdfBytes, fontBytes] = await Promise.all([
                 fetch(pdfUrl).then(res => res.arrayBuffer()),
@@ -169,103 +158,133 @@
             return;
         }
 
-        // 2. PDFドキュメントの生成
         const pdfDoc = await PDFDocument.load(pdfBytes);
         pdfDoc.registerFontkit(fontkit);
         const customFont = await pdfDoc.embedFont(fontBytes);
         const page = pdfDoc.getPages()[0];
+        
+        // ======================= ▼▼▼ ここから修正 ▼▼▼ =======================
 
-        // 文字を常に横書きで描画（回転0度を明示）
-        const ROTATE_NONE = { type: 'degrees', angle: 0 };
+        const pageRotation = page.getRotation().angle;
+        // getSize()は回転前のページの幅と高さを返します
+        const { width, height } = page.getSize();
 
-        // 描画関数 (マス目対応)
-        const drawText = (text, x, y, size = 10, spacing = 0) => {
+        /**
+         * 描画関数
+         * @param {string} text - 描画するテキスト
+         * @param {number} x - 見た目上の用紙の「左下」を原点としたX座標
+         * @param {number} y - 見た目上の用紙の「左下」を原点としたY座標
+         * @param {number} size - フォントサイズ
+         * @param {number} spacing - 文字間隔（マス目入力用）
+         * @param {number} angle - テキスト自体の追加の回転角度（通常は0）
+         */
+        const drawText = (text, x, y, size = 10, spacing = 0, angle = 0) => {
             if (!text) return;
-            const textOptions = {
+
+            // ページの回転を打ち消すためのテキストの回転角度
+            const textRotation = degrees(angle - pageRotation);
+            
+            // ユーザー指定の座標(x,y)を、ページの回転状態に応じて
+            // pdf-libが解釈する実際の座標(transformedX, transformedY)に変換
+            let transformedX, transformedY;
+            if (pageRotation === 90) {
+                transformedX = y;
+                transformedY = height - x; // heightは回転前の高さ = 見た目上の幅
+            } else if (pageRotation === 270) {
+                transformedX = width - y;  // widthは回転前の幅 = 見た目上の高さ
+                transformedY = x;
+            } else if (pageRotation === 180) {
+                transformedX = width - x;
+                transformedY = height - y;
+            } else { // 0度の場合
+                transformedX = x;
+                transformedY = y;
+            }
+
+            const options = {
+                size: size,
                 font: customFont,
                 color: rgb(0, 0, 0),
-                rotate: ROTATE_NONE,
+                rotate: textRotation,
             };
-            if (spacing > 0) {
+
+            if (spacing > 0 && text.length > 0) {
                 // マス目入力
-                for (let i = 0; i < text.length; i++) {
-                    page.drawText(text[i], {
-                        x: x + (i * spacing),
-                        y: y,
-                        size: size,
-                        ...textOptions,
-                    });
-                }
+                const chars = Array.from(text);
+                chars.forEach((char, i) => {
+                    let charX = transformedX;
+                    let charY = transformedY;
+
+                    // 見た目上のX軸（横）方向へ文字間隔を適用
+                    if (pageRotation === 90) {
+                        charY -= (i * spacing);
+                    } else if (pageRotation === 270) {
+                        charY += (i * spacing);
+                    } else if (pageRotation === 180) {
+                        charX -= (i * spacing);
+                    } else { // 0度
+                        charX += (i * spacing);
+                    }
+                    
+                    page.drawText(char, { ...options, x: charX, y: charY });
+                });
             } else {
                 // 通常入力
-                page.drawText(text, {
-                    x,
-                    y,
-                    size,
-                    ...textOptions,
-                });
+                page.drawText(text, { ...options, x: transformedX, y: transformedY });
             }
         };
+        
+        // ======================= ▲▲▲ ここまで修正 ▲▲▲ =======================
+
 
         const v = (id) => document.getElementById(id).value;
 
         // =========================================================
-        // 座標のマッピング (要微調整エリア)
-        // PDFの原点は左下(0,0)です。Yが大きいほど上になります。
-        // 専用3号様式のレイアウトに合わせて仮置きしています。
+        // 座標のマッピング（このセクションは変更不要です）
         // =========================================================
 
-        const ROW_1_Y = 760; // 最上段 (業務種別など)
-        const ROW_2_Y = 660; // 車両番号など
-        const BOX_SIZE = 12; // 文字サイズ
+        const ROW_1_Y = 760; 
+        const ROW_2_Y = 660; 
+        const BOX_SIZE = 12; 
 
-        // --- 1. 上部チェック・数字項目 ---
-        // ※左からのX座標を指定してください
-        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         // (1)業務種別
-        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             // (2)手数料
-        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        // (7)有効期間
-        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        // (9)出張
-        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         // (11)処理
+        // 1. 上部チェック・数字項目
+        drawText(v('biz_type'), 45, ROW_1_Y, BOX_SIZE);         
+        drawText(v('fee'), 125, ROW_1_Y, BOX_SIZE);             
+        drawText(v('validity'), 190, ROW_1_Y, BOX_SIZE);        
+        drawText(v('dispatch'), 270, ROW_1_Y, BOX_SIZE);        
+        drawText(v('process'), 345, ROW_1_Y, BOX_SIZE);         
         
-        drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       // (16)例外
-        drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     // (17)制限解除
-        drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             // (19)NOx
-        drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);// (20)証明書指示
+        drawText(v('exception'), 485, ROW_1_Y, BOX_SIZE);       
+        drawText(v('restriction'), 545, ROW_1_Y, BOX_SIZE);     
+        drawText(v('nox'), 635, ROW_1_Y, BOX_SIZE);             
+        drawText(v('cert_instruction'), 720, ROW_1_Y, BOX_SIZE);
 
-        // --- 2. 自動車登録番号 (21) ---
-        // 位置調整: BOX_WIDTH はマス目の幅
+        // 2. 自動車登録番号
         const BOX_WIDTH = 17; 
-        
-        // 地域名 (40付近)
         drawText(v('car_num_1'), 40, ROW_2_Y, 12, 28); 
-        // 分類 (150付近)
         drawText(v('car_num_2'), 150, ROW_2_Y, 12, BOX_WIDTH);
-        // かな (220付近)
         drawText(v('car_num_3'), 220, ROW_2_Y, 12);
-        // 一連指定番号 (260付近)
         drawText(v('car_num_4'), 260, ROW_2_Y, 12, BOX_WIDTH);
 
-        // --- 3. 車台番号 (22) ---
-        // 360付近
+        // 3. 車台番号
         drawText(v('chassis_num'), 360, ROW_2_Y, 12, BOX_WIDTH);
 
-        // --- 4. 整備工場コード (28) ---
-        // 2桁 (660付近)
+        // 4. 整備工場コード
         drawText(v('factory_code_1'), 660, ROW_2_Y, 12, BOX_WIDTH);
-        // 5桁 (705付近 - ハイフン分あける)
         drawText(v('factory_code_2'), 705, ROW_2_Y, 12, BOX_WIDTH);
 
 
-        // --- 5. 氏名・住所エリア ---
-        const NAME_LEFT_X = 50; // インデント
+        // --- 5. 氏名・住所エリア (通常の横書き) ---
+        const NAME_LEFT_X = 50; 
+        const NAME_SIZE = 10;
         
-        // 申請者 (Y座標を前回のアプリに合わせて調整)
-        drawText(v('applicant_name'), NAME_LEFT_X, 420, 10);
-        drawText(v('applicant_address'), NAME_LEFT_X, 390, 10);
+        // 申請者
+        drawText(v('applicant_name'), NAME_LEFT_X, 420, NAME_SIZE);
+        drawText(v('applicant_address'), NAME_LEFT_X, 390, NAME_SIZE);
 
         // 受検者
-        drawText(v('examinee_name'), NAME_LEFT_X, 320, 10);
-        drawText(v('examinee_address'), NAME_LEFT_X, 290, 10);
+        drawText(v('examinee_name'), NAME_LEFT_X, 320, NAME_SIZE);
+        drawText(v('examinee_address'), NAME_LEFT_X, 290, NAME_SIZE);
 
         // =========================================================
 
