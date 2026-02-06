@@ -53,37 +53,23 @@
     <h1>継続検査用データ入力アプリ（専用３号様式）</h1>
     <form id="pdfForm">
         
-        <!-- 1段目 -->
+        <!-- 有効期間のみ残し -->
         <div class="row">
-            <div class="col"><div class="form-group"><label>手数料</label><input type="text" id="fee" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>有効期間</label><input type="text" id="validity" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>出張</label><input type="text" id="dispatch" maxlength="1" placeholder="1文字"></div></div>
+            <div class="col" style="max-width: 200px;">
+                <div class="form-group">
+                    <label>有効期間</label>
+                    <input type="text" id="validity" maxlength="1" placeholder="1文字">
+                </div>
+            </div>
         </div>
 
-        <!-- 2段目 -->
-        <div class="row">
-            <div class="col"><div class="form-group"><label>処理 (左欄)</label><input type="text" id="proc_left" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>処理 (右欄)</label><input type="text" id="proc_right" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>例外</label><input type="text" id="exception" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>制限解除</label><input type="text" id="restriction" maxlength="1" placeholder="1文字"></div></div>
-        </div>
-
-        <!-- 3段目 -->
-        <div class="row">
-            <div class="col"><div class="form-group"><label>NOx・PM</label><input type="text" id="nox" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"><div class="form-group"><label>証明書指示</label><input type="text" id="cert_instruction" maxlength="1" placeholder="1文字"></div></div>
-            <div class="col"></div>
-            <div class="col"></div>
-        </div>
-
-        <!-- 車両番号（小板を削除） -->
+        <!-- 車両番号 -->
         <div class="form-group">
             <label>車両番号</label>
             <div class="row">
                 <input type="text" id="car_num_1" placeholder="地域名" style="flex:3">
                 <input type="text" id="car_num_2" placeholder="123" style="flex:2">
                 <input type="text" id="car_num_3" placeholder="あ" style="flex:1">
-                <!-- 4文字制限を追加 -->
                 <input type="text" id="car_num_4" maxlength="4" placeholder="1234" style="flex:4">
             </div>
         </div>
@@ -135,7 +121,6 @@
 <script>
     const { PDFDocument, rgb } = PDFLib;
 
-    // --- 履歴保存機能 ---
     const STORAGE_KEY_NAME = 'examinee_name_history_form3'; 
     const STORAGE_KEY_ADDR = 'examinee_address_history_form3';
 
@@ -174,7 +159,7 @@
                 fetch(fontUrl).then(res => res.arrayBuffer())
             ]);
         } catch (e) {
-            alert("template.pdf と font.ttf を配置してください。");
+            alert("template.pdf または font.ttf が見つかりません。");
             return;
         }
 
@@ -194,32 +179,16 @@
             }
         };
 
-        const drawVerticalText = (text, x, y, size = 10) => {
-            if (!text) return;
-            const lineHeight = size * 1.1; 
-            for (let i = 0; i < text.length; i++) {
-                page.drawText(text[i], { x, y: y - (i * lineHeight), size, font: customFont, color: rgb(0, 0, 0) });
-            }
-        };
-
         const v = (id) => document.getElementById(id).value;
 
-        // --- 最新のご指定座標マッピング ---
+        // --- 最新座標マッピング（削除項目を除外） ---
         const ROW_1_Y = 535; 
         const ROW_2_Y = 457; 
         const BOX_SIZE = 12; 
         const BOX_WIDTH = 17;
 
-        // 上段の9項目
-        drawText(v('fee'), 200, ROW_1_Y, BOX_SIZE);         
+        // 有効期間のみ描画
         drawText(v('validity'), 265, ROW_1_Y, BOX_SIZE);             
-        drawText(v('dispatch'), 345, ROW_1_Y, BOX_SIZE);        
-        drawText(v('proc_left'), 405, ROW_1_Y, BOX_SIZE);        
-        drawText(v('proc_right'), 435, ROW_1_Y, BOX_SIZE);         
-        drawText(v('exception'), 500, ROW_1_Y, BOX_SIZE);       
-        drawText(v('restriction'), 550, ROW_1_Y, BOX_SIZE);     
-        drawText(v('nox'), 642, ROW_1_Y, BOX_SIZE);             
-        drawText(v('cert_instruction'), 715, ROW_1_Y, BOX_SIZE);
 
         // 車両・工場情報
         drawText(v('car_num_1'), 45, ROW_2_Y, 12, 33); 
@@ -232,11 +201,11 @@
         drawText(v('factory_code_1'), 680, ROW_2_Y, 12, BOX_WIDTH);
         drawText(v('factory_code_2'), 723, ROW_2_Y, 12, BOX_WIDTH);
 
-        // 氏名・住所（縦書き）
-        drawVerticalText(v('applicant_name'), 100, 265, 10);
-        drawVerticalText(v('applicant_address'), 100, 240, 10);
-        drawVerticalText(v('examinee_name'), 100, 205, 10);
-        drawVerticalText(v('examinee_address'), 100, 180, 10);
+        // 氏名・住所（横書き）
+        drawText(v('applicant_name'), 100, 265, 10);
+        drawText(v('applicant_address'), 100, 240, 10);
+        drawText(v('examinee_name'), 100, 205, 10);
+        drawText(v('examinee_address'), 100, 180, 10);
 
         saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
         saveHistory(STORAGE_KEY_ADDR, v('examinee_address'));
@@ -245,6 +214,34 @@
         const link = document.createElement('a');
         link.href = pdfDataUri;
         link.download = `継続検査_${v('applicant_name') || 'export'}.pdf`;
+        link.click();
+
+         // --- 履歴保存実行 ---
+         saveHistory(STORAGE_KEY_NAME, v('examinee_name'));
+        saveHistory(STORAGE_KEY_ADDR, v('examinee_address'));
+        loadHistory(STORAGE_KEY_NAME, 'examinee_name_list');
+        loadHistory(STORAGE_KEY_ADDR, 'examinee_address_list');
+
+        // 3. ファイル名の生成処理
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const dateStr = `${year}${month}${day}`;
+
+        let applicant = v('applicant_name');
+        if (!applicant) {
+            applicant = '名称未入力';
+        }
+        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+
+        const fileName = `${dateStr}_専用第3号様式_${applicant}.pdf`;
+
+        // 4. ダウンロード実行
+        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        const link = document.createElement('a');
+        link.href = pdfDataUri;
+        link.download = fileName;
         link.click();
     }
 </script>
