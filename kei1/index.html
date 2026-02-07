@@ -20,6 +20,10 @@
         .col { flex: 1; }
         .note { font-size: 0.8em; color: #666; margin-top: 5px; }
         .hyphen { font-weight: bold; padding: 0 5px; }
+        .form-block { border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; background: #fafafa; }
+        .form-block-title { font-weight: bold; font-size: 1em; margin-bottom: 10px; display: block; }
+        .form-block-label { display: block; font-size: 0.9em; margin-top: 10px; margin-bottom: 4px; font-weight: bold; }
+        .form-block-label:first-of-type { margin-top: 0; }
     </style>
 </head>
 <body>
@@ -32,25 +36,25 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label>番号提示 用途1</label>
+                    <label>番号提示<br>用途１</label>
                     <input type="text" id="number_purpose_1" maxlength="1" inputmode="numeric" placeholder="1文字">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>用途2</label>
+                    <label>番号提示<br>用途２</label>
                     <input type="text" id="number_purpose_2" maxlength="1" inputmode="numeric" placeholder="1文字">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>用途3</label>
+                    <label>番号提示<br>用途３</label>
                     <input type="text" id="number_purpose_3" maxlength="1" inputmode="numeric" placeholder="1文字">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>用途4</label>
+                    <label>番号提示<br>用途４</label>
                     <input type="text" id="number_purpose_4" maxlength="1" inputmode="numeric" placeholder="1文字">
                 </div>
             </div>
@@ -148,38 +152,34 @@
             <input type="text" id="body_color" maxlength="1" placeholder="1文字">
         </div>
         <hr>
-        <div class="form-group">
-            <label>申請者（使用者）氏名又は名称</label>
+        <div class="form-group form-block">
+            <div class="form-block-title">申請者（使用者）</div>
+            <label class="form-block-label">氏名又は名称</label>
             <input type="text" id="applicant_name" placeholder="氏名又は名称">
-        </div>
-        <div class="form-group">
-            <label>（使用者） 住所</label>
+            <label class="form-block-label">住所</label>
             <input type="text" id="applicant_address" placeholder="住所">
         </div>
 
-        <div class="form-group">
-            <label>（所有者）氏名又は名称</label>
+        <div class="form-group form-block">
+            <div class="form-block-title">所有者</div>
+            <label class="form-block-label">氏名又は名称</label>
             <input type="text" id="owner_name" placeholder="氏名又は名称">
-        </div>
-        <div class="form-group">
-            <label>（所有者）住所</label>
+            <label class="form-block-label">住所</label>
             <input type="text" id="owner_address" placeholder="住所">
         </div>
         <hr>
-        <div class="form-group">
-            <label>（旧使用者）氏名又は名称</label>
+        <div class="form-group form-block">
+            <div class="form-block-title">旧使用者</div>
+            <label class="form-block-label">氏名又は名称</label>
             <input type="text" id="ex_user_name" placeholder="氏名又は名称">
-        </div>
-        <div class="form-group">
-            <label>（旧使用者）住所</label>
+            <label class="form-block-label">住所</label>
             <input type="text" id="ex_user_address" placeholder="住所">
         </div>
-        <div class="form-group">
-            <label>（旧所有者）氏名又は名称</label>
+        <div class="form-group form-block">
+            <div class="form-block-title">旧所有者</div>
+            <label class="form-block-label">氏名又は名称</label>
             <input type="text" id="ex_owner_name" placeholder="氏名又は名称">
-        </div>
-        <div class="form-group">
-            <label>（旧所有者）住所</label>
+            <label class="form-block-label">住所</label>
             <input type="text" id="ex_owner_address" placeholder="住所">
         </div>
         <hr>
