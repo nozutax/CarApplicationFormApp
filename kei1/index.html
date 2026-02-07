@@ -115,8 +115,12 @@
                     <input type="checkbox" id="user_same_owner_address"> 使用者に同じ
                 </label>
                 <div style="flex:1;">
-                    <label for="owner_address_mei" style="display:block; margin-bottom:5px;">７所有者住所</label>
-                    <input type="text" id="owner_address_mei" placeholder="住所">
+                    <label style="display:block; margin-bottom:5px;">７所有者住所</label>
+                    <div class="row">
+                        <input type="text" id="owner_address_mei_1" maxlength="12" placeholder="都道府県市区郡-町村-小字" style="flex:2">
+                        <input type="text" id="owner_address_mei_2" maxlength="2" placeholder="丁目" style="flex:0.3">
+                        <input type="text" id="owner_address_mei_3" maxlength="22" placeholder="番、号、番地、棟番号等" style="flex:2">
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,8 +130,12 @@
                     <input type="checkbox" id="user_same_use_base"> 使用者に同じ
                 </label>
                 <div style="flex:1;">
-                    <label for="use_base" style="display:block; margin-bottom:5px;">９使用の本拠の位置</label>
-                    <input type="text" id="use_base" placeholder="使用の本拠の位置">
+                    <label style="display:block; margin-bottom:5px;">９使用の本拠の位置</label>
+                    <div class="row">
+                        <input type="text" id="use_base_1" maxlength="12" placeholder="都道府県市区郡-町村-小字" style="flex:2">
+                        <input type="text" id="use_base_2" maxlength="2" placeholder="丁目" style="flex:0.3">
+                        <input type="text" id="use_base_3" maxlength="22" placeholder="番、号、番地、棟番号等" style="flex:2">
+                    </div>
                 </div>
             </div>
         </div>
@@ -247,32 +255,40 @@
         drawText(v('hope_car_num_3'), 270, 495, 12, BOX_WIDTH);
 
         // 3. 車両番号 
-        drawText(v('car_num_1'), 40, 440, 12, 32); 
-        drawText(v('car_num_2'), 170, 440, 12, BOX_WIDTH);
-        drawText(v('car_num_3'), 235, 440, 12);
-        drawText(v('car_num_4'), 270, 440, 12, BOX_WIDTH);
-        drawText(v('car_num_5'), 345, 440, 12);
+        drawText(v('car_num_1'), 40, 445, 12, 32); 
+        drawText(v('car_num_2'), 170, 445, 12, BOX_WIDTH);
+        drawText(v('car_num_3'), 235, 445, 12);
+        drawText(v('car_num_4'), 270, 445, 12, BOX_WIDTH);
+        drawText(v('car_num_5'), 345, 445, 12);
 
         // 4. 車台番号
-        drawText(v('chassis_num'), 380, 440, 12, BOX_WIDTH);
+        drawText(v('chassis_num'), 380, 445, 12, BOX_WIDTH);
 
         // 8. 氏名・住所
         const LEFT_X = 120;
 
-        drawText(v('user_name'), 70, 365, 20,32);
-        drawText(v('user_address_1'), 60, 310,12, BOX_WIDTH);
-        drawText(v('user_address_2'), 270, 310,12, BOX_WIDTH);
-        drawText(v('user_address_3'), 310, 310,12, BOX_WIDTH);
+        drawText(v('user_name'), 70, 362, 18,32);
+        drawText(v('user_address_1'), 65, 325,12, BOX_WIDTH);
+        drawText(v('user_address_2'), 275, 325,12, BOX_WIDTH);
+        drawText(v('user_address_3'), 315, 325,12, BOX_WIDTH);
 
         // ６所有者氏名又は名称：チェック時は[1]、未チェック時は入力値を出力
-        if (isChecked('user_same_owner_name')) drawText('[1]', 10, 260, 10);
-        else drawText(v('owner_name_mei'), LEFT_X, 260, 10);
-        // ７所有者住所：チェック時は[1]、未チェック時は入力値を出力
-        if (isChecked('user_same_owner_address')) drawText('[1]', 10, 230, 10);
-        else drawText(v('owner_address_mei'), LEFT_X, 230, 10);
-        // ９使用の本拠の位置：チェック時は[1]、未チェック時は入力値を出力
-        if (isChecked('user_same_use_base')) drawText('[1]', 10, 170, 10);
-        else drawText(v('use_base'), LEFT_X, 170, 10);
+        if (isChecked('user_same_owner_name')) drawText('1', 20, 260, 10);
+        else drawText(v('owner_name_mei'), 70, 260, 18,32);
+        // ７所有者住所：チェック時は[1]、未チェック時は3フォームの値を出力（５使用者住所と同様）
+        if (isChecked('user_same_owner_address')) drawText('1', 20, 220, 10);
+        else {
+            drawText(v('owner_address_mei_1'), 65, 220, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_2'), 275, 220, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_3'), 315, 220, 12, BOX_WIDTH);
+        }
+        // ９使用の本拠の位置：チェック時は[1]、未チェック時は3フォームの値を出力（５使用者住所と同様）
+        if (isChecked('user_same_use_base')) drawText('1', 20, 160, 10);
+        else {
+            drawText(v('use_base_1'), 65, 160, 12, BOX_WIDTH);
+            drawText(v('use_base_2'), 275, 160, 12, BOX_WIDTH);
+            drawText(v('use_base_3'), 315, 160, 12, BOX_WIDTH);
+        }
 
         drawText(v('owner_code'), LEFT_X, 260, 10);
         drawText(v('body_color'), LEFT_X, 245, 10);
@@ -282,12 +298,12 @@
         drawText(v('owner_name'), LEFT_X, 50, 10);
         drawText(v('owner_address'), LEFT_X, 20, 10);
 
-        drawText(v('ex_user_name'), LEFT_X+260, 110, 10);
-        drawText(v('ex_user_address'), LEFT_X+260, 80, 10);
-        drawText(v('ex_owner_name'), LEFT_X+260, 50, 10);
-        drawText(v('ex_owner_address'), LEFT_X+260, 20, 10);
+        drawText(v('ex_user_name'), LEFT_X+270, 110, 10);
+        drawText(v('ex_user_address'), LEFT_X+270, 80, 10);
+        drawText(v('ex_owner_name'), LEFT_X+270, 50, 10);
+        drawText(v('ex_owner_address'), LEFT_X+270, 20, 10);
 
-        drawText(v('change_details'), LEFT_X+540, 30, 10);
+        drawText(v('change_details'), LEFT_X+580, 40, 14);
 
         // 3. ファイル名の生成処理
         const now = new Date();
