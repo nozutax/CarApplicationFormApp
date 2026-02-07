@@ -36,45 +36,6 @@
                     <input type="text" id="presentation" maxlength="1" inputmode="numeric" placeholder="1文字">
                 </div>
             </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>手数料</label>
-                    <input type="text" id="fee" maxlength="1" inputmode="numeric" placeholder="1文字">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>証明書指示</label>
-                    <input type="text" id="cert_instruction" maxlength="1" inputmode="numeric" placeholder="1文字">
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>処理 (左欄)</label>
-                    <input type="text" id="process_left" maxlength="1" inputmode="numeric" placeholder="1文字">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>処理 (右欄)</label>
-                    <input type="text" id="process_right" maxlength="1" inputmode="numeric" placeholder="1文字">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>例外</label>
-                    <input type="text" id="exception" maxlength="1" inputmode="numeric" placeholder="1文字">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>制限解除</label>
-                    <input type="text" id="restriction" maxlength="1" inputmode="numeric" placeholder="1文字">
-                </div>
-            </div>
         </div>
 
         <!-- 車両情報 -->
@@ -212,12 +173,6 @@
 
         // 1. 上部マス目項目
         drawText(v('presentation'), 180, 535, 12);
-        drawText(v('fee'), 230, 535, 12); 
-        drawText(v('cert_instruction'), 560, 535, 12);
-        drawText(v('process_left'), 630, 535, 12);
-        drawText(v('process_right'), 670, 535, 12);
-        drawText(v('exception'), 745, 535, 10);
-        drawText(v('restriction'), 775, 535, 10);
 
         // 2. 車両番号
         const BOX_WIDTH = 17; 
@@ -250,29 +205,25 @@
         loadHistory(STORAGE_KEY_ADDR, 'examinee_address_list');
 
         // 3. ファイル名の生成処理
-        // 現在の日時を取得 (YYYYMMDD)
         const now = new Date();
         const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // 月は0始まりなので+1
+        const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         const dateStr = `${year}${month}${day}`;
 
-        // 申請者名を取得
         let applicant = v('applicant_name');
         if (!applicant) {
             applicant = '名称未入力';
         }
-        // ファイル名として不適切な文字（/や:など）は削除する
         applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
 
-        // ファイル名を組み立て
         const fileName = `${dateStr}_軽専用第2号様式_${applicant}.pdf`;
 
         // 4. ダウンロード実行
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');
         link.href = pdfDataUri;
-        link.download = fileName; // 生成したファイル名をセット
+        link.download = fileName;
         link.click();
     }
 </script>
