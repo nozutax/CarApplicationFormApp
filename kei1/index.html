@@ -262,45 +262,45 @@
         drawText(v('car_num_5'), 345, 445, 12);
 
         // 4. 車台番号
-        drawText(v('chassis_num'), 380, 445, 12, BOX_WIDTH);
+        drawText(v('chassis_num'), 379, 445, 12, BOX_WIDTH);
 
         // 8. 氏名・住所
         const LEFT_X = 120;
 
-        drawText(v('user_name'), 70, 362, 18,30);
-        drawText(v('user_address_1'), 65, 325,12, BOX_WIDTH);
-        drawText(v('user_address_2'), 275, 325,12, BOX_WIDTH);
-        drawText(v('user_address_3'), 315, 325,12, BOX_WIDTH);
+        drawText(v('user_name'), 70, 362, 18,31);
+        drawText(v('user_address_1'), 65, 323,12, BOX_WIDTH);
+        drawText(v('user_address_2'), 277, 323,12, BOX_WIDTH);
+        drawText(v('user_address_3'), 320, 323,12, BOX_WIDTH);
 
         // ６所有者氏名又は名称：チェック時は[1]、未チェック時は入力値を出力
         if (isChecked('user_same_owner_name')) drawText('1', 20, 260, 10);
-        else drawText(v('owner_name_mei'), 70, 260, 18,30);
+        else drawText(v('owner_name_mei'), 70, 260, 18,10);
         // ７所有者住所：チェック時は[1]、未チェック時は3フォームの値を出力（５使用者住所と同様）
-        if (isChecked('user_same_owner_address')) drawText('1', 20, 215, 10);
+        if (isChecked('user_same_owner_address')) drawText('1', 20, 212, 10);
         else {
-            drawText(v('owner_address_mei_1'), 65, 215, 12, BOX_WIDTH);
-            drawText(v('owner_address_mei_2'), 275, 215, 12, BOX_WIDTH);
-            drawText(v('owner_address_mei_3'), 315, 215, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_1'), 65, 212, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_2'), 275, 212, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_3'), 315, 212, 12, BOX_WIDTH);
         }
         // ９使用の本拠の位置：チェック時は[1]、未チェック時は3フォームの値を出力（５使用者住所と同様）
-        if (isChecked('user_same_use_base')) drawText('1', 20, 157, 10);
+        if (isChecked('user_same_use_base')) drawText('1', 20, 156, 10);
         else {
-            drawText(v('use_base_1'), 65, 157, 12, BOX_WIDTH);
-            drawText(v('use_base_2'), 275, 157, 12, BOX_WIDTH);
-            drawText(v('use_base_3'), 315, 157, 12, BOX_WIDTH);
+            drawText(v('use_base_1'), 65, 156, 12, BOX_WIDTH);
+            drawText(v('use_base_2'), 275, 156, 12, BOX_WIDTH);
+            drawText(v('use_base_3'), 315, 156, 12, BOX_WIDTH);
         }
 
-        drawText(v('owner_code'), LEFT_X, 260, 10);
-        drawText(v('body_color'), LEFT_X, 245, 10);
+        drawText(v('owner_code'), 700, 260, 10);
+        drawText(v('body_color'), 700, 156, 10);
         
         drawText(v('applicant_name'), LEFT_X, 110, 10);
         drawText(v('applicant_address'), LEFT_X, 80, 10);
-        drawText(v('owner_name'), LEFT_X, 50, 10);
+        drawText(v('owner_name'), LEFT_X, 49, 10);
         drawText(v('owner_address'), LEFT_X, 20, 10);
 
         drawText(v('ex_user_name'), LEFT_X+270, 110, 10);
         drawText(v('ex_user_address'), LEFT_X+270, 80, 10);
-        drawText(v('ex_owner_name'), LEFT_X+270, 50, 10);
+        drawText(v('ex_owner_name'), LEFT_X+270, 49, 10);
         drawText(v('ex_owner_address'), LEFT_X+270, 20, 10);
 
         drawText(v('change_details'), LEFT_X+570, 40, 12);
