@@ -269,29 +269,29 @@
 
         drawText(v('user_name'), 70, 362, 18,31);
         drawText(v('user_address_1'), 65, 323,12, BOX_WIDTH);
-        drawText(v('user_address_2'), 277, 323,12, BOX_WIDTH);
-        drawText(v('user_address_3'), 320, 323,12, BOX_WIDTH);
+        drawText(v('user_address_2'), 278, 323,12, BOX_WIDTH);
+        drawText(v('user_address_3'), 320.5, 323,12, BOX_WIDTH);
 
         // ６所有者氏名又は名称：チェック時は[1]、未チェック時は入力値を出力
         if (isChecked('user_same_owner_name')) drawText('1', 20, 260, 10);
-        else drawText(v('owner_name_mei'), 70, 260, 18,10);
+        else drawText(v('owner_name_mei'), 70, 260, 18,31);
         // ７所有者住所：チェック時は[1]、未チェック時は3フォームの値を出力（５使用者住所と同様）
-        if (isChecked('user_same_owner_address')) drawText('1', 20, 212, 10);
+        if (isChecked('user_same_owner_address')) drawText('1', 20, 210, 10);
         else {
-            drawText(v('owner_address_mei_1'), 65, 212, 12, BOX_WIDTH);
-            drawText(v('owner_address_mei_2'), 275, 212, 12, BOX_WIDTH);
-            drawText(v('owner_address_mei_3'), 315, 212, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_1'), 65, 210, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_2'), 278, 210, 12, BOX_WIDTH);
+            drawText(v('owner_address_mei_3'), 320.5, 210, 12, BOX_WIDTH);
         }
         // ９使用の本拠の位置：チェック時は[1]、未チェック時は3フォームの値を出力（５使用者住所と同様）
         if (isChecked('user_same_use_base')) drawText('1', 20, 156, 10);
         else {
             drawText(v('use_base_1'), 65, 156, 12, BOX_WIDTH);
-            drawText(v('use_base_2'), 275, 156, 12, BOX_WIDTH);
-            drawText(v('use_base_3'), 315, 156, 12, BOX_WIDTH);
+            drawText(v('use_base_2'), 278, 156, 12, BOX_WIDTH);
+            drawText(v('use_base_3'), 320.5, 156, 12, BOX_WIDTH);
         }
 
-        drawText(v('owner_code'), 700, 260, 10);
-        drawText(v('body_color'), 700, 156, 10);
+        drawText(v('owner_code'), 720, 260, 10);
+        drawText(v('body_color'), 720, 156, 10);
         
         drawText(v('applicant_name'), LEFT_X, 110, 10);
         drawText(v('applicant_address'), LEFT_X, 80, 10);
