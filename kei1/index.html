@@ -97,13 +97,13 @@
         <!-- 住所・氏名欄 -->
         <hr>
         <div class="form-group">
-            <label>使用者 氏名又は名称</label>
+            <label>４使用者 氏名又は名称</label>
             <input type="text" id="user_name" placeholder="山田 太郎">
         </div>
         <div class="form-group">
-            <label>使用者住所</label>
+            <label>５使用者住所</label>
             <div class="row">
-                <input type="text" id="user_address_1" maxlength="12" placeholder="都道府県市区郡コード-町村コード-小字コード" style="flex:2">
+                <input type="text" id="user_address_1" maxlength="12" placeholder="都道府県市区郡-町村-小字" style="flex:2">
                 <input type="text" id="user_address_2" maxlength="2" placeholder="丁目" style="flex:0.3">
                 <input type="text" id="user_address_3" maxlength="22" placeholder="番、号、番地、棟番号等" style="flex:2">
             </div>
@@ -112,14 +112,55 @@
             <label>使用者に同じ</label>
             <input type="text" id="user_same" maxlength="1" inputmode="numeric" placeholder="1文字">
         </div>
+        <div class="form-group">
+            <div class="row" style="align-items: center;">
+                <label style="margin:0; flex: 0 0 auto;">
+                    <input type="checkbox" id="user_same_owner_name"> 使用者に同じ
+                </label>
+                <div style="flex:1;">
+                    <label for="owner_name_mei" style="display:block; margin-bottom:5px;">６所有者氏名又は名称</label>
+                    <input type="text" id="owner_name_mei" placeholder="氏名又は名称">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>所有者コード</label>
+            <input type="text" id="owner_code" maxlength="5" placeholder="5文字以下">
+        </div>
+        <div class="form-group">
+            <div class="row" style="align-items: center;">
+                <label style="margin:0; flex: 0 0 auto;">
+                    <input type="checkbox" id="user_same_owner_address"> 使用者に同じ
+                </label>
+                <div style="flex:1;">
+                    <label for="owner_address_mei" style="display:block; margin-bottom:5px;">７所有者住所</label>
+                    <input type="text" id="owner_address_mei" placeholder="住所">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row" style="align-items: center;">
+                <label style="margin:0; flex: 0 0 auto;">
+                    <input type="checkbox" id="user_same_use_base"> 使用者に同じ
+                </label>
+                <div style="flex:1;">
+                    <label for="use_base" style="display:block; margin-bottom:5px;">８使用の本拠の位置</label>
+                    <input type="text" id="use_base" placeholder="使用の本拠の位置">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>車体の塗色</label>
+            <input type="text" id="body_color" maxlength="1" placeholder="1文字">
+        </div>
         <hr>
         <div class="form-group">
             <label>申請者（使用者）氏名又は名称</label>
-            <input type="text" id="applicant_name" placeholder="山田 太郎">
+            <input type="text" id="applicant_name" placeholder="氏名又は名称">
         </div>
         <div class="form-group">
             <label>（使用者） 住所</label>
-            <input type="text" id="applicant_address" placeholder="東京都...">
+            <input type="text" id="applicant_address" placeholder="住所">
         </div>
 
         <div class="form-group">
@@ -202,6 +243,7 @@
         };
 
         const v = (id) => document.getElementById(id).value;
+        const isChecked = (id) => document.getElementById(id).checked;
 
         // === 座標のマッピング ===
 
@@ -240,17 +282,22 @@
         drawText(v('user_address_2'), 200, 350, 10);
         drawText(v('user_address_3'), 230, 350, 10);
         drawText(v('user_same'), LEFT_X, 335, 10);
+        if (isChecked('user_same_owner_name')) drawText('[1]', LEFT_X, 320, 10);
+        drawText(v('owner_code'), LEFT_X, 305, 10);
+        if (isChecked('user_same_owner_address')) drawText('[1]', LEFT_X, 290, 10);
+        if (isChecked('user_same_use_base')) drawText('[1]', LEFT_X, 275, 10);
+        drawText(v('body_color'), LEFT_X, 260, 10);
         
-        drawText(v('applicant_name'), LEFT_X, 330, 10);
-        drawText(v('applicant_address'), LEFT_X, 290, 10);
+        drawText(v('applicant_name'), LEFT_X, 240, 10);
+        drawText(v('applicant_address'), LEFT_X, 220, 10);
 
-        drawText(v('owner_name'), LEFT_X, 270, 10);
-        drawText(v('owner_address'), LEFT_X, 250, 10);
-        drawText(v('ex_user_name'), LEFT_X, 230, 10);
-        drawText(v('ex_user_address'), LEFT_X, 210, 10);
-        drawText(v('ex_owner_name'), LEFT_X, 190, 10);
-        drawText(v('ex_owner_address'), LEFT_X, 170, 10);
-        drawText(v('change_details'), LEFT_X, 150, 10);
+        drawText(v('owner_name'), LEFT_X, 200, 10);
+        drawText(v('owner_address'), LEFT_X, 180, 10);
+        drawText(v('ex_user_name'), LEFT_X, 160, 10);
+        drawText(v('ex_user_address'), LEFT_X, 140, 10);
+        drawText(v('ex_owner_name'), LEFT_X, 120, 10);
+        drawText(v('ex_owner_address'), LEFT_X, 100, 10);
+        drawText(v('change_details'), LEFT_X, 80, 10);
 
         // 3. ファイル名の生成処理
         const now = new Date();
