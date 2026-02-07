@@ -84,21 +84,11 @@
             <input type="text" id="chassis_num" maxlength="7" class="box-input" placeholder="7文字以下">
         </div>
 
-        <!-- 整備工場コード 2桁と5桁制限 -->
-        <div class="form-group">
-            <label>整備工場コード</label>
-            <div class="row">
-                <input type="text" id="factory_code_1" maxlength="2" inputmode="numeric" placeholder="2桁" style="flex:1">
-                <span class="hyphen">-</span>
-                <input type="text" id="factory_code_2" maxlength="5" inputmode="numeric" placeholder="5桁" style="flex:2">
-            </div>
-        </div>
-
         <!-- 住所・氏名欄 -->
         <hr>
         <div class="form-group">
             <label>４使用者 氏名又は名称</label>
-            <input type="text" id="user_name" placeholder="山田 太郎">
+            <input type="text" id="user_name" placeholder="氏と名の間を1マス開けて入力">
         </div>
         <div class="form-group">
             <label>５使用者住所</label>
@@ -107,10 +97,6 @@
                 <input type="text" id="user_address_2" maxlength="2" placeholder="丁目" style="flex:0.3">
                 <input type="text" id="user_address_3" maxlength="22" placeholder="番、号、番地、棟番号等" style="flex:2">
             </div>
-        </div>
-        <div class="form-group">
-            <label>使用者に同じ</label>
-            <input type="text" id="user_same" maxlength="1" inputmode="numeric" placeholder="1文字">
         </div>
         <div class="form-group">
             <div class="row" style="align-items: center;">
@@ -122,10 +108,6 @@
                     <input type="text" id="owner_name_mei" placeholder="氏名又は名称">
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label>所有者コード</label>
-            <input type="text" id="owner_code" maxlength="5" placeholder="5文字以下">
         </div>
         <div class="form-group">
             <div class="row" style="align-items: center;">
@@ -148,6 +130,10 @@
                     <input type="text" id="use_base" placeholder="使用の本拠の位置">
                 </div>
             </div>
+        </div>
+        <div class="form-group">
+            <label>所有者コード</label>
+            <input type="text" id="owner_code" maxlength="5" placeholder="5文字以下">
         </div>
         <div class="form-group">
             <label>車体の塗色</label>
@@ -248,56 +234,54 @@
         // === 座標のマッピング ===
 
         // 1. 番号提示 用途1〜4（同一Y=535）
-        drawText(v('number_purpose_1'), 80, 535, 12);
-        drawText(v('number_purpose_2'), 180, 535, 12);
-        drawText(v('number_purpose_3'), 280, 535, 12);
-        drawText(v('number_purpose_4'), 380, 535, 12);
+        drawText(v('number_purpose_1'), 440, 535, 12);
+        drawText(v('number_purpose_2'), 480, 535, 12);
+        drawText(v('number_purpose_3'), 520, 535, 12);
+        drawText(v('number_purpose_4'), 560, 535, 12);
 
         const BOX_WIDTH = 17;
 
         // 2. 希望車両番号（Y=510）※地域名・小板なし
-        drawText(v('hope_car_num_1'), 170, 510, 12, BOX_WIDTH);
-        drawText(v('hope_car_num_2'), 240, 510, 12);
-        drawText(v('hope_car_num_3'), 270, 510, 12, BOX_WIDTH);
+        drawText(v('hope_car_num_1'), 170, 495, 12, BOX_WIDTH);
+        drawText(v('hope_car_num_2'), 240, 495, 12);
+        drawText(v('hope_car_num_3'), 270, 495, 12, BOX_WIDTH);
 
         // 3. 車両番号 
-        drawText(v('car_num_1'), 40, 485, 12, 30); 
-        drawText(v('car_num_2'), 170, 485, 12, BOX_WIDTH);
-        drawText(v('car_num_3'), 240, 485, 12);
-        drawText(v('car_num_4'), 270, 485, 12, BOX_WIDTH);
-        drawText(v('car_num_5'), 345, 485, 12);
+        drawText(v('car_num_1'), 40, 425, 12, 30); 
+        drawText(v('car_num_2'), 170, 425, 12, BOX_WIDTH);
+        drawText(v('car_num_3'), 240, 425, 12);
+        drawText(v('car_num_4'), 270, 425, 12, BOX_WIDTH);
+        drawText(v('car_num_5'), 345, 425, 12);
 
         // 4. 車台番号
         drawText(v('chassis_num'), 380, 485, 12, BOX_WIDTH);
 
-        // 5. 整備工場コード
-        drawText(v('factory_code_1'), 698, 485, 12, BOX_WIDTH);
-        drawText(v('factory_code_2'), 740, 485, 12, BOX_WIDTH);
-
         // 8. 氏名・住所
-        const LEFT_X = 150;
+        const LEFT_X = 120;
 
-        drawText(v('user_name'), LEFT_X, 370, 10);
-        drawText(v('user_address_1'), 50, 350, 10);
-        drawText(v('user_address_2'), 200, 350, 10);
-        drawText(v('user_address_3'), 230, 350, 10);
-        drawText(v('user_same'), LEFT_X, 335, 10);
-        if (isChecked('user_same_owner_name')) drawText('[1]', LEFT_X, 320, 10);
-        drawText(v('owner_code'), LEFT_X, 305, 10);
-        if (isChecked('user_same_owner_address')) drawText('[1]', LEFT_X, 290, 10);
-        if (isChecked('user_same_use_base')) drawText('[1]', LEFT_X, 275, 10);
-        drawText(v('body_color'), LEFT_X, 260, 10);
+        drawText(v('user_name'), 80, 365, 30);
+        drawText(v('user_address_1'), 50, 310, BOX_WIDTH);
+        drawText(v('user_address_2'), 200, 310, BOX_WIDTH);
+        drawText(v('user_address_3'), 230, 310, BOX_WIDTH);
+
+        if (isChecked('user_same_owner_name')) drawText('1', 10, 320, 10);
+        if (isChecked('user_same_owner_address')) drawText('1', 10, 290, 10);
+        if (isChecked('user_same_use_base')) drawText('1', 10, 275, 10);
+
+        drawText(v('owner_code'), LEFT_X, 260, 10);
+        drawText(v('body_color'), LEFT_X, 245, 10);
         
-        drawText(v('applicant_name'), LEFT_X, 240, 10);
-        drawText(v('applicant_address'), LEFT_X, 220, 10);
+        drawText(v('applicant_name'), LEFT_X, 110, 10);
+        drawText(v('applicant_address'), LEFT_X, 80, 10);
+        drawText(v('owner_name'), LEFT_X, 40, 10);
+        drawText(v('owner_address'), LEFT_X, 10, 10);
 
-        drawText(v('owner_name'), LEFT_X, 200, 10);
-        drawText(v('owner_address'), LEFT_X, 180, 10);
-        drawText(v('ex_user_name'), LEFT_X, 160, 10);
-        drawText(v('ex_user_address'), LEFT_X, 140, 10);
-        drawText(v('ex_owner_name'), LEFT_X, 120, 10);
-        drawText(v('ex_owner_address'), LEFT_X, 100, 10);
-        drawText(v('change_details'), LEFT_X, 80, 10);
+        drawText(v('ex_user_name'), LEFT_X+240, 110, 10);
+        drawText(v('ex_user_address'), LEFT_X+240, 80, 10);
+        drawText(v('ex_owner_name'), LEFT_X+240, 40, 10);
+        drawText(v('ex_owner_address'), LEFT_X+240, 10, 10);
+
+        drawText(v('change_details'), LEFT_X+480, 15, 10);
 
         // 3. ファイル名の生成処理
         const now = new Date();
