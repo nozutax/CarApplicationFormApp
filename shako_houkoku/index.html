@@ -79,8 +79,8 @@
             </div>
         </div>
         <div class="form-group" id="app_reason_add_text_group" style="margin-top:8px; display:none;">
-            <label style="font-weight:normal; font-size:12px;">申請事由「増車」の内容</label>
-            <input type="text" id="app_reason_add_text" placeholder="増車の詳細を入力">
+            <label style="font-weight:normal; font-size:12px;">増車の台数</label>
+            <input type="text" id="app_reason_add_text" placeholder="台数を入力">
         </div>
 
         <!-- 代替車両等の詳細 -->
@@ -238,6 +238,11 @@
         } else if (carTypeVal === 'other') {
             // その他
             drawCircleMark(570, carTypeY);
+            // その他の内容テキスト（〇の右側に出力）
+            const otherText = v('car_type_other_text');
+            if (otherText) {
+                drawText(otherText, 610, carTypeY , 9);
+            }
         }
 
         // 申請事由（新規・代替・名義変更・商用車・増車・その他）
@@ -256,7 +261,12 @@
             drawCircleMark(500, reasonY);
         } else if (reasonVal === 'add_car') {
             // 増車
-            drawCircleMark(225, reasonY - 26); 
+            drawCircleMark(225, reasonY - 26);
+            // 増車の内容テキスト（〇の下側に出力）
+            const addText = v('app_reason_add_text');
+            if (addText) {
+                drawText(addText, 220, reasonY - 45, );
+            }
         } else if (reasonVal === 'other') {
             // その他
             drawCircleMark(590, reasonY);
@@ -264,12 +274,12 @@
 
         // 4. 代替車両情報・車台番号
         // 車名
-        drawText(v('sub_car_name'), 390, reasonY-25); 
+        drawText(v('sub_car_name'), 390, reasonY-30); 
         // 登録年月 (数値ではなく文字列として出力)
-        drawText(v('sub_reg_year'), 660, reasonY-25); // 年
-        drawText(v('sub_reg_month'), 720, reasonY-25); // 月
+        drawText(v('sub_reg_year'), 660, reasonY-30); // 年
+        drawText(v('sub_reg_month'), 720, reasonY-30); // 月
         // 車台番号
-        drawText(v('chassis_num'), 390, reasonY - 40);
+        drawText(v('chassis_num'), 390, reasonY - 45);
 
         // 5. 保管場所の種類・収容台数
         const typeY = height - 395;
