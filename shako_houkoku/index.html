@@ -60,6 +60,10 @@
                 <label class="radio-label"><input type="radio" name="car_type" value="other"> その他</label>
             </div>
         </div>
+        <div class="form-group" id="car_type_other_text_group" style="margin-top:8px; display:none;">
+            <label style="font-weight:normal; font-size:12px;">申請車種「その他」の内容</label>
+            <input type="text" id="car_type_other_text" placeholder="その他の内容を入力">
+        </div>
 
         <!-- 申請事由 -->
         <h2>申請事由</h2>
@@ -70,9 +74,13 @@
                 <label class="radio-label"><input type="radio" name="app_reason" value="sub_car"> 代替</label>
                 <label class="radio-label"><input type="radio" name="app_reason" value="name_change"> 名義変更</label>
                 <label class="radio-label"><input type="radio" name="app_reason" value="business_car"> 商用車</label>
-                <label class="radio-label"><input type="radio" name="app_reason" value="add_car"> 増車</label>
                 <label class="radio-label"><input type="radio" name="app_reason" value="other"> その他</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="add_car"> 増車</label>
             </div>
+        </div>
+        <div class="form-group" id="app_reason_add_text_group" style="margin-top:8px; display:none;">
+            <label style="font-weight:normal; font-size:12px;">申請事由「増車」の内容</label>
+            <input type="text" id="app_reason_add_text" placeholder="増車の詳細を入力">
         </div>
 
         <!-- 代替車両等の詳細 -->
@@ -268,10 +276,10 @@
         const storageVal = getRadio('storage_type');
         
         if (storageVal === 'lot') drawCircleMark(220, typeY); // 空地
-        if (storageVal === 'garage') drawCircleMark(275, typeY); // 車庫
-        if (storageVal === 'rental') drawCircleMark(330, typeY); // 貸ガレージ
+        if (storageVal === 'garage') drawCircleMark(290, typeY); // 車庫
+        if (storageVal === 'rental') drawCircleMark(360, typeY); // 貸ガレージ
         if (storageVal === 'single') drawCircleMark(440, typeY); // 単独
-        if (storageVal === 'shared') drawCircleMark(500, typeY); // 共用
+        if (storageVal === 'shared') drawCircleMark(510, typeY); // 共用
 
         // 総収容台数
         drawText(v('capacity'), 600, typeY);
@@ -297,6 +305,51 @@
         link.download = fileName;
         link.click();
     }
+
+    // ラジオボタン選択に応じて「その他」「増車」のテキスト入力を表示切替
+    (function () {
+        // 申請車種「その他」
+        const carTypeRadios = document.getElementsByName('car_type');
+        const carTypeOtherGroup = document.getElementById('car_type_other_text_group');
+        if (carTypeRadios && carTypeOtherGroup) {
+            const updateCarTypeOther = () => {
+                let show = false;
+                for (const r of carTypeRadios) {
+                    if (r.checked && r.value === 'other') {
+                        show = true;
+                        break;
+                    }
+                }
+                carTypeOtherGroup.style.display = show ? 'block' : 'none';
+            };
+            for (const r of carTypeRadios) {
+                r.addEventListener('change', updateCarTypeOther);
+            }
+            // 初期状態の反映
+            updateCarTypeOther();
+        }
+
+        // 申請事由「増車」
+        const appReasonRadios = document.getElementsByName('app_reason');
+        const appReasonAddGroup = document.getElementById('app_reason_add_text_group');
+        if (appReasonRadios && appReasonAddGroup) {
+            const updateAppReasonAdd = () => {
+                let show = false;
+                for (const r of appReasonRadios) {
+                    if (r.checked && r.value === 'add_car') {
+                        show = true;
+                        break;
+                    }
+                }
+                appReasonAddGroup.style.display = show ? 'block' : 'none';
+            };
+            for (const r of appReasonRadios) {
+                r.addEventListener('change', updateAppReasonAdd);
+            }
+            // 初期状態の反映
+            updateAppReasonAdd();
+        }
+    })();
 </script>
 
 </body>
