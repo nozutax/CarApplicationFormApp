@@ -179,8 +179,8 @@
             page.drawEllipse({
                 x: x,
                 y: y,
-                xScale: 10,   // 横方向半径（大きめ）
-                yScale: 6,    // 縦方向半径（小さめ）→ 横長に見せる
+                xScale: 30,   // 横方向半径（大きめ）
+                yScale: 10,    // 縦方向半径（小さめ）→ 横長に見せる
                 borderColor: rgb(0, 0, 0),
                 borderWidth: 1.2,
             });
@@ -208,14 +208,14 @@
         drawText(v('storage_location'), 200,  applicantY - 40);
 
         // 3. 申請事由・申請車種のラジオボタン処理
-        const carTypeY = height - 230;
-        const reasonY = height - 260;
+        const carTypeY = height - 220;
+        const reasonY = height - 255;
 
         // 申請車種（小型乗用・普通乗用・小型貨物・普通貨物・その他）
         const carTypeVal = getRadio('car_type');
         if (carTypeVal === 'small_pass') {
             // 小型乗用
-            drawCircleMark(210, carTypeY);
+            drawCircleMark(220, carTypeY);
         } else if (carTypeVal === 'normal_pass') {
             // 普通乗用
             drawCircleMark(300, carTypeY);
@@ -234,7 +234,7 @@
         const reasonVal = getRadio('app_reason');
         if (reasonVal === 'new_car') {
             // 新規
-            drawCircleMark(210, reasonY);
+            drawCircleMark(220, reasonY);
         } else if (reasonVal === 'sub_car') {
             // 代替
             drawCircleMark(300, reasonY);
@@ -256,10 +256,10 @@
         drawText(v('chassis_num'), 390, reasonY - 40);
 
         // 5. 保管場所の種類・収容台数
-        const typeY = height - 400;
+        const typeY = height - 395;
         const storageVal = getRadio('storage_type');
         
-        if (storageVal === 'lot') drawCircleMark(200, typeY); // 空地
+        if (storageVal === 'lot') drawCircleMark(20, typeY); // 空地
         if (storageVal === 'garage') drawCircleMark(260, typeY); // 車庫
         if (storageVal === 'rental') drawCircleMark(320, typeY); // 貸ガレージ
         if (storageVal === 'single') drawCircleMark(380, typeY); // 単独
