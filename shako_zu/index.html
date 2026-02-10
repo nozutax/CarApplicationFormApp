@@ -190,8 +190,36 @@
             redraw();
         }
 
+        // スナップ位置が分かるようにグリッドを描画
+        function drawGrid() {
+            const step = 10; // getPos と同じ 10px グリッド
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 1;
+
+            for (let x = 0; x <= canvas.width; x += step) {
+                ctx.beginPath();
+                // 5マスごとに少し濃くする
+                ctx.strokeStyle = (x % 50 === 0) ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.06)';
+                ctx.moveTo(x + 0.5, 0);
+                ctx.lineTo(x + 0.5, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y <= canvas.height; y += step) {
+                ctx.beginPath();
+                ctx.strokeStyle = (y % 50 === 0) ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.06)';
+                ctx.moveTo(0, y + 0.5);
+                ctx.lineTo(canvas.width, y + 0.5);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
         function redraw() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
+            // まずグリッドを描画してから、図形を上に重ねる
+            drawGrid();
 
             shapes.forEach(s => {
                 ctx.strokeStyle = s.color; ctx.fillStyle = s.color; ctx.lineWidth = LINE_WIDTH;
