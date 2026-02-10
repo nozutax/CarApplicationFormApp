@@ -49,18 +49,6 @@
             <input type="text" id="storage_location" placeholder="同上 または 住所を入力">
         </div>
 
-        <!-- 申請事由 -->
-        <h2>申請事由</h2>
-        <div class="form-group">
-            <div class="radio-group">
-                <!-- ラベル修正: 新車(新規)→新規, 代車(代替)→代替 -->
-                <label class="radio-label"><input type="radio" name="app_reason" value="new_car"> 新規</label>
-                <label class="radio-label"><input type="radio" name="app_reason" value="sub_car"> 代替</label>
-                <label class="radio-label"><input type="radio" name="app_reason" value="add_car"> 増車</label>
-                <label class="radio-label"><input type="radio" name="app_reason" value="other"> その他</label>
-            </div>
-        </div>
-
         <!-- 申請車種 -->
         <h2>申請車種</h2>
         <div class="form-group">
@@ -70,6 +58,20 @@
                 <label class="radio-label"><input type="radio" name="car_type" value="small_cargo"> 小型貨物</label>
                 <label class="radio-label"><input type="radio" name="car_type" value="normal_cargo"> 普通貨物</label>
                 <label class="radio-label"><input type="radio" name="car_type" value="other"> その他</label>
+            </div>
+        </div>
+
+        <!-- 申請事由 -->
+        <h2>申請事由</h2>
+        <div class="form-group">
+            <div class="radio-group">
+                <!-- ラベル修正: 新車(新規)→新規, 代車(代替)→代替 -->
+                <label class="radio-label"><input type="radio" name="app_reason" value="new_car"> 新規</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="sub_car"> 代替</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="name_change"> 名義変更</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="business_car"> 商用車</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="add_car"> 増車</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="other"> その他</label>
             </div>
         </div>
 
@@ -179,8 +181,8 @@
             page.drawEllipse({
                 x: x,
                 y: y,
-                xScale: 30,   // 横方向半径（大きめ）
-                yScale: 10,    // 縦方向半径（小さめ）→ 横長に見せる
+                xScale: 25,   // 横方向半径（大きめ）
+                yScale: 8,    // 縦方向半径（小さめ）→ 横長に見せる
                 borderColor: rgb(0, 0, 0),
                 borderWidth: 1.2,
             });
@@ -207,9 +209,9 @@
         // 2. 保管場所の位置
         drawText(v('storage_location'), 200,  applicantY - 40);
 
-        // 3. 申請事由・申請車種のラジオボタン処理
-        const carTypeY = height - 220;
-        const reasonY = height - 255;
+        // 3. 申請車種・申請事由のラジオボタン処理
+        const carTypeY = height - 221;
+        const reasonY = height - 254;
 
         // 申請車種（小型乗用・普通乗用・小型貨物・普通貨物・その他）
         const carTypeVal = getRadio('car_type');
@@ -218,7 +220,7 @@
             drawCircleMark(220, carTypeY);
         } else if (carTypeVal === 'normal_pass') {
             // 普通乗用
-            drawCircleMark(300, carTypeY);
+            drawCircleMark(315, carTypeY);
         } else if (carTypeVal === 'small_cargo') {
             // 小型貨物
             drawCircleMark(390, carTypeY); 
@@ -230,14 +232,20 @@
             drawCircleMark(570, carTypeY);
         }
 
-        // 申請事由（新規・代替・増車・その他）
+        // 申請事由（新規・代替・名義変更・商用車・増車・その他）
         const reasonVal = getRadio('app_reason');
         if (reasonVal === 'new_car') {
             // 新規
             drawCircleMark(220, reasonY);
         } else if (reasonVal === 'sub_car') {
             // 代替
-            drawCircleMark(300, reasonY);
+            drawCircleMark(315, reasonY);
+        } else if (reasonVal === 'name_change') {
+            // 名義変更
+            drawCircleMark(410, reasonY);
+        } else if (reasonVal === 'business_car') {
+            // 商用車
+            drawCircleMark(490, reasonY);
         } else if (reasonVal === 'add_car') {
             // 増車
             drawCircleMark(210, reasonY - 25); 
@@ -259,8 +267,8 @@
         const typeY = height - 395;
         const storageVal = getRadio('storage_type');
         
-        if (storageVal === 'lot') drawCircleMark(20, typeY); // 空地
-        if (storageVal === 'garage') drawCircleMark(260, typeY); // 車庫
+        if (storageVal === 'lot') drawCircleMark(220, typeY); // 空地
+        if (storageVal === 'garage') drawCircleMark(275, typeY); // 車庫
         if (storageVal === 'rental') drawCircleMark(320, typeY); // 貸ガレージ
         if (storageVal === 'single') drawCircleMark(380, typeY); // 単独
         if (storageVal === 'shared') drawCircleMark(440, typeY); // 共用
