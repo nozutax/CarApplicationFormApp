@@ -194,7 +194,6 @@
         function drawGrid() {
             const step = 10; // getPos と同じ 10px グリッド
             ctx.save();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.lineWidth = 1;
 
             for (let x = 0; x <= canvas.width; x += step) {
@@ -217,9 +216,12 @@
             ctx.restore();
         }
 
-        function redraw() {
-            // まずグリッドを描画してから、図形を上に重ねる
-            drawGrid();
+        // 実際の図形類を描画する共通関数（引数フラグでグリッド有無を制御）
+        function redrawInternal(withGrid) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (withGrid) {
+                drawGrid();
+            }
 
             shapes.forEach(s => {
                 ctx.strokeStyle = s.color; ctx.fillStyle = s.color; ctx.lineWidth = LINE_WIDTH;
@@ -280,6 +282,11 @@
                 ctx.lineTo(p.x, p.y);
                 ctx.stroke();
             }
+        }
+
+        // 通常の再描画（グリッド付き）
+        function redraw() {
+            redrawInternal(true);
         }
 
         function drawHatchPattern(context, points, color) {
@@ -345,8 +352,43 @@
         async function generateFinalPDF() {
             try {
                 const bytes = await fetch(TEMPLATE_URL).then(res => res.arrayBuffer());
-                const exCanvas = document.createElement('canvas'); exCanvas.width = canvas.width; exCanvas.height = canvas.height;
-                exCanvas.getContext('2d').drawImage(canvas, 0, 0);
+                // PDF 用にはグリッドなしで一時描画したものを使用
+                const exCanvas = document.createElement('canvas');
+                exCanvas.width = canvas.width;
+                exCanvas.height = canvas.height;
+                const exCtx = exCanvas.getContext('2d');
+
+                // 一時キャンバスに図形のみを描画（グリッドなし）
+                const prevCtx = { ctxRef: ctx };
+                // メインキャンバスの内容を壊さないように、元の図形描画処理を exCtx 上で再現
+                // ここでは shapes / hatchPoints / drawing / 現在ツールのプレビューは無視し、
+                // 確定済みの shapes のみを出力する簡易版を使う。
+                shapes.forEach(s => {
+                    exCtx.strokeStyle = s.color; exCtx.fillStyle = s.color; exCtx.lineWidth = LINE_WIDTH;
+                    
+                    if(s.type==='rect') exCtx.strokeRect(s.x1, s.y1, s.x2-s.x1, s.y2-s.y1);
+                    else if(s.type==='hatch') drawHatchPattern(exCtx, s.points, s.color);
+                    else if(s.type==='multi'){
+                        const dx = s.x2-s.x1, dy = s.y2-s.y1;
+                        for(let i=0; i<s.count; i++){
+                            const r = i/(s.count-1);
+                            exCtx.beginPath();
+                            if(s.dir==='V') { let px = s.x1+(dx*r); exCtx.moveTo(px,s.y1); exCtx.lineTo(px,s.y2); }
+                            else { let py = s.y1+(dy*r); exCtx.moveTo(s.x1,py); exCtx.lineTo(s.x2,py); }
+                            exCtx.stroke();
+                        }
+                    } else if(s.type==='line' || s.type==='dist'){
+                        exCtx.beginPath(); exCtx.moveTo(s.x1, s.y1); exCtx.lineTo(s.x2, s.y2); exCtx.stroke();
+                        if(s.type==='dist'){
+                            exCtx.font = FONT_SIZE_S;
+                            drawArrow(exCtx, s.x1, s.y1, s.x2, s.y2); drawArrow(exCtx, s.x2, s.y2, s.x1, s.y1);
+                            const mx = (s.x1+s.x2)/2, my = (s.y1+s.y2)/2, tw = exCtx.measureText(s.text).width;
+                            exCtx.fillStyle = "white"; exCtx.fillRect(mx-tw/2-6, my-15, tw+12, 30);
+                            exCtx.fillStyle = s.color; exCtx.textAlign="center"; exCtx.fillText(s.text, mx, my+9);
+                        }
+                    } else if(s.type==='text'){ exCtx.font=FONT_SIZE_L; exCtx.textAlign="left"; exCtx.fillText(s.text, s.x, s.y); }
+                });
+
                 const img = await fetch(exCanvas.toDataURL()).then(res => res.arrayBuffer());
                 const doc = await PDFDocument.load(bytes);
                 const png = await doc.embedPng(img);
