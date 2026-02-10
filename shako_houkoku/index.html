@@ -53,8 +53,9 @@
         <h2>申請事由</h2>
         <div class="form-group">
             <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="app_reason" value="new_car"> 新車 (新規)</label>
-                <label class="radio-label"><input type="radio" name="app_reason" value="sub_car"> 代車 (代替)</label>
+                <!-- ラベル修正: 新車(新規)→新規, 代車(代替)→代替 -->
+                <label class="radio-label"><input type="radio" name="app_reason" value="new_car"> 新規</label>
+                <label class="radio-label"><input type="radio" name="app_reason" value="sub_car"> 代替</label>
                 <label class="radio-label"><input type="radio" name="app_reason" value="small_cargo"> 小型貨物</label>
                 <label class="radio-label"><input type="radio" name="app_reason" value="std_cargo"> 普通貨物</label>
                 <label class="radio-label"><input type="radio" name="app_reason" value="add_car"> 増車</label>
@@ -72,9 +73,10 @@
             <div class="form-group">
                 <label style="font-weight:normal; font-size:12px;">代替車両の登録年月</label>
                 <div class="row">
-                    <input type="number" id="sub_reg_year" placeholder="令和5" style="flex:1">
+                    <!-- 入力を type="text" に変更 -->
+                    <input type="text" id="sub_reg_year" placeholder="例：令和5" style="flex:1">
                     <span class="suffix">年</span>
-                    <input type="number" id="sub_reg_month" placeholder="10" style="flex:1">
+                    <input type="text" id="sub_reg_month" placeholder="例：10" style="flex:1">
                     <span class="suffix">月</span>
                 </div>
             </div>
@@ -183,11 +185,10 @@
 
         // === 座標のマッピング ===
         // ※PDFのY座標は下から上に向かって増えます。
-        // ※値は添付画像を目視で推定しています。ずれている場合は微調整してください。
 
         // 1. 申請者の住所・氏名
         // Y座標目安: 上から1/3あたり
-        const applicantY = height - 265; 
+        const applicantY = height - 165; 
         drawText(v('applicant_address'), 150, applicantY + 10);
         drawText(v('applicant_name'), 150, applicantY - 10, 12);
 
@@ -195,11 +196,8 @@
         drawText(v('storage_location'), 150, height - 305);
 
         // 3. 申請事由・車種のラジオボタン処理
-        // PDFの行: [車種行] と [事由行] があると想定
-        // 車種行Y = height - 340付近
-        // 事由行Y = height - 370付近
-        const carTypeY = height - 340;
-        const reasonY = height - 370;
+        const carTypeY = height - 270;
+        const reasonY = height - 300;
 
         const reasonVal = getRadio('app_reason');
         if (reasonVal === 'small_cargo') {
@@ -215,24 +213,24 @@
             // 代替
             drawCircleMark(215, reasonY);
         } else if (reasonVal === 'add_car') {
-            // 増車 (左端の括弧付近と想定)
+            // 増車
             drawCircleMark(155, reasonY - 25); 
         } else if (reasonVal === 'other') {
-            // その他 (車種行のその他か、事由行のその他か不明だが、事由行の右端と想定)
+            // その他
             drawCircleMark(450, reasonY);
         }
 
         // 4. 代替車両情報・車台番号
         // 車名
         drawText(v('sub_car_name'), 300, reasonY); 
-        // 登録年月
+        // 登録年月 (数値ではなく文字列として出力)
         drawText(v('sub_reg_year'), 465, reasonY); // 年
         drawText(v('sub_reg_month'), 500, reasonY); // 月
         // 車台番号
         drawText(v('chassis_num'), 280, reasonY - 25);
 
         // 5. 保管場所の種類・収容台数
-        const typeY = height - 475; // 下の方
+        const typeY = height - 370;
         const storageVal = getRadio('storage_type');
         
         if (storageVal === 'lot') drawCircleMark(160, typeY); // 空地
@@ -242,10 +240,10 @@
         if (storageVal === 'shared') drawCircleMark(375, typeY); // 共用
 
         // 総収容台数
-        drawText(v('capacity'), 470, typeY);
+        drawText(v('capacity'), 370, typeY);
 
         // 6. 保管場所の広さ
-        const dimY = height - 510;
+        const dimY = height - 420;
         drawText(v('dim_length'), 190, dimY); // 縦
         drawText(v('dim_width'), 350, dimY);  // 横
         drawText(v('dim_area'), 500, dimY);   // 面積
