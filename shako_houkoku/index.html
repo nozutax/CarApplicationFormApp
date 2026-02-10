@@ -248,7 +248,7 @@
             drawCircleMark(500, reasonY);
         } else if (reasonVal === 'add_car') {
             // 増車
-            drawCircleMark(210, reasonY - 25); 
+            drawCircleMark(225, reasonY - 26); 
         } else if (reasonVal === 'other') {
             // その他
             drawCircleMark(590, reasonY);
@@ -271,7 +271,7 @@
         if (storageVal === 'garage') drawCircleMark(275, typeY); // 車庫
         if (storageVal === 'rental') drawCircleMark(330, typeY); // 貸ガレージ
         if (storageVal === 'single') drawCircleMark(440, typeY); // 単独
-        if (storageVal === 'shared') drawCircleMark(495, typeY); // 共用
+        if (storageVal === 'shared') drawCircleMark(500, typeY); // 共用
 
         // 総収容台数
         drawText(v('capacity'), 600, typeY);
