@@ -189,64 +189,64 @@
         // 1. 申請者の住所・氏名
         // Y座標目安: 上から1/3あたり
         const applicantY = height - 165; 
-        drawText(v('applicant_address'), 150, applicantY + 10);
-        drawText(v('applicant_name'), 150, applicantY - 10, 12);
+        drawText(v('applicant_address'), 190, applicantY -13);
+        drawText(v('applicant_name'), 600, applicantY - 13, 12);
 
         // 2. 保管場所の位置
-        drawText(v('storage_location'), 150, height - 305);
+        drawText(v('storage_location'), 190,  applicantY - 20);
 
         // 3. 申請事由・車種のラジオボタン処理
-        const carTypeY = height - 270;
-        const reasonY = height - 300;
+        const carTypeY = height - 200;
+        const reasonY = height - 270;
 
         const reasonVal = getRadio('app_reason');
         if (reasonVal === 'small_cargo') {
             // 小型貨物
-            drawCircleMark(245, carTypeY); 
+            drawCircleMark(390, carTypeY); 
         } else if (reasonVal === 'std_cargo') {
             // 普通貨物
-            drawCircleMark(345, carTypeY);
+            drawCircleMark(480, carTypeY);
         } else if (reasonVal === 'new_car') {
             // 新規
-            drawCircleMark(155, reasonY);
+            drawCircleMark(210, reasonY);
         } else if (reasonVal === 'sub_car') {
             // 代替
-            drawCircleMark(215, reasonY);
+            drawCircleMark(300reasonY);
         } else if (reasonVal === 'add_car') {
             // 増車
-            drawCircleMark(155, reasonY - 25); 
+            drawCircleMark(210, reasonY - 25); 
         } else if (reasonVal === 'other') {
             // その他
-            drawCircleMark(450, reasonY);
+            drawCircleMark(570, reasonY);
         }
 
         // 4. 代替車両情報・車台番号
         // 車名
-        drawText(v('sub_car_name'), 300, reasonY); 
+        drawText(v('sub_car_name'), 320, reasonY-25); 
         // 登録年月 (数値ではなく文字列として出力)
-        drawText(v('sub_reg_year'), 465, reasonY); // 年
-        drawText(v('sub_reg_month'), 500, reasonY); // 月
+        drawText(v('sub_reg_year'), 640, reasonY-25); // 年
+        drawText(v('sub_reg_month'), 700, reasonY-25); // 月
         // 車台番号
-        drawText(v('chassis_num'), 280, reasonY - 25);
+        drawText(v('chassis_num'), 320, reasonY - 40);
 
         // 5. 保管場所の種類・収容台数
         const typeY = height - 370;
         const storageVal = getRadio('storage_type');
         
-        if (storageVal === 'lot') drawCircleMark(160, typeY); // 空地
-        if (storageVal === 'garage') drawCircleMark(205, typeY); // 車庫
-        if (storageVal === 'rental') drawCircleMark(255, typeY); // 貸ガレージ
-        if (storageVal === 'single') drawCircleMark(330, typeY); // 単独
-        if (storageVal === 'shared') drawCircleMark(375, typeY); // 共用
+        if (storageVal === 'lot') drawCircleMark(200, typeY); // 空地
+        if (storageVal === 'garage') drawCircleMark(260, typeY); // 車庫
+        if (storageVal === 'rental') drawCircleMark(320, typeY); // 貸ガレージ
+        if (storageVal === 'single') drawCircleMark(380, typeY); // 単独
+        if (storageVal === 'shared') drawCircleMark(440, typeY); // 共用
 
         // 総収容台数
-        drawText(v('capacity'), 370, typeY);
+        drawText(v('capacity'), 600, typeY);
 
         // 6. 保管場所の広さ
         const dimY = height - 420;
-        drawText(v('dim_length'), 190, dimY); // 縦
-        drawText(v('dim_width'), 350, dimY);  // 横
-        drawText(v('dim_area'), 500, dimY);   // 面積
+        drawText(v('dim_length'), 210, dimY); // 縦
+        drawText(v('dim_width'), 400, dimY);  // 横
+        drawText(v('dim_area'), 640, dimY);   // 面積
 
         // --- ファイル出力 ---
         const now = new Date();
