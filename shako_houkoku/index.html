@@ -241,7 +241,7 @@
             // その他の内容テキスト（〇の右側に出力）
             const otherText = v('car_type_other_text');
             if (otherText) {
-                drawText(otherText, 610, carTypeY , 9);
+                drawText(otherText, 620, carTypeY-3 , 9);
             }
         }
 
@@ -265,7 +265,7 @@
             // 増車の内容テキスト（〇の下側に出力）
             const addText = v('app_reason_add_text');
             if (addText) {
-                drawText(addText, 220, reasonY - 45, );
+                drawText(addText, 220, reasonY - 47, );
             }
         } else if (reasonVal === 'other') {
             // その他
