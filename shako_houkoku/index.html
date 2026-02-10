@@ -173,14 +173,16 @@
             });
         };
 
-        // 丸印（〇）を描画する関数
+        // 丸印（横長の楕円）を描画する関数
         const drawCircleMark = (x, y) => {
-            page.drawText('〇', {
+            // x, y を中心として横長の楕円枠を描画
+            page.drawEllipse({
                 x: x,
                 y: y,
-                size: 20, // 〇のサイズ
-                font: customFont,
-                color: rgb(0, 0, 0),
+                xScale: 10,   // 横方向半径（大きめ）
+                yScale: 6,    // 縦方向半径（小さめ）→ 横長に見せる
+                borderColor: rgb(0, 0, 0),
+                borderWidth: 1.2,
             });
         };
 
@@ -199,14 +201,14 @@
         // 1. 申請者の住所・氏名
         // Y座標目安: 上から1/3あたり
         const applicantY = height - 165; 
-        drawText(v('applicant_address'), 190, applicantY -13);
-        drawText(v('applicant_name'), 600, applicantY - 13);
+        drawText(v('applicant_address'), 200, applicantY -15);
+        drawText(v('applicant_name'), 600, applicantY - 15);
 
         // 2. 保管場所の位置
-        drawText(v('storage_location'), 190,  applicantY - 30);
+        drawText(v('storage_location'), 200,  applicantY - 40);
 
         // 3. 申請事由・申請車種のラジオボタン処理
-        const carTypeY = height - 190;
+        const carTypeY = height - 230;
         const reasonY = height - 260;
 
         // 申請車種（小型乗用・普通乗用・小型貨物・普通貨物・その他）
@@ -246,12 +248,12 @@
 
         // 4. 代替車両情報・車台番号
         // 車名
-        drawText(v('sub_car_name'), 360, reasonY-25); 
+        drawText(v('sub_car_name'), 390, reasonY-25); 
         // 登録年月 (数値ではなく文字列として出力)
         drawText(v('sub_reg_year'), 660, reasonY-25); // 年
         drawText(v('sub_reg_month'), 720, reasonY-25); // 月
         // 車台番号
-        drawText(v('chassis_num'), 360, reasonY - 40);
+        drawText(v('chassis_num'), 390, reasonY - 40);
 
         // 5. 保管場所の種類・収容台数
         const typeY = height - 400;
