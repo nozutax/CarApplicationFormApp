@@ -217,13 +217,13 @@
         const carTypeVal = getRadio('car_type');
         if (carTypeVal === 'small_pass') {
             // 小型乗用
-            drawCircleMark(220, carTypeY);
+            drawCircleMark(225, carTypeY);
         } else if (carTypeVal === 'normal_pass') {
             // 普通乗用
             drawCircleMark(315, carTypeY);
         } else if (carTypeVal === 'small_cargo') {
             // 小型貨物
-            drawCircleMark(390, carTypeY); 
+            drawCircleMark(395, carTypeY); 
         } else if (carTypeVal === 'normal_cargo') {
             // 普通貨物
             drawCircleMark(480, carTypeY);
@@ -236,7 +236,7 @@
         const reasonVal = getRadio('app_reason');
         if (reasonVal === 'new_car') {
             // 新規
-            drawCircleMark(220, reasonY);
+            drawCircleMark(225, reasonY);
         } else if (reasonVal === 'sub_car') {
             // 代替
             drawCircleMark(315, reasonY);
@@ -245,13 +245,13 @@
             drawCircleMark(410, reasonY);
         } else if (reasonVal === 'business_car') {
             // 商用車
-            drawCircleMark(490, reasonY);
+            drawCircleMark(500, reasonY);
         } else if (reasonVal === 'add_car') {
             // 増車
             drawCircleMark(210, reasonY - 25); 
         } else if (reasonVal === 'other') {
             // その他
-            drawCircleMark(570, reasonY);
+            drawCircleMark(590, reasonY);
         }
 
         // 4. 代替車両情報・車台番号
@@ -269,9 +269,9 @@
         
         if (storageVal === 'lot') drawCircleMark(220, typeY); // 空地
         if (storageVal === 'garage') drawCircleMark(275, typeY); // 車庫
-        if (storageVal === 'rental') drawCircleMark(320, typeY); // 貸ガレージ
-        if (storageVal === 'single') drawCircleMark(380, typeY); // 単独
-        if (storageVal === 'shared') drawCircleMark(440, typeY); // 共用
+        if (storageVal === 'rental') drawCircleMark(330, typeY); // 貸ガレージ
+        if (storageVal === 'single') drawCircleMark(440, typeY); // 単独
+        if (storageVal === 'shared') drawCircleMark(495, typeY); // 共用
 
         // 総収容台数
         drawText(v('capacity'), 600, typeY);
