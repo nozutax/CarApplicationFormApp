@@ -69,16 +69,16 @@
         <div class="form-group">
             <div class="row" style="align-items: flex-end;">
                 <div class="col" style="flex: 0 0 100px;">
-                    <input type="text" id="hope_num_1" maxlength="3" placeholder="3桁">
+                    <input type="text" id="hope_num_1" maxlength="3" placeholder="300">
                 </div>
                 <div class="col" style="flex: 0 0 60px;">
-                    <input type="text" id="hope_num_2" maxlength="1" placeholder="1桁">
+                    <input type="text" id="hope_num_2" maxlength="1" placeholder="あ">
                 </div>
                 <div class="col" style="flex: 0 0 140px;">
-                    <input type="text" id="hope_num_3" maxlength="4" placeholder="4桁">
+                    <input type="text" id="hope_num_3" maxlength="4" placeholder="0123">
                 </div>
             </div>
-            <div class="hint">3桁 ＋ 1桁 ＋ 4桁</div>
+            <div class="hint">3桁 ＋ ひらがな ＋ 4桁</div>
         </div>
 
         <h2>車両情報</h2>
@@ -92,45 +92,55 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col" style="flex:2;">
-                <label>㉒車台番号（下7桁）</label>
-                <input type="text" id="chassis_num" maxlength="7" placeholder="ABC1234">
-            </div>
-            <div class="col" style="flex:1;">
-                <label>⑦有効期間</label>
-                <input type="text" id="validity" maxlength="1" placeholder="例:2">
-            </div>
+        <div class="form-group">
+            <label>㉒車台番号（下7桁）</label>
+            <input type="text" id="chassis_num" maxlength="7" placeholder="ABC1234">
         </div>
-        
-        <div class="row">
-            <div class="col">
-                <label>㊴走行距離計表示値</label>
-                <input type="text" id="odometer" placeholder="12300">
-                <div class="hint">※単位(km)は自動選択されます</div>
-            </div>
-            <div class="col">
-                <label>メーター形態</label>
-                <select id="meter_type">
-                    <option value="km">km</option>
-                    <option value="mile">mile</option>
-                </select>
+
+        <h2>所有者欄</h2>
+        <div class="form-group">
+            <label>氏名又は名称</label>
+            <input type="text" id="owner_name" placeholder="山田 太郎">
+        </div>
+        <div class="form-group">
+            <label>住所（3つのマス）</label>
+            <div class="row" style="align-items: flex-end;">
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">都道府県町村小字コード</label>
+                    <input type="text" id="owner_address_code" placeholder="都道府県町村小字コード">
+                </div>
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">丁目</label>
+                    <input type="text" id="owner_chome" placeholder="丁目">
+                </div>
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">番地</label>
+                    <input type="text" id="owner_banchi" placeholder="番地">
+                </div>
             </div>
         </div>
 
-        <h2>申請人（新所有者など）</h2>
+        <h2>使用者欄</h2>
         <div class="form-group">
             <label>氏名又は名称</label>
-            <input type="text" id="applicant_name" placeholder="山田 太郎">
+            <input type="text" id="user_name" placeholder="山田 太郎">
         </div>
         <div class="form-group">
-            <label>住所</label>
-            <input type="text" id="applicant_address" placeholder="東京都千代田区...">
-        </div>
-        
-        <div class="form-group">
-            <label>住所コード（数字のみ）</label>
-            <input type="text" id="address_code" placeholder="130010005 (都道府県コード等)">
+            <label>住所（3つのマス）</label>
+            <div class="row" style="align-items: flex-end;">
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">都道府県町村小字コード</label>
+                    <input type="text" id="user_address_code" placeholder="都道府県町村小字コード">
+                </div>
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">丁目</label>
+                    <input type="text" id="user_chome" placeholder="丁目">
+                </div>
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">番地</label>
+                    <input type="text" id="user_banchi" placeholder="番地">
+                </div>
+            </div>
         </div>
 
         <button type="button" onclick="generatePDF()">PDFを作成してダウンロード</button>
@@ -214,9 +224,6 @@
         drawText(v('hope_num_2'), 98, Y_HOPE, 14, BOX_W);
         drawText(v('hope_num_3'), 115, Y_HOPE, 14, BOX_W);
 
-        // ⑦有効期間 (上段中央右寄り)
-        drawText(v('validity'), 450, Y_ROW_TOP, 14, BOX_W);
-
         // ㉑自動車登録番号 (地域、分類、ひらがな、一連番号)
         // 座標は画像のマス目に合わせて調整
         const CAR_Y = Y_ROW_CAR; 
@@ -228,24 +235,25 @@
         // ㉒車台番号（下7桁）
         drawText(v('chassis_num'), 400, CAR_Y, 14, BOX_W);
 
-        // ㊴走行距離計表示値 (下の方)
-        const ODO_Y = 150; 
-        drawText(v('odometer'), 400, ODO_Y, 14, BOX_W);
-        // km/mileのマル印などの実装は省略（必要に応じて円を描画してください）
+        // 所有者欄（氏名・住所3マス）
+        const Y_OWNER = Y_ROW_ADD + 50;
+        drawText(v('owner_name'), 100, Y_OWNER, 11);
+        drawText(v('owner_address_code'), 100, Y_OWNER - 25, 11);
+        drawText(v('owner_chome'), 280, Y_OWNER - 25, 11);
+        drawText(v('owner_banchi'), 380, Y_OWNER - 25, 11);
 
-        // 氏名・住所エリア（第1号様式の中段〜下段）
-        // 漢字用フリースペース
-        drawText(v('applicant_name'), 100, Y_ROW_ADD + 40, 11);
-        drawText(v('applicant_address'), 100, Y_ROW_ADD, 11);
-        
-        // 住所コード（マス目）
-        drawText(v('address_code'), 100, Y_ROW_ADD - 30, 14, BOX_W);
+        // 使用者欄（氏名・住所3マス）
+        const Y_USER = Y_ROW_ADD - 20;
+        drawText(v('user_name'), 100, Y_USER, 11);
+        drawText(v('user_address_code'), 100, Y_USER - 25, 11);
+        drawText(v('user_chome'), 280, Y_USER - 25, 11);
+        drawText(v('user_banchi'), 380, Y_USER - 25, 11);
 
         // --- ファイル名生成とダウンロード ---
         const now = new Date();
         const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
         
-        let applicant = v('applicant_name') || '未入力';
+        let applicant = v('owner_name') || '未入力';
         applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
 
         const fileName = `${dateStr}_第1号様式_${applicant}.pdf`;
