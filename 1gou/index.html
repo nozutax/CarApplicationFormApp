@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自動車登録申請書作成アプリ（第1号様式）</title>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+    <style>
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #fcfcfc; color: #333; }
+        .container { background: white; padding: 40px; border-radius: 4px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 20px; font-weight: bold; }
+        h2 { font-size: 16px; border-bottom: 2px solid #007BFF; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 16px; color: #444; }
+        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; color: #333; }
+        .row { display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-end; }
+        .col { flex: 1; }
+        button { display: block; width: 100%; padding: 18px; background-color: #007BFF; color: white; border: none; border-radius: 4px; font-size: 20px; cursor: pointer; margin-top: 40px; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        .hint { font-size: 12px; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>自動車登録申請書（第1号様式）</h1>
+    <p style="text-align:center; font-size:14px; color:#666;">新規登録・移転登録・変更登録など</p>
+    
+    <form id="pdfForm">
+        
+        <h2>基本情報</h2>
+        <div class="row">
+            <div class="col" style="flex:1;">
+                <label>①業務種別</label>
+                <select id="job_type">
+                    <option value="1">1: 新規登録</option>
+                    <option value="3">3: 移転登録</option>
+                    <option value="4">4: 変更登録</option>
+                    <option value="5">5: 更正登録</option>
+                    <option value="6">6: 番号変更</option>
+                </select>
+            </div>
+            <div class="col" style="flex:1;">
+                <label>㊲塗色コード</label>
+                <input type="text" id="color_code" maxlength="1" placeholder="例:1(赤) 8(白)">
+            </div>
+        </div>
+
+        <h2>車両情報</h2>
+        <div class="form-group">
+            <label>㉑自動車登録番号（ナンバープレート）</label>
+            <div class="row">
+                <input type="text" id="car_num_1" placeholder="品川" style="flex:2">
+                <input type="text" id="car_num_2" placeholder="300" style="flex:2">
+                <input type="text" id="car_num_3" placeholder="あ" style="flex:1">
+                <input type="text" id="car_num_4" maxlength="4" placeholder="1234" style="flex:3">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col" style="flex:2;">
+                <label>㉒車台番号（下7桁）</label>
+                <input type="text" id="chassis_num" maxlength="7" placeholder="ABC1234">
+            </div>
+            <div class="col" style="flex:1;">
+                <label>⑦有効期間</label>
+                <input type="text" id="validity" maxlength="1" placeholder="例:2">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <label>㊴走行距離計表示値</label>
+                <input type="text" id="odometer" placeholder="12300">
+                <div class="hint">※単位(km)は自動選択されます</div>
+            </div>
+            <div class="col">
+                <label>メーター形態</label>
+                <select id="meter_type">
+                    <option value="km">km</option>
+                    <option value="mile">mile</option>
+                </select>
+            </div>
+        </div>
+
+        <h2>申請人（新所有者など）</h2>
+        <div class="form-group">
+            <label>氏名又は名称</label>
+            <input type="text" id="applicant_name" placeholder="山田 太郎">
+        </div>
+        <div class="form-group">
+            <label>住所</label>
+            <input type="text" id="applicant_address" placeholder="東京都千代田区...">
+        </div>
+        
+        <div class="form-group">
+            <label>住所コード（数字のみ）</label>
+            <input type="text" id="address_code" placeholder="130010005 (都道府県コード等)">
+        </div>
+
+        <button type="button" onclick="generatePDF()">PDFを作成してダウンロード</button>
+    </form>
+</div>
+
+<script>
+    const { PDFDocument, rgb } = PDFLib;
+
+    async function generatePDF() {
+        let pdfBytes, fontBytes;
+        try {
+            // 第1号様式のPDFを読み込みます
+            const pdfUrl = 'template.pdf'; 
+            const fontUrl = 'font.ttf'; 
+            [pdfBytes, fontBytes] = await Promise.all([
+                fetch(pdfUrl).then(res => res.arrayBuffer()),
+                fetch(fontUrl).then(res => res.arrayBuffer())
+            ]);
+        } catch (e) {
+            alert("template.pdf (第1号様式) または font.ttf が見つかりません。");
+            return;
+        }
+
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+        pdfDoc.registerFontkit(fontkit);
+        const customFont = await pdfDoc.embedFont(fontBytes);
+        const page = pdfDoc.getPages()[0];
+        
+        // ページサイズを取得（座標計算用）
+        const { width, height } = page.getSize();
+
+        // テキスト描画用ヘルパー関数
+        // spacing: 文字間のスペース（OCRマスの幅に合わせる）
+        const drawText = (text, x, y, size = 10, spacing = 0) => {
+            if (!text) return;
+            text = String(text); // 文字列化
+            if (spacing > 0) {
+                for (let i = 0; i < text.length; i++) {
+                    // OCRマス目は等幅で配置するため、1文字ずつずらして描画
+                    page.drawText(text[i], { x: x + (i * spacing), y, size, font: customFont, color: rgb(0, 0, 0) });
+                }
+            } else {
+                page.drawText(text, { x, y, size, font: customFont, color: rgb(0, 0, 0) });
+            }
+        };
+
+        const v = (id) => document.getElementById(id).value;
+
+        // ==========================================
+        //  座標設定 (第1号様式のレイアウトに合わせて調整)
+        //  ※お手持ちのPDFのスキャン状況により、
+        //  baseY や offsetX を微調整してください。
+        // ==========================================
+        
+        // OCRシートのマスの幅（約17〜18ポイント）
+        const BOX_W = 17.5; 
+        
+        // 行の高さ（Y座標）の基準
+        // PDF-Libは左下が(0,0)です。A4横向き想定か縦向きかで大きく変わります。
+        // 一般的なOCRシート(A4横配置)を想定したY座標です。ズレる場合はここを変更してください。
+        const Y_ROW_TOP = 500;   // 業務種別など
+        const Y_ROW_CAR = 440;   // 自動車登録番号
+        const Y_ROW_ADD = 250;   // 住所・氏名欄
+        const Y_ROW_BTM = 100;   // 走行距離など
+
+        // ①業務種別
+        drawText(v('job_type'), 45, Y_ROW_TOP, 14, BOX_W);
+
+        // ㊲車体の塗色 (右側の方)
+        drawText(v('color_code'), 780, 180, 14, BOX_W); // 位置要調整
+
+        // ⑦有効期間 (上段中央右寄り)
+        drawText(v('validity'), 450, Y_ROW_TOP, 14, BOX_W);
+
+        // ㉑自動車登録番号 (地域、分類、ひらがな、一連番号)
+        // 座標は画像のマス目に合わせて調整
+        const CAR_Y = Y_ROW_CAR; 
+        drawText(v('car_num_1'), 45,  CAR_Y, 12, 33);     // 地域名（漢字）はマスが広い
+        drawText(v('car_num_2'), 175, CAR_Y, 14, BOX_W);  // 3桁数字
+        drawText(v('car_num_3'), 245, CAR_Y, 12);         // ひらがな
+        drawText(v('car_num_4'), 280, CAR_Y, 14, BOX_W);  // 4桁一連番号
+
+        // ㉒車台番号（下7桁）
+        drawText(v('chassis_num'), 400, CAR_Y, 14, BOX_W);
+
+        // ㊴走行距離計表示値 (下の方)
+        const ODO_Y = 150; 
+        drawText(v('odometer'), 400, ODO_Y, 14, BOX_W);
+        // km/mileのマル印などの実装は省略（必要に応じて円を描画してください）
+
+        // 氏名・住所エリア（第1号様式の中段〜下段）
+        // 漢字用フリースペース
+        drawText(v('applicant_name'), 100, Y_ROW_ADD + 40, 11);
+        drawText(v('applicant_address'), 100, Y_ROW_ADD, 11);
+        
+        // 住所コード（マス目）
+        drawText(v('address_code'), 100, Y_ROW_ADD - 30, 14, BOX_W);
+
+        // --- ファイル名生成とダウンロード ---
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+        
+        let applicant = v('applicant_name') || '未入力';
+        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+
+        const fileName = `${dateStr}_第1号様式_${applicant}.pdf`;
+
+        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        const link = document.createElement('a');
+        link.href = pdfDataUri;
+        link.download = fileName;
+        link.click();
+    }
+</script>
+</body>
+</html>
