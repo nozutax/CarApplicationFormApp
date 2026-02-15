@@ -31,16 +31,35 @@
             margin-bottom: 14px;
         }
         .applicant-block:last-child { margin-bottom: 0; }
+        .applicant-block .block-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 0 12px 0;
+        }
         .applicant-block .block-title {
             font-size: 14px;
             font-weight: bold;
             color: #1e3a5f;
             border-left: 4px solid #007BFF;
             padding: 6px 0 6px 12px;
-            margin: 0 0 12px 0;
+            margin: 0;
             background: #eef5ff;
             border-radius: 0 4px 4px 0;
+            flex: 1;
+            min-width: 0;
         }
+        .applicant-block .block-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #555;
+            white-space: nowrap;
+        }
+        .applicant-block .block-check input { width: auto; margin: 0; cursor: pointer; }
         .applicant-block .form-group { margin-bottom: 12px; }
         .applicant-block .form-group:last-child { margin-bottom: 0; }
         .applicant-block label { font-size: 14px; margin-bottom: 6px; }
@@ -190,7 +209,10 @@
         <h2>申請人</h2>
         <div class="applicant-section">
             <div class="applicant-block">
-                <div class="block-title">新所有者・現所有者</div>
+                <div class="block-title-row">
+                    <div class="block-title">新所有者・現所有者</div>
+                    <label class="block-check"><input type="checkbox" id="check_same_ininjo_new_owner" onchange="toggleSameIninjo('new_owner')"> 委任状記載事項に同じ</label>
+                </div>
                 <div class="form-group">
                     <label>氏名又は名称</label>
                     <input type="text" id="app_new_owner_name" placeholder="山田 太郎">
@@ -202,7 +224,10 @@
             </div>
 
             <div class="applicant-block">
-                <div class="block-title">使用者</div>
+                <div class="block-title-row">
+                    <div class="block-title">使用者</div>
+                    <label class="block-check"><input type="checkbox" id="check_same_ininjo_user" onchange="toggleSameIninjo('user')"> 委任状記載事項に同じ</label>
+                </div>
                 <div class="form-group">
                     <label>氏名又は名称</label>
                     <input type="text" id="app_user_name" placeholder="山田 太郎">
@@ -214,7 +239,10 @@
             </div>
 
             <div class="applicant-block">
-                <div class="block-title">旧所有者</div>
+                <div class="block-title-row">
+                    <div class="block-title">旧所有者</div>
+                    <label class="block-check"><input type="checkbox" id="check_same_ininjo_old_owner" onchange="toggleSameIninjo('old_owner')"> 委任状記載事項に同じ</label>
+                </div>
                 <div class="form-group">
                     <label>氏名又は名称</label>
                     <input type="text" id="app_old_owner_name" placeholder="山田 太郎">
@@ -250,7 +278,10 @@
             </div>
 
             <div class="applicant-block">
-                <div class="block-title">使用者本拠の位置</div>
+                <div class="block-title-row">
+                    <div class="block-title">使用者本拠の位置</div>
+                    <label class="block-check"><input type="checkbox" id="check_same_user_address_base" onchange="toggleSameUserAddressBase()"> 使用者住所に同じ</label>
+                </div>
                 <div class="form-group">
                     <label>住所</label>
                     <input type="text" id="app_user_base_address" placeholder="東京都千代田区...">
@@ -264,6 +295,33 @@
 
 <script>
     const { PDFDocument, rgb } = PDFLib;
+
+    const SAME_ININJO = '委任状記載事項に同じ';
+    const SAME_USER_ADDRESS = '使用者住所に同じ';
+
+    function toggleSameIninjo(which) {
+        const ids = {
+            new_owner: ['app_new_owner_name', 'app_new_owner_address'],
+            user: ['app_user_name', 'app_user_address'],
+            old_owner: ['app_old_owner_name', 'app_old_owner_address']
+        };
+        const checkIds = { new_owner: 'check_same_ininjo_new_owner', user: 'check_same_ininjo_user', old_owner: 'check_same_ininjo_old_owner' };
+        const names = ids[which];
+        const chk = document.getElementById(checkIds[which]);
+        const value = chk.checked ? SAME_ININJO : '';
+        names.forEach(id => {
+            const el = document.getElementById(id);
+            el.value = value;
+            el.readOnly = chk.checked;
+        });
+    }
+
+    function toggleSameUserAddressBase() {
+        const chk = document.getElementById('check_same_user_address_base');
+        const el = document.getElementById('app_user_base_address');
+        el.value = chk.checked ? SAME_USER_ADDRESS : '';
+        el.readOnly = chk.checked;
+    }
 
     async function generatePDF() {
         let pdfBytes, fontBytes;
