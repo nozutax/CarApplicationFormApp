@@ -30,21 +30,55 @@
     <form id="pdfForm">
         
         <h2>基本情報</h2>
-        <div class="row">
-            <div class="col" style="flex:1;">
-                <label>①業務種別</label>
-                <select id="job_type">
-                    <option value="1">1: 新規登録</option>
-                    <option value="3">3: 移転登録</option>
-                    <option value="4">4: 変更登録</option>
-                    <option value="5">5: 更正登録</option>
-                    <option value="6">6: 番号変更</option>
-                </select>
+        <div class="form-group">
+            <label>①業務種別</label>
+            <select id="job_type">
+                <option value="1">1: 新規登録</option>
+                <option value="3">3: 移転登録</option>
+                <option value="4">4: 変更登録</option>
+                <option value="5">5: 更正登録</option>
+                <option value="6">6: 番号変更</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>６番号指示</label>
+            <div class="row" style="align-items: flex-end;">
+                <div class="col" style="flex: 0 0 80px;">
+                    <label class="hint" style="margin-bottom:4px;">種別</label>
+                    <input type="text" id="number_indication_type" maxlength="1" placeholder="1桁">
+                </div>
+                <div class="col" style="flex: 0 0 120px;">
+                    <label class="hint" style="margin-bottom:4px;">用途</label>
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="number_indication_use_1" maxlength="1" placeholder="1">
+                        <input type="text" id="number_indication_use_2" maxlength="1" placeholder="2">
+                    </div>
+                </div>
+                <div class="col" style="flex: 0 0 120px;">
+                    <label class="hint" style="margin-bottom:4px;">標板</label>
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="number_indication_hyo_1" maxlength="1" placeholder="1">
+                        <input type="text" id="number_indication_hyo_2" maxlength="1" placeholder="2">
+                    </div>
+                </div>
             </div>
-            <div class="col" style="flex:1;">
-                <label>㊲塗色コード</label>
-                <input type="text" id="color_code" maxlength="1" placeholder="例:1(赤) 8(白)">
+        </div>
+
+        <h2>希望番号</h2>
+        <div class="form-group">
+            <div class="row" style="align-items: flex-end;">
+                <div class="col" style="flex: 0 0 100px;">
+                    <input type="text" id="hope_num_1" maxlength="3" placeholder="3桁">
+                </div>
+                <div class="col" style="flex: 0 0 60px;">
+                    <input type="text" id="hope_num_2" maxlength="1" placeholder="1桁">
+                </div>
+                <div class="col" style="flex: 0 0 140px;">
+                    <input type="text" id="hope_num_3" maxlength="4" placeholder="4桁">
+                </div>
             </div>
+            <div class="hint">3桁 ＋ 1桁 ＋ 4桁</div>
         </div>
 
         <h2>車両情報</h2>
@@ -166,8 +200,19 @@
         // ①業務種別
         drawText(v('job_type'), 45, Y_ROW_TOP, 14, BOX_W);
 
-        // ㊲車体の塗色 (右側の方)
-        drawText(v('color_code'), 780, 180, 14, BOX_W); // 位置要調整
+        // ６番号指示（種別1桁・用途2桁・標板2桁）
+        const Y_NUMBER_IND = Y_ROW_TOP - 35;
+        drawText(v('number_indication_type'), 45, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_use_1'), 65, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_use_2'), 82, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_1'), 115, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_2'), 132, Y_NUMBER_IND, 14, BOX_W);
+
+        // 希望番号（3桁＋1桁＋4桁）
+        const Y_HOPE = Y_ROW_TOP - 70;
+        drawText(v('hope_num_1'), 45, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_2'), 98, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_3'), 115, Y_HOPE, 14, BOX_W);
 
         // ⑦有効期間 (上段中央右寄り)
         drawText(v('validity'), 450, Y_ROW_TOP, 14, BOX_W);
