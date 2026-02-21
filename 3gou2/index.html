@@ -20,6 +20,9 @@
         
         .row { display: flex; gap: 15px; align-items: flex-end; }
         .col { flex: 1; }
+        .ocr-row .col { flex: 1; min-width: 0; }
+        .sub-section { font-size: 14px; font-weight: bold; color: #1e3a5f; margin-top: 18px; margin-bottom: 8px; border-left: 4px solid #007BFF; padding-left: 10px; }
+        .sub-section:first-of-type { margin-top: 0; }
         
         /* OCRボックス風スタイル */
         .ocr-box-group { display: flex; gap: 5px; }
@@ -49,29 +52,28 @@
     <form id="pdfForm">
         
         <h2>上部 OCR コード入力欄</h2>
-        <div class="row">
-            <div class="col" style="flex:2;">
+        <div class="row ocr-row">
+            <div class="col">
                 <label>①業務種別 (1桁)</label>
                 <input type="text" id="code_gyomu" maxlength="1" placeholder="9" class="ocr-input">
-                <div class="hint">例: 1桁で入力</div>
             </div>
-            <div class="col" style="flex:1;">
+            <div class="col">
                 <label>②手数料</label>
                 <input type="text" id="code_tesuryo" maxlength="1" class="ocr-input">
             </div>
-            <div class="col" style="flex:1;">
+            <div class="col">
                 <label>⑨出張</label>
                 <input type="text" id="code_shucho" maxlength="1" class="ocr-input">
             </div>
-            <div class="col" style="flex:1;">
+            <div class="col">
                 <label>⑫抹消</label>
                 <input type="text" id="code_massho" maxlength="1" class="ocr-input">
             </div>
-            <div class="col" style="flex:1;">
+            <div class="col">
                 <label>⑪処理</label>
                 <input type="text" id="code_shori" maxlength="1" class="ocr-input">
             </div>
-            <div class="col" style="flex:1;">
+            <div class="col">
                 <label>⑰制限</label>
                 <input type="text" id="code_seigen" maxlength="1" class="ocr-input">
             </div>
@@ -94,47 +96,31 @@
         </div>
 
         <h2>申請人・届出人</h2>
-        
-        <!-- 申請人 -->
+
+        <div class="sub-section">所有者</div>
         <div class="form-group">
             <label>氏名又は名称</label>
-            <input type="text" id="applicant_name" placeholder="申請太郎">
+            <input type="text" id="owner_name" placeholder="山田 太郎">
         </div>
         <div class="form-group">
             <label>住所</label>
-            <input type="text" id="applicant_address" placeholder="東京都千代田区霞が関2-1-3">
+            <input type="text" id="owner_address" placeholder="東京都千代田区...">
         </div>
 
-        <!-- 使用者 -->
+        <div class="sub-section">使用者</div>
         <div class="form-group">
             <div style="display:flex; justify-content:space-between;">
-                <label>（使用者）氏名又は名称</label>
-                <label class="inline-copy"><input type="checkbox" onclick="copyValue('applicant_name', 'user_name')"> 申請人と同じ</label>
+                <label>氏名又は名称</label>
+                <label class="inline-copy"><input type="checkbox" onclick="copyValue('owner_name', 'user_name')"> 所有者と同じ</label>
             </div>
-            <input type="text" id="user_name">
+            <input type="text" id="user_name" placeholder="山田 太郎">
         </div>
         <div class="form-group">
             <div style="display:flex; justify-content:space-between;">
-                <label>（使用者）住所</label>
-                <label class="inline-copy"><input type="checkbox" onclick="copyValue('applicant_address', 'user_address')"> 申請人と同じ</label>
+                <label>住所</label>
+                <label class="inline-copy"><input type="checkbox" onclick="copyValue('owner_address', 'user_address')"> 所有者と同じ</label>
             </div>
-            <input type="text" id="user_address">
-        </div>
-
-        <!-- 所有者 -->
-        <div class="form-group">
-            <div style="display:flex; justify-content:space-between;">
-                <label>（所有者）氏名又は名称</label>
-                <label class="inline-copy"><input type="checkbox" onclick="copyValue('applicant_name', 'owner_name')"> 申請人と同じ</label>
-            </div>
-            <input type="text" id="owner_name">
-        </div>
-        <div class="form-group">
-            <div style="display:flex; justify-content:space-between;">
-                <label>（所有者）住所</label>
-                <label class="inline-copy"><input type="checkbox" onclick="copyValue('applicant_address', 'owner_address')"> 申請人と同じ</label>
-            </div>
-            <input type="text" id="owner_address">
+            <input type="text" id="user_address" placeholder="東京都千代田区...">
         </div>
 
         <h2>登録又は届出の原因（右下枠）</h2>
@@ -264,22 +250,15 @@
         const X_LABEL = 40; // ラベル位置の右横
         const X_TEXT = 120; // テキスト開始位置
 
-        // 申請人・届出人
-        draw(v('applicant_name'), X_TEXT, y, 10);
-        y -= LINE_H;
-        draw(v('applicant_address'), X_TEXT, y, 10);
-        y -= (LINE_H * 1.5); // 少し空く
-
-        // 使用者
-        draw(v('user_name'), X_TEXT, y, 10);
-        y -= LINE_H;
-        draw(v('user_address'), X_TEXT, y, 10);
-        y -= (LINE_H * 1.5);
-
-        // 所有者
+        // 申請人・届出人（所有者 → 使用者）
         draw(v('owner_name'), X_TEXT, y, 10);
         y -= LINE_H;
         draw(v('owner_address'), X_TEXT, y, 10);
+        y -= (LINE_H * 1.5);
+
+        draw(v('user_name'), X_TEXT, y, 10);
+        y -= LINE_H;
+        draw(v('user_address'), X_TEXT, y, 10);
 
         // --- 4. 右下：原因・使用の本拠 ---
         // 原因チェックボックス（滅失を1番目に）
@@ -309,7 +288,7 @@
 
 
         // --- ダウンロード処理 ---
-        const fileName = `申請書_${v('applicant_name')}.pdf`;
+        const fileName = `申請書_${v('owner_name') || '未入力'}.pdf`;
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');
         link.href = pdfDataUri;
