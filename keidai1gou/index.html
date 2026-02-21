@@ -140,36 +140,6 @@
             <input type="text" id="chassis_no" maxlength="20" placeholder="ABC1234567">
         </div>
 
-        <h2>所有者欄</h2>
-        <div class="form-group">
-            <label>氏名又は名称</label>
-            <input type="text" id="owner_name" placeholder="軽 太郎">
-        </div>
-        <div class="form-group">
-            <div class="label-row">
-                <label>住所</label>
-                <label class="inline-check"><input type="checkbox" id="chk_owner_addr_same" onchange="toggleSame('owner_addr')"> 使用者住所に同じ</label>
-            </div>
-            <div class="row" style="align-items: flex-end;">
-                <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">都道府県-市区町村コード</label>
-                    <div class="addr-group">
-                        <input type="text" id="owner_addr_code_1" maxlength="2" placeholder="13" style="width:50px">
-                        <span>-</span>
-                        <input type="text" id="owner_addr_code_2" maxlength="3" placeholder="100" style="width:60px">
-                    </div>
-                </div>
-                <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">丁目</label>
-                    <input type="text" id="owner_addr_chome" placeholder="丁目">
-                </div>
-                <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">番地</label>
-                    <input type="text" id="owner_addr_banchi" placeholder="番地">
-                </div>
-            </div>
-        </div>
-
         <h2>使用者欄</h2>
         <div class="form-group">
             <div class="label-row">
@@ -182,12 +152,8 @@
             <label>住所</label>
             <div class="row" style="align-items: flex-end;">
                 <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">都道府県-市区町村コード</label>
-                    <div class="addr-group">
-                        <input type="text" id="user_addr_code_1" maxlength="2" placeholder="13" style="width:50px">
-                        <span>-</span>
-                        <input type="text" id="user_addr_code_2" maxlength="3" placeholder="100" style="width:60px">
-                    </div>
+                    <label class="hint" style="margin-bottom:4px;">都道府県・市区町村コード（12桁）</label>
+                    <input type="text" id="user_address_code" maxlength="12" placeholder="1310001など">
                 </div>
                 <div class="col">
                     <label class="hint" style="margin-bottom:4px;">丁目</label>
@@ -196,6 +162,32 @@
                 <div class="col">
                     <label class="hint" style="margin-bottom:4px;">番地</label>
                     <input type="text" id="user_addr_banchi" placeholder="番地">
+                </div>
+            </div>
+        </div>
+
+        <h2>所有者欄</h2>
+        <div class="form-group">
+            <label>氏名又は名称</label>
+            <input type="text" id="owner_name" placeholder="軽 太郎">
+        </div>
+        <div class="form-group">
+            <div class="label-row">
+                <label>住所</label>
+                <label class="inline-check"><input type="checkbox" id="chk_owner_addr_same" onchange="toggleSame('owner_addr')"> 使用者住所に同じ</label>
+            </div>
+            <div class="row" style="align-items: flex-end;">
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">都道府県・市区町村コード（12桁）</label>
+                    <input type="text" id="owner_address_code" maxlength="12" placeholder="1310001など">
+                </div>
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">丁目</label>
+                    <input type="text" id="owner_addr_chome" placeholder="丁目">
+                </div>
+                <div class="col">
+                    <label class="hint" style="margin-bottom:4px;">番地</label>
+                    <input type="text" id="owner_addr_banchi" placeholder="番地">
                 </div>
             </div>
         </div>
@@ -409,10 +401,11 @@
 
         // ⑤使用者 住所
         const Y_USER_ADDR = 570;
-        draw(v('user_addr_code_1'), 50, Y_USER_ADDR, 14, OCR_W); // 都道
-        draw(v('user_addr_code_2'), 100, Y_USER_ADDR, 14, OCR_W); // 市区
-        draw(v('user_addr_chome'), 200, Y_USER_ADDR, 14, OCR_W); // 丁目
-        draw(v('user_addr_banchi'), 250, Y_USER_ADDR, 14, OCR_W); // 番地等
+        var userCode = v('user_address_code') || '';
+        draw(userCode.substring(0, 2), 50, Y_USER_ADDR, 14, OCR_W);
+        draw(userCode.substring(2, 5), 100, Y_USER_ADDR, 14, OCR_W);
+        draw(v('user_addr_chome'), 200, Y_USER_ADDR, 14, OCR_W);
+        draw(v('user_addr_banchi'), 250, Y_USER_ADDR, 14, OCR_W);
 
         // ⑥所有者 氏名
         const Y_OWNER_NAME = 510;
@@ -425,8 +418,9 @@
         const Y_OWNER_ADDR = 465;
         drawCheck('chk_owner_addr_same', 40, Y_OWNER_ADDR);
         if (!document.getElementById('chk_owner_addr_same').checked) {
-            draw(v('owner_addr_code_1'), 80, Y_OWNER_ADDR, 14, OCR_W);
-            draw(v('owner_addr_code_2'), 130, Y_OWNER_ADDR, 14, OCR_W);
+            var ownerCode = v('owner_address_code') || '';
+            draw(ownerCode.substring(0, 2), 80, Y_OWNER_ADDR, 14, OCR_W);
+            draw(ownerCode.substring(2, 5), 130, Y_OWNER_ADDR, 14, OCR_W);
             draw(v('owner_addr_chome'), 230, Y_OWNER_ADDR, 14, OCR_W);
             draw(v('owner_addr_banchi'), 280, Y_OWNER_ADDR, 14, OCR_W);
         }
