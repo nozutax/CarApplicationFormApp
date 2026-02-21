@@ -15,6 +15,7 @@
         h2 { font-size: 16px; background: #eef5ff; border-left: 5px solid #007BFF; padding: 8px 10px; margin-top: 30px; margin-bottom: 15px; font-weight: bold; }
         
         .form-section { margin-bottom: 20px; border-bottom: 1px dashed #eee; padding-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
         
         label { display: block; font-weight: bold; font-size: 13px; color: #555; margin-bottom: 5px; }
         .hint { font-size: 11px; color: #888; margin-top: 2px; margin-bottom: 0; line-height: 1.2; }
@@ -51,24 +52,24 @@
             <div class="row">
                 <div class="col-narrow">
                     <label>①業務</label>
-                    <input type="text" id="ocr_1_gyomu" maxlength="1" placeholder="1" class="ocr">
+                    <input type="text" id="ocr_1_gyomu" maxlength="1"  class="ocr">
                     <div class="hint">1:継続 4:再交付</div>
                 </div>
                 <div class="col-mid">
                     <label>②手数料</label>
                     <div class="row" style="gap:5px">
-                        <input type="text" id="ocr_2_fee_type" maxlength="1" class="ocr" placeholder="種">
-                        <input type="text" id="ocr_2_fee_use" maxlength="1" class="ocr" placeholder="二">
+                        <input type="text" id="ocr_2_fee_type" maxlength="1" class="ocr" >
+                        <input type="text" id="ocr_2_fee_use" maxlength="1" class="ocr" >
                     </div>
                 </div>
                 <div class="col">
                     <label>⑥番号指示 (種別/用途/標板)</label>
                     <div class="row" style="gap:5px">
-                        <input type="text" id="ocr_6_type" maxlength="1" class="ocr" placeholder="種">
-                        <input type="text" id="ocr_6_use1" maxlength="1" class="ocr" placeholder="用">
-                        <input type="text" id="ocr_6_use2" maxlength="1" class="ocr" placeholder="途">
-                        <input type="text" id="ocr_6_plate1" maxlength="1" class="ocr" placeholder="標">
-                        <input type="text" id="ocr_6_plate2" maxlength="1" class="ocr" placeholder="板">
+                        <input type="text" id="ocr_6_type" maxlength="1" class="ocr" >
+                        <input type="text" id="ocr_6_use1" maxlength="1" class="ocr" >
+                        <input type="text" id="ocr_6_use2" maxlength="1" class="ocr" >
+                        <input type="text" id="ocr_6_plate1" maxlength="1" class="ocr" >
+                        <input type="text" id="ocr_6_plate2" maxlength="1" class="ocr" >
                     </div>
                 </div>
                 <div class="col-narrow">
@@ -114,7 +115,6 @@
                 <div class="col">
                     <label>⑫希望自動車登録番号</label>
                     <div class="row" style="gap:5px">
-                        <input type="text" id="hope_area" placeholder="品川" style="flex:2">
                         <input type="text" id="hope_class" placeholder="330" class="ocr" style="flex:1">
                         <input type="text" id="hope_hira" placeholder="あ" style="flex:1">
                         <input type="text" id="hope_no" placeholder="1234" class="ocr" style="flex:2">
@@ -147,89 +147,23 @@
             </div>
         </div>
 
-        <h2>3. 点検・走行距離</h2>
+        <h2>4. 申請人</h2>
         <div class="form-section">
-            <div class="row">
-                <div class="col-narrow">
-                    <label>⑱点検</label>
-                    <input type="text" id="ocr_18_check" maxlength="1" class="ocr">
-                </div>
-                <div class="col-narrow">
-                    <label>⑲受検</label>
-                    <input type="text" id="ocr_19_form" maxlength="1" class="ocr">
-                </div>
-                <div class="col" style="flex:2">
-                    <label>㉔装置名等コード (7枠)</label>
-                    <input type="text" id="device_code" maxlength="7" class="ocr" placeholder="1234567">
-                </div>
-                <div class="col" style="flex:2">
-                    <label>⑩走行距離計表示値</label>
-                    <div class="row" style="gap:5px; align-items:flex-end;">
-                        <input type="text" id="dist_int" class="ocr" placeholder="12300" style="flex:2; text-align:right;">
-                        <span style="padding-bottom:10px;">.</span>
-                        <input type="text" id="dist_dec" class="ocr" placeholder="0" style="width:30px;">
-                        <div style="text-align:center;">
-                            <label style="font-size:10px;">単位</label>
-                            <input type="text" id="dist_unit" class="ocr" placeholder="1" style="width:30px;">
-                        </div>
-                        <div class="hint" style="padding-bottom:10px;">1:km 2:mile</div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>氏名又は名称</label>
+                <input type="text" id="app_name" placeholder="申請 太郎">
+            </div>
+            <div class="form-group">
+                <label>住所</label>
+                <input type="text" id="app_addr" placeholder="東京都千代田区...">
             </div>
         </div>
 
-        <h2>4. 申請人・使用者・所有者</h2>
+        <h2>5. その他</h2>
         <div class="form-section">
-            <!-- 申請人 -->
-            <div class="row">
-                <div class="col">
-                    <label>申請人 氏名</label>
-                    <input type="text" id="app_name" placeholder="申請 太郎">
-                </div>
-                <div class="col">
-                    <label>申請人 住所</label>
-                    <input type="text" id="app_addr" placeholder="東京都千代田区...">
-                </div>
-            </div>
-
-            <!-- 使用者 -->
-            <div style="margin-top:15px;">
-                <label>（使用者）氏名 <span class="inline-copy" onclick="copyVal('app_name','user_name')">申請人と同じ</span></label>
-                <input type="text" id="user_name">
-                <label style="margin-top:5px;">（使用者）住所 <span class="inline-copy" onclick="copyVal('app_addr','user_addr')">申請人と同じ</span></label>
-                <input type="text" id="user_addr">
-            </div>
-
-            <!-- 所有者 -->
-            <div style="margin-top:15px;">
-                <label>（所有者）氏名 <span class="inline-copy" onclick="copyVal('app_name','owner_name')">申請人と同じ</span></label>
-                <input type="text" id="owner_name">
-                <label style="margin-top:5px;">（所有者）住所 <span class="inline-copy" onclick="copyVal('app_addr','owner_addr')">申請人と同じ</span></label>
-                <input type="text" id="owner_addr">
-            </div>
-
-            <!-- 受検者 -->
-            <div style="margin-top:15px;">
-                <label>受検者 氏名</label>
-                <input type="text" id="examiner_name">
-                <label style="margin-top:5px;">受検者 住所</label>
-                <input type="text" id="examiner_addr">
-            </div>
-        </div>
-
-        <h2>5. その他・チェック項目</h2>
-        <div class="form-section">
-            <label>提出書類・保安基準適合証など</label>
-            <div class="checkbox-area">
-                <label class="checkbox-label"><input type="checkbox" id="chk_hoan"> 保安基準適合証</label>
-                <label class="checkbox-label"><input type="checkbox" id="chk_genzai"> 現在記録ファイル記録事項分</label>
-            </div>
-
-            <label style="margin-top:15px;">本人確認書類（交付請求時）</label>
-            <div class="checkbox-area">
-                <label class="checkbox-label"><input type="checkbox" id="chk_menkyo"> 運転免許証</label>
-                <label class="checkbox-label"><input type="checkbox" id="chk_hoken"> 健康保険証</label>
-                <label class="checkbox-label"><input type="checkbox" id="chk_juki"> 住民基本台帳カード</label>
+            <div class="form-group">
+                <label>申請又は請求の理由</label>
+                <input type="text" id="reason_text" placeholder="申請又は請求の理由を入力">
             </div>
         </div>
 
@@ -338,11 +272,10 @@
 
 
         // --- 2段目 (希望番号・車台番号) ---
-        // ⑫希望番号
-        draw(v('hope_area'), 50, Y_ROW2, 11); // 漢字(品川)
-        draw(v('hope_class'), 160, Y_ROW2, 14, OCR_W); // 分類
-        draw(v('hope_hira'), 220, Y_ROW2, 11); // ひらがな
-        draw(v('hope_no'), 255, Y_ROW2, 14, OCR_W); // 一連
+        // ⑫希望番号 (hope_area 削除)
+        draw(v('hope_class'), 50, Y_ROW2, 14, OCR_W); // 分類
+        draw(v('hope_hira'), 110, Y_ROW2, 11); // ひらがな
+        draw(v('hope_no'), 145, Y_ROW2, 14, OCR_W); // 一連
         
         // ㉒車台番号 (非常に長い枠)
         // 右側の長いエリア。開始X座標を調整
@@ -359,76 +292,17 @@
         draw(v('garage_code_1'), 700, Y_ROW3, 14, OCR_W); // 前2桁
         draw(v('garage_code_2'), 750, Y_ROW3, 14, OCR_W); // 後5桁
 
-        // --- 4段目 (点検・距離) ---
-        // ⑱点検
-        draw(v('ocr_18_check'), 40, Y_ROW4, 14, OCR_W);
-        // ⑲受検
-        draw(v('ocr_19_form'), 85, Y_ROW4, 14, OCR_W);
-        // ㉔装置名等
-        draw(v('device_code'), 130, Y_ROW4, 14, OCR_W);
-        
-        // ⑩走行距離
-        // 整数部分 (右寄せ気味に配置したいが、ここでは左詰め描画でXを調整)
-        // 枠の位置：700くらいから
-        const distInt = v('dist_int');
-        // 桁数に応じて開始位置を少しずらす簡易ロジック（必要なら）
-        draw(distInt, 670, Y_ROW4, 14, OCR_W); 
-        // 小数点以下
-        draw(v('dist_dec'), 775, Y_ROW4, 14, OCR_W);
-        // 単位(km/mile)
-        draw(v('dist_unit'), 810, Y_ROW4, 14, OCR_W);
-
-
-        // --- 下部 (氏名・住所) ---
-        // 第3号様式のフォーマット：
-        // 申請人(所有者) -> 使用者 -> (所有者) -> 受検者 -> 請求者 -> 代理人
-        // 画像を見ると
-        // 左側：申請人、(使用者)、(所有者)、受検者、請求者
-        // 右側：申請代理人
-
+        // --- 下部 (４．申請人：氏名・住所のみ) ---
         let y = Y_ADDR_START;
-        const X_TEXT = 100; // 左側の入力開始位置
+        const X_TEXT = 100;
 
-        // 申請人
         draw(v('app_name'), X_TEXT, y, 10);
         y -= LINE_H;
         draw(v('app_addr'), X_TEXT, y, 10);
-        
-        // 使用者
-        y -= 25; // 枠の区切り
-        draw(v('user_name'), X_TEXT, y, 10);
-        y -= LINE_H;
-        draw(v('user_addr'), X_TEXT, y, 10);
 
-        // 所有者
-        y -= 25;
-        draw(v('owner_name'), X_TEXT, y, 10);
-        y -= LINE_H;
-        draw(v('owner_addr'), X_TEXT, y, 10);
-
-        // 受検者
-        y -= 25;
-        draw(v('examiner_name'), X_TEXT, y, 10);
-        y -= LINE_H;
-        draw(v('examiner_addr'), X_TEXT, y, 10);
-
-        // 申請代理人（右側にある場合が多いですが、画像のレイアウトに従い左下に配置か、右下か確認）
-        // 画像OCRのテキストを見ると「申請代理人」は一番下にあります。
-        // 第3号様式の標準では右下に枠があることが多いです。
-        const X_AGENT = 550; // 右側のX座標
-        const Y_AGENT = 60; // 一番下
-        draw(v('app_name'), X_AGENT, Y_AGENT + 15, 10); // 代理人氏名（ここでは申請人と同じ変数を使っていますが、代理人欄用の変数があればそちらを）
-        // ※コード内の変数 app_name を使っていますが、必要なら agent_name を追加してください
-        
-
-        // --- チェックボックス ---
-        // 保安基準適合証 (中央付近)
-        drawCheck('chk_hoan', 495, 175);
-        
-        // 本人確認書類 (右下)
-        drawCheck('chk_menkyo', 530, 95);
-        drawCheck('chk_hoken', 600, 95);
-        drawCheck('chk_juki', 670, 95);
+        // --- ５．その他：申請又は請求の理由 ---
+        const Y_REASON = 120;
+        draw(v('reason_text'), X_TEXT, Y_REASON, 10);
 
 
         // ファイル保存
