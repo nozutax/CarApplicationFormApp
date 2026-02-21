@@ -271,8 +271,11 @@
         draw(v('reason_text'), X_TEXT, Y_REASON, 10);
 
 
-        // ファイル保存・ダウンロード
-        const fileName = `第3号様式_${(v('app_name') || '申請書').replace(/[\\/:*?"<>|]/g, '')}.pdf`;
+        // ファイル保存・ダウンロード（ファイル名: ダウンロード日付_申請人名_第3号様式.pdf）
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+        const applicant = (v('app_name') || '申請書').replace(/[\\/:*?"<>|]/g, '');
+        const fileName = `${dateStr}_${applicant}_第3号様式.pdf`;
         const pdfBytesOut = await pdfDoc.save();
         const blob = new Blob([pdfBytesOut], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
