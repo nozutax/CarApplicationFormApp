@@ -21,12 +21,17 @@
         .hint { font-size: 11px; color: #888; margin-top: 2px; margin-bottom: 0; line-height: 1.2; }
 
         input[type="text"], select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 15px; }
-        input[type="text"].ocr { font-family: monospace; letter-spacing: 2px; text-align: center; background-color: #fffbf0; border-color: #e0d0b0; }
+        input[type="text"], input[type="text"].ocr { background-color: #fff; border-color: #ccc; }
+        input[type="text"].ocr { font-family: monospace; letter-spacing: 2px; text-align: center; }
         
         .row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
         .col { flex: 1; }
         .col-narrow { flex: 0 0 60px; }
         .col-mid { flex: 0 0 100px; }
+        .ocr-row-even { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+        .ocr-row-even .col-equal { flex: 1; min-width: 0; }
+        .ocr-box-group { display: flex; gap: 4px; }
+        .ocr-box-group input { width: 2.2em; min-width: 0; text-align: center; }
 
         /* チェックボックスエリア */
         .checkbox-area { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 5px; }
@@ -49,62 +54,35 @@
 
         <h2>1. 業務種別・手数料・番号指示 (最上段)</h2>
         <div class="form-section">
-            <div class="row">
-                <div class="col-narrow">
+            <div class="row ocr-row-even">
+                <div class="col-equal">
                     <label>①業務</label>
-                    <input type="text" id="ocr_1_gyomu" maxlength="1"  class="ocr">
-                    <div class="hint">1:継続 4:再交付</div>
+                    <input type="text" id="ocr_1_gyomu" maxlength="1" class="ocr">
                 </div>
-                <div class="col-mid">
+                <div class="col-equal">
                     <label>②手数料</label>
-                    <div class="row" style="gap:5px">
-                        <input type="text" id="ocr_2_fee_type" maxlength="1" class="ocr" >
-                        <input type="text" id="ocr_2_fee_use" maxlength="1" class="ocr" >
+                    <div class="ocr-box-group">
+                        <input type="text" id="ocr_2_fee_type" maxlength="1" class="ocr">
+                        <input type="text" id="ocr_2_fee_use" maxlength="1" class="ocr">
                     </div>
                 </div>
-                <div class="col">
-                    <label>⑥番号指示 (種別/用途/標板)</label>
-                    <div class="row" style="gap:5px">
-                        <input type="text" id="ocr_6_type" maxlength="1" class="ocr" >
-                        <input type="text" id="ocr_6_use1" maxlength="1" class="ocr" >
-                        <input type="text" id="ocr_6_use2" maxlength="1" class="ocr" >
-                        <input type="text" id="ocr_6_plate1" maxlength="1" class="ocr" >
-                        <input type="text" id="ocr_6_plate2" maxlength="1" class="ocr" >
+                <div class="col-equal">
+                    <label>⑥番号指示</label>
+                    <div class="ocr-box-group">
+                        <input type="text" id="ocr_6_type" maxlength="1" class="ocr">
+                        <input type="text" id="ocr_6_use1" maxlength="1" class="ocr">
+                        <input type="text" id="ocr_6_use2" maxlength="1" class="ocr">
+                        <input type="text" id="ocr_6_plate1" maxlength="1" class="ocr">
+                        <input type="text" id="ocr_6_plate2" maxlength="1" class="ocr">
                     </div>
                 </div>
-                <div class="col-narrow">
+                <div class="col-equal">
                     <label>⑦期間</label>
                     <input type="text" id="ocr_7_term" maxlength="1" class="ocr">
                 </div>
-                <div class="col-narrow">
+                <div class="col-equal">
                     <label>⑨出張</label>
                     <input type="text" id="ocr_9_trip" maxlength="1" class="ocr">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-narrow">
-                    <label>⑬証書</label>
-                    <input type="text" id="ocr_13_cert" maxlength="1" class="ocr">
-                </div>
-                <div class="col-narrow">
-                    <label>⑪処理</label>
-                    <input type="text" id="ocr_11_proc" maxlength="1" class="ocr">
-                </div>
-                <div class="col-narrow">
-                    <label>⑯例外</label>
-                    <input type="text" id="ocr_16_ex" maxlength="1" class="ocr">
-                </div>
-                <div class="col-narrow">
-                    <label>⑰制限</label>
-                    <input type="text" id="ocr_17_limit" maxlength="1" class="ocr">
-                </div>
-                <div class="col-narrow">
-                    <label>⑲NOx</label>
-                    <input type="text" id="ocr_19_nox" maxlength="1" class="ocr">
-                </div>
-                <div class="col-narrow">
-                    <label>⑳指示</label>
-                    <input type="text" id="ocr_20_ind" maxlength="1" class="ocr">
                 </div>
             </div>
         </div>
@@ -115,14 +93,14 @@
                 <div class="col">
                     <label>⑫希望自動車登録番号</label>
                     <div class="row" style="gap:5px">
-                        <input type="text" id="hope_class" placeholder="330" class="ocr" style="flex:1">
-                        <input type="text" id="hope_hira" placeholder="あ" style="flex:1">
-                        <input type="text" id="hope_no" placeholder="1234" class="ocr" style="flex:2">
+                        <input type="text" id="hope_class" maxlength="1" placeholder="3" class="ocr" style="flex:1">
+                        <input type="text" id="hope_hira" maxlength="1" placeholder="あ" style="flex:1">
+                        <input type="text" id="hope_no" maxlength="1" placeholder="1" class="ocr" style="flex:1">
                     </div>
                 </div>
                 <div class="col" style="flex:1.5">
                     <label>㉒車台番号 (下23桁まで記入可)</label>
-                    <input type="text" id="chassis_no" maxlength="23" placeholder="ABC-1234567" class="ocr" style="text-align:left; letter-spacing:4px;">
+                    <input type="text" id="chassis_no" maxlength="1" placeholder="0" class="ocr" style="text-align:center;">
                 </div>
             </div>
 
@@ -130,18 +108,18 @@
                 <div class="col">
                     <label>㉑自動車登録番号</label>
                     <div class="row" style="gap:5px">
-                        <input type="text" id="reg_area" placeholder="品川" style="flex:2">
-                        <input type="text" id="reg_class" placeholder="500" class="ocr" style="flex:1">
-                        <input type="text" id="reg_hira" placeholder="わ" style="flex:1">
-                        <input type="text" id="reg_no" placeholder="5678" class="ocr" style="flex:2">
+                        <input type="text" id="reg_area" maxlength="1" placeholder="品" style="flex:1">
+                        <input type="text" id="reg_class" maxlength="1" placeholder="5" class="ocr" style="flex:1">
+                        <input type="text" id="reg_hira" maxlength="1" placeholder="わ" style="flex:1">
+                        <input type="text" id="reg_no" maxlength="1" placeholder="5" class="ocr" style="flex:1">
                     </div>
                 </div>
                 <div class="col" style="flex:1.5">
                     <label>㉓整備工場コード</label>
                     <div class="row" style="gap:5px">
-                        <input type="text" id="garage_code_1" maxlength="2" class="ocr" style="width:50px;">
+                        <input type="text" id="garage_code_1" maxlength="1" class="ocr" style="width:2.2em; text-align:center;">
                         <span style="padding-top:10px">-</span>
-                        <input type="text" id="garage_code_2" maxlength="5" class="ocr" style="width:100px;">
+                        <input type="text" id="garage_code_2" maxlength="1" class="ocr" style="width:2.2em; text-align:center;">
                     </div>
                 </div>
             </div>
@@ -257,19 +235,6 @@
         draw(v('ocr_7_term'), 325, Y_ROW1, 14, OCR_W);
         // ⑨出張
         draw(v('ocr_9_trip'), 370, Y_ROW1, 14, OCR_W);
-        // ⑬証書
-        draw(v('ocr_13_cert'), 415, Y_ROW1, 14, OCR_W);
-        // ⑪処理
-        draw(v('ocr_11_proc'), 465, Y_ROW1, 14, OCR_W);
-        // ⑯例外
-        draw(v('ocr_16_ex'), 545, Y_ROW1, 14, OCR_W);
-        // ⑰制限
-        draw(v('ocr_17_limit'), 600, Y_ROW1, 14, OCR_W);
-        // ⑲NOx
-        draw(v('ocr_19_nox'), 710, Y_ROW1, 14, OCR_W);
-        // ⑳指示
-        draw(v('ocr_20_ind'), 760, Y_ROW1, 14, OCR_W);
-
 
         // --- 2段目 (希望番号・車台番号) ---
         // ⑫希望番号 (hope_area 削除)
