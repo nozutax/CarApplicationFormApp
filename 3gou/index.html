@@ -145,7 +145,7 @@
             </div>
         </div>
 
-        <button type="button" onclick="generatePDF()">PDFを作成 (Type3)</button>
+        <button type="button" onclick="generatePDF()">PDFを作成</button>
     </form>
 </div>
 
@@ -159,18 +159,19 @@
     async function generatePDF() {
         let pdfBytes, fontBytes;
         try {
-            // 第3号様式のPDFファイル名に合わせて変更してください
-            const pdfUrl = 'template_type3.pdf'; 
-            const fontUrl = 'font.ttf'; 
-            [pdfBytes, fontBytes] = await Promise.all([
-                fetch(pdfUrl).then(res => res.arrayBuffer()),
-                fetch(fontUrl).then(res => res.arrayBuffer())
-            ]);
+            const pdfUrl = 'template.pdf';
+            const fontUrl = 'font.ttf';
+            const [pdfRes, fontRes] = await Promise.all([fetch(pdfUrl), fetch(fontUrl)]);
+            if (!pdfRes.ok) throw new Error('template.pdf を読み込めません。');
+            if (!fontRes.ok) throw new Error('font.ttf を読み込めません。');
+            pdfBytes = await pdfRes.arrayBuffer();
+            fontBytes = await fontRes.arrayBuffer();
         } catch (e) {
-            alert("template_type3.pdf または font.ttf が見つかりません。");
+            alert("PDFを作成できません。\n" + (e.message || e) + "\n\n3gou フォルダに template.pdf と font.ttf を置いてください。");
             return;
         }
 
+        try {
         const pdfDoc = await PDFDocument.load(pdfBytes);
         pdfDoc.registerFontkit(fontkit);
         const customFont = await pdfDoc.embedFont(fontBytes);
@@ -270,13 +271,21 @@
         draw(v('reason_text'), X_TEXT, Y_REASON, 10);
 
 
-        // ファイル保存
-        const fileName = `第3号様式_${v('app_name')}.pdf`;
-        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        // ファイル保存・ダウンロード
+        const fileName = `第3号様式_${(v('app_name') || '申請書').replace(/[\\/:*?"<>|]/g, '')}.pdf`;
+        const pdfBytesOut = await pdfDoc.save();
+        const blob = new Blob([pdfBytesOut], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = pdfDataUri;
+        link.href = url;
         link.download = fileName;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        } catch (e) {
+            alert("PDFの作成中にエラーが発生しました。\n" + (e.message || String(e)));
+        }
     }
 </script>
 </body>
