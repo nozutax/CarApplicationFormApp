@@ -21,6 +21,7 @@
         .col-mid { flex: 0 0 120px; }
         
         label { display: block; font-weight: bold; font-size: 12px; color: #555; margin-bottom: 4px; }
+        label.label-space { margin-bottom: 10px; }
         .hint { font-size: 11px; color: #888; line-height: 1.3; }
 
         input[type="text"], select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; box-sizing: border-box; background-color: #fff; }
@@ -67,7 +68,7 @@
                     <input type="text" id="code_kanpu" maxlength="1" placeholder="1" class="ocr">
                 </div>
                 <div class="col">
-                    <label>㉑<br>自動車登録番号</label>
+                    <label class="label-space">㉑自動車登録番号</label>
                     <div class="multi-input">
                         <input type="text" id="car_area" placeholder="品川" style="flex:1">
                         <input type="text" id="car_class" placeholder="300" class="ocr" style="flex:1">
@@ -82,7 +83,7 @@
                     <input type="text" id="chassis_no" maxlength="7" class="ocr">
                 </div>
                 <div class="col">
-                    <label>㉓<br>移動報告番号</label>
+                    <label class="label-space">㉓移動報告番号</label>
                     <input type="text" id="mobile_report_no" class="ocr">
                 </div>
             </div>
@@ -100,14 +101,14 @@
                     </select>
                 </div>
                 <div class="col">
-                    <label>⑪<br>氏名又は名称（フリガナ）</label>
+                    <label class="label-space">⑪氏名又は名称（フリガナ）</label>
                     <input type="text" id="app_kana" placeholder="シンセイ タロウ" class="ocr" style="text-align:left;">
                     <label class="checkbox-label"><input type="checkbox" id="chk_kana_comp"> カナ補完有(1)</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>⑪<br>氏名又は名称（漢字）</label>
+                    <label class="label-space">⑪氏名又は名称（漢字）</label>
                     <input type="text" id="app_kanji" placeholder="申請 太郎" class="ocr" style="text-align:left;">
                     <div class="multi-input">
                          <label class="checkbox-label"><input type="checkbox" id="chk_kanji_comp"> 補完有(1)</label>
