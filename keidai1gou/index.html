@@ -142,10 +142,7 @@
 
         <h2>使用者欄</h2>
         <div class="form-group">
-            <div class="label-row">
-                <label>氏名又は名称</label>
-                <label class="inline-check"><input type="checkbox" id="chk_owner_same" onchange="toggleSame('owner')"> 所有者に同じ</label>
-            </div>
+            <label>氏名又は名称</label>
             <input type="text" id="user_name" placeholder="軽 太郎">
         </div>
         <div class="form-group">
@@ -168,7 +165,10 @@
 
         <h2>所有者欄</h2>
         <div class="form-group">
-            <label>氏名又は名称</label>
+            <div class="label-row">
+                <label>氏名又は名称</label>
+                <label class="inline-check"><input type="checkbox" id="chk_owner_same_as_user"> 使用者に同じ</label>
+            </div>
             <input type="text" id="owner_name" placeholder="軽 太郎">
         </div>
         <div class="form-group">
@@ -191,6 +191,10 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <label>所有者コード（5桁）</label>
+            <input type="text" id="owner_code" maxlength="5" placeholder="5桁">
+        </div>
 
         <h2>使用の本拠の位置</h2>
         <div class="form-group">
@@ -200,12 +204,8 @@
             </div>
             <div class="row" style="align-items: flex-end;">
                 <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">都道府県-市区町村コード</label>
-                    <div class="addr-group">
-                        <input type="text" id="base_addr_code_1" maxlength="2" placeholder="13" style="width:50px">
-                        <span>-</span>
-                        <input type="text" id="base_addr_code_2" maxlength="3" placeholder="100" style="width:60px">
-                    </div>
+                    <label class="hint" style="margin-bottom:4px;">都道府県・市区町村コード（12桁）</label>
+                    <input type="text" id="base_address_code" maxlength="12" placeholder="1310001など">
                 </div>
                 <div class="col">
                     <label class="hint" style="margin-bottom:4px;">丁目</label>
@@ -218,8 +218,9 @@
             </div>
         </div>
 
-        <div class="form-group advanced-options">
-            <label>⑩型式指定番号・類別区分番号・57整備工場コード・97受検・98点検</label>
+        <h2>その他欄</h2>
+        <div class="form-group">
+            <label>⑩型式指定番号・類別区分番号・57整備工場コード</label>
             <div class="row" style="align-items: flex-end;">
                 <div class="col" style="flex: 0 0 100px;">
                     <label class="hint" style="margin-bottom:4px;">型式指定番号</label>
@@ -233,15 +234,20 @@
                     <label class="hint" style="margin-bottom:4px;">57整備工場</label>
                     <input type="text" id="factory_code" maxlength="7">
                 </div>
-                <div class="col" style="flex: 0 0 60px;">
-                    <label class="hint" style="margin-bottom:4px;">97受検</label>
-                    <input type="text" id="code_97" maxlength="1">
-                </div>
-                <div class="col" style="flex: 0 0 60px;">
-                    <label class="hint" style="margin-bottom:4px;">98点検</label>
-                    <input type="text" id="code_98" maxlength="1">
-                </div>
             </div>
+        </div>
+        <div class="form-group">
+            <label>走行距離計表示値</label>
+            <div class="addr-group" style="align-items: center; flex-wrap: nowrap;">
+                <input type="text" id="run_km_1" maxlength="3" placeholder="123" style="width:3em; text-align:center;">
+                <span>,</span>
+                <input type="text" id="run_km_2" maxlength="1" placeholder="4" style="width:1.5em; text-align:center;">
+                <span>00km-</span>
+                <input type="text" id="run_mile_1" maxlength="1" placeholder="1" style="width:1.5em; text-align:center;">
+                <input type="text" id="run_mile_2" maxlength="1" placeholder="2" style="width:1.5em; text-align:center;">
+                <span>mile</span>
+            </div>
+            <div class="hint">表示: □□□,□00km-□□mile（各□が入力欄）</div>
         </div>
 
         <h2>申請人</h2>
@@ -409,10 +415,8 @@
 
         // ⑥所有者 氏名
         const Y_OWNER_NAME = 510;
-        drawCheck('chk_owner_same', 40, Y_OWNER_NAME); // 「1」を左端に
-        if (!document.getElementById('chk_owner_same').checked) {
-            draw(v('owner_name'), 80, Y_OWNER_NAME, 14, 25);
-        }
+        drawCheck('chk_owner_same_as_user', 40, Y_OWNER_NAME); // 「使用者に同じ」チェック時は「1」を出力
+        draw(v('owner_name'), 80, Y_OWNER_NAME, 14, 25);
 
         // ⑦所有者 住所
         const Y_OWNER_ADDR = 465;
@@ -425,6 +429,10 @@
             draw(v('owner_addr_banchi'), 280, Y_OWNER_ADDR, 14, OCR_W);
         }
 
+        // 所有者コード（5桁）
+        const Y_OWNER_CODE = 420;
+        draw(v('owner_code'), 80, Y_OWNER_CODE, 14, OCR_W);
+
         // ⑧⑨使用の本拠の位置
         const Y_BASE = 410; // チェック欄
         const Y_BASE_ADDR = 370; // 住所欄
@@ -433,8 +441,9 @@
 
         // ⑨住所 (チェックがない場合)
         if (!document.getElementById('chk_base_same').checked) {
-            draw(v('base_addr_code_1'), 80, Y_BASE_ADDR, 14, OCR_W);
-            draw(v('base_addr_code_2'), 130, Y_BASE_ADDR, 14, OCR_W);
+            var baseCode = v('base_address_code') || '';
+            draw(baseCode.substring(0, 2), 80, Y_BASE_ADDR, 14, OCR_W);
+            draw(baseCode.substring(2, 5), 130, Y_BASE_ADDR, 14, OCR_W);
             draw(v('base_addr_chome'), 230, Y_BASE_ADDR, 14, OCR_W);
             draw(v('base_addr_banchi'), 280, Y_BASE_ADDR, 14, OCR_W);
         }
@@ -444,10 +453,6 @@
         draw(v('model_no'), 50, Y_MODEL, 14, OCR_W);
         draw(v('class_no'), 175, Y_MODEL, 14, OCR_W);
         draw(v('factory_code'), 350, Y_MODEL, 14, OCR_W);
-        
-        const Y_BOTTOM_CODE = 220; // 97,98など
-        draw(v('code_97'), 50, Y_BOTTOM_CODE, 14, OCR_W);
-        draw(v('code_98'), 100, Y_BOTTOM_CODE, 14, OCR_W);
 
 
         // 下部テキスト欄（手書き欄への印字）
