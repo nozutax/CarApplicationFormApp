@@ -149,7 +149,7 @@
             <label>住所</label>
             <div class="row" style="align-items: flex-end;">
                 <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">都道府県・市区町村コード（12桁）</label>
+                    <label class="hint" style="margin-bottom:4px;">都道府県市区郡コード（12桁）</label>
                     <input type="text" id="user_address_code" maxlength="12" placeholder="1310001など">
                 </div>
                 <div class="col">
@@ -178,7 +178,7 @@
             </div>
             <div class="row" style="align-items: flex-end;">
                 <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">都道府県・市区町村コード（12桁）</label>
+                    <label class="hint" style="margin-bottom:4px;">都道府県市区郡コード（12桁）</label>
                     <input type="text" id="owner_address_code" maxlength="12" placeholder="1310001など">
                 </div>
                 <div class="col">
@@ -204,7 +204,7 @@
             </div>
             <div class="row" style="align-items: flex-end;">
                 <div class="col">
-                    <label class="hint" style="margin-bottom:4px;">都道府県・市区町村コード（12桁）</label>
+                    <label class="hint" style="margin-bottom:4px;">都道府県市区郡コード（12桁）</label>
                     <input type="text" id="base_address_code" maxlength="12" placeholder="1310001など">
                 </div>
                 <div class="col">
@@ -231,9 +231,14 @@
                     <label class="hint" style="margin-bottom:4px;">類別区分番号（4桁）</label>
                     <input type="text" id="class_no" maxlength="4">
                 </div>
-                <div class="col" style="flex: 0 0 120px;">
-                    <label class="hint" style="margin-bottom:4px;">57整備工場</label>
-                    <input type="text" id="factory_code" maxlength="7">
+                <div class="col" style="flex: 0 0 60px;">
+                    <label class="hint" style="margin-bottom:4px;">57整備工場（2桁）</label>
+                    <input type="text" id="factory_code_1" maxlength="2">
+                </div>
+                <div style="flex: 0 0 auto; padding-bottom:10px;">－</div>
+                <div class="col" style="flex: 0 0 80px;">
+                    <label class="hint" style="margin-bottom:4px;">（5桁）</label>
+                    <input type="text" id="factory_code_2" maxlength="5">
                 </div>
             </div>
         </div>
@@ -438,7 +443,8 @@
         const Y_MODEL = 295;
         draw(v('model_no'), 50, Y_MODEL, 14, OCR_W);
         draw(v('class_no'), 175, Y_MODEL, 14, OCR_W);
-        draw(v('factory_code'), 350, Y_MODEL, 14, OCR_W);
+        draw(v('factory_code_1'), 350, Y_MODEL, 14, OCR_W);
+        draw(v('factory_code_2'), 386, Y_MODEL, 14, OCR_W); // 2桁分(18*2)後
 
 
         // 下部テキスト欄（手書き欄への印字）
