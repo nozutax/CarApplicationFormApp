@@ -175,7 +175,7 @@
                 <div class="col">
                     <label>金融機関別種別</label>
                     <input type="text" id="bank_type" maxlength="1" class="ocr" placeholder="1">
-                    <div class="hint">1:銀行 0:郵便局...</div>
+                    <div class="hint">0:郵便局　1:銀行　2:信金　3:信用組合　4:労金　5:信用農協連合会　6:農協　7:信用漁協　8:漁協　9:その他</div>
                 </div>
             </div>
             <div class="row">
@@ -188,6 +188,7 @@
                 <div class="col">
                     <label>支店種別</label>
                     <input type="text" id="branch_type" maxlength="1" class="ocr" placeholder="1">
+                    <div class="hint">1:本店　2:支店　3:出張所　4:代理店　5:本所　6:支所　9:その他</div>
                 </div>
             </div>
             <div class="row">
@@ -200,13 +201,13 @@
                 <div class="col">
                     <label>口座種類</label>
                     <input type="text" id="account_type" maxlength="1" class="ocr" placeholder="1">
-                    <div class="hint">1:普通 2:当座</div>
+                    <div class="hint">1:普通 2:当座　3:納税準備預金　4:通知預金　5:別段預金　6:貯蓄預金　9:その他</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label>個人番号または法人番号</label>
-                    <input type="text" id="my_number" class="ocr" style="text-align:left; letter-spacing:3px;" placeholder="※必要な場合のみ">
+                    <input type="text" id="my_number" class="ocr" style="text-align:left; letter-spacing:3px;" >
                 </div>
             </div>
         </div>
@@ -245,7 +246,7 @@
                 fetch(fontUrl).then(res => res.arrayBuffer())
             ]);
         } catch (e) {
-            alert("template_type3_3.pdf または font.ttf が見つかりません。");
+            alert("template.pdf または font.ttf が見つかりません。");
             return;
         }
 
