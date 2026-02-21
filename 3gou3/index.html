@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3号様式の3 作成（永久抹消・重量税還付）</title>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+    <style>
+        body { font-family: "Helvetica Neue", Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; color: #333; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        h1 { text-align: center; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; font-size: 13px; margin-bottom: 25px; }
+        
+        h2 { font-size: 15px; background: #e8f0fe; border-left: 4px solid #1a73e8; padding: 8px 12px; margin-top: 30px; margin-bottom: 15px; font-weight: bold; }
+        
+        .section { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #ddd; }
+        .row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 12px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 100px; }
+        .col-narrow { flex: 0 0 60px; }
+        .col-mid { flex: 0 0 120px; }
+        
+        label { display: block; font-weight: bold; font-size: 12px; color: #555; margin-bottom: 4px; }
+        .hint { font-size: 11px; color: #888; line-height: 1.3; }
+
+        input[type="text"], select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; box-sizing: border-box; }
+        input[type="text"].ocr { font-family: monospace; letter-spacing: 1px; background-color: #fff9e6; border-color: #e6dcb0; text-align: center; }
+        
+        /* 住所コードなどの連結入力欄 */
+        .multi-input { display: flex; align-items: center; gap: 5px; }
+        
+        button { display: block; width: 100%; padding: 15px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer; margin-top: 30px; font-weight: bold; }
+        button:hover { background-color: #1557b0; }
+
+        .checkbox-label { font-size: 12px; display: flex; align-items: center; gap: 5px; cursor: pointer; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>第3号様式の3 作成フォーム</h1>
+    <p class="subtitle">永久抹消登録・解体届出・自動車重量税還付申請</p>
+
+    <form id="pdfForm">
+        
+        <!-- 1. 最上段 -->
+        <div class="section">
+            <div class="row">
+                <div class="col-narrow">
+                    <label>①業務</label>
+                    <input type="text" id="code_gyomu" maxlength="2" placeholder="91" class="ocr">
+                </div>
+                <div class="col-narrow">
+                    <label>⑨出張</label>
+                    <input type="text" id="code_shucho" maxlength="1" class="ocr">
+                </div>
+                <div class="col-narrow">
+                    <label>⑪処理</label>
+                    <input type="text" id="code_shori" maxlength="1" class="ocr">
+                </div>
+                <div class="col-narrow">
+                    <label>⑰制限</label>
+                    <input type="text" id="code_seigen" maxlength="1" class="ocr">
+                </div>
+                <div class="col-narrow">
+                    <label>⑩重還付</label>
+                    <input type="text" id="code_kanpu" maxlength="1" placeholder="1" class="ocr">
+                    <div class="hint">1:有 0:無</div>
+                </div>
+                <div class="col">
+                    <label>㉑自動車登録番号</label>
+                    <div class="multi-input">
+                        <input type="text" id="car_area" placeholder="品川" style="flex:1">
+                        <input type="text" id="car_class" placeholder="300" class="ocr" style="flex:1">
+                        <input type="text" id="car_hira" placeholder="あ" style="flex:0.5">
+                        <input type="text" id="car_no" placeholder="1234" class="ocr" style="flex:1">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>㉒車台番号 (下7桁)</label>
+                    <input type="text" id="chassis_no" maxlength="7" class="ocr">
+                </div>
+                <div class="col">
+                    <label>㉓移動報告番号</label>
+                    <input type="text" id="mobile_report_no" class="ocr">
+                </div>
+            </div>
+        </div>
+
+        <h2>申請者（所有者）情報</h2>
+        <div class="section">
+            <div class="row">
+                <div class="col-mid">
+                    <label>人格区分</label>
+                    <select id="applicant_type">
+                        <option value="">選択</option>
+                        <option value="1">1:個人</option>
+                        <option value="2">2:法人</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>⑪氏名又は名称（フリガナ）</label>
+                    <input type="text" id="app_kana" placeholder="シンセイ タロウ" class="ocr" style="text-align:left;">
+                    <label class="checkbox-label"><input type="checkbox" id="chk_kana_comp"> カナ補完有(1)</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>⑪氏名又は名称（漢字）</label>
+                    <input type="text" id="app_kanji" placeholder="申請 太郎" class="ocr" style="text-align:left;">
+                    <div class="multi-input">
+                         <label class="checkbox-label"><input type="checkbox" id="chk_kanji_comp"> 補完有(1)</label>
+                         <label class="checkbox-label"><input type="checkbox" id="chk_gaiji"> 外字有(2)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>⑫住所コード (都道府県-市区郡町村-小字)</label>
+                    <div class="multi-input">
+                        <input type="text" id="addr_code_1" maxlength="2" class="ocr" placeholder="13">
+                        <span>-</span>
+                        <input type="text" id="addr_code_2" maxlength="3" class="ocr" placeholder="101">
+                        <span>-</span>
+                        <input type="text" id="addr_code_3" maxlength="4" class="ocr" placeholder="0056">
+                    </div>
+                </div>
+                <div class="col-mid">
+                    <label>丁目</label>
+                    <input type="text" id="addr_chome" class="ocr">
+                </div>
+                <div class="col">
+                    <label>番・号・番地・棟番号等</label>
+                    <input type="text" id="addr_banchi" class="ocr" style="text-align:left;">
+                    <label class="checkbox-label"><input type="checkbox" id="chk_addr_comp"> 住所補完有(1)</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-mid">
+                    <label>⑬郵便番号</label>
+                    <input type="text" id="app_zip" maxlength="7" class="ocr">
+                </div>
+                <div class="col">
+                    <label>⑭電話番号 (左詰め)</label>
+                    <input type="text" id="app_tel" class="ocr" style="text-align:left;">
+                </div>
+                <div class="col-mid">
+                    <label>⑮代理受領</label>
+                    <select id="proxy_receve_flag">
+                        <option value="">選択</option>
+                        <option value="1">1:代理受領者なし</option>
+                    </select>
+                </div>
+                <div class="col-mid">
+                    <label>⑯共同所有</label>
+                    <select id="joint_owner_flag">
+                        <option value="">選択</option>
+                        <option value="1">1:有</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>⑱申請者所有者コード</label>
+                    <input type="text" id="owner_code" class="ocr">
+                </div>
+            </div>
+        </div>
+
+        <h2>振込先口座（重量税還付申請用）</h2>
+        <div class="section">
+            <div class="row">
+                <div class="col-narrow">
+                    <label>⑰機関種別</label>
+                    <input type="text" id="bank_type" maxlength="1" class="ocr" placeholder="1">
+                    <div class="hint">1:銀行 0:郵便局...</div>
+                </div>
+                <div class="col">
+                    <label>㉒金融機関名称 (種別選択時以外)</label>
+                    <input type="text" id="bank_name" class="ocr" style="text-align:left;">
+                </div>
+                <div class="col-narrow">
+                    <label>⑲支店種別</label>
+                    <input type="text" id="branch_type" maxlength="1" class="ocr" placeholder="1">
+                </div>
+                <div class="col">
+                    <label>㉓支店名</label>
+                    <input type="text" id="branch_name" class="ocr" style="text-align:left;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-narrow">
+                    <label>㉕口座種別</label>
+                    <input type="text" id="account_type" maxlength="1" class="ocr" placeholder="1">
+                    <div class="hint">1:普通 2:当座</div>
+                </div>
+                <div class="col">
+                    <label>㉔口座番号又は記号番号</label>
+                    <input type="text" id="account_no" class="ocr" style="text-align:left; letter-spacing:3px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>㉗個人番号又は法人番号 (マイナンバー)</label>
+                    <input type="text" id="my_number" class="ocr" style="text-align:left; letter-spacing:3px;" placeholder="※必要な場合のみ">
+                </div>
+                <div class="col-narrow">
+                    <label>確認区分</label>
+                    <input type="text" id="mynum_confirm" maxlength="1" class="ocr">
+                </div>
+            </div>
+        </div>
+
+        <h2>代理受領者（還付金を代理人が受け取る場合）</h2>
+        <div class="section">
+            <p class="hint">※申請者情報と同じ形式です。必要な場合のみ入力してください。</p>
+            <div class="row">
+                <div class="col">
+                    <label>㉘氏名又は名称（フリガナ）</label>
+                    <input type="text" id="proxy_kana" class="ocr" style="text-align:left;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>㉘氏名又は名称（漢字）</label>
+                    <input type="text" id="proxy_kanji" class="ocr" style="text-align:left;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>㉙住所 (コード/丁目/番地等)</label>
+                    <div class="multi-input">
+                        <input type="text" id="proxy_addr_code" class="ocr" placeholder="コード" style="flex:1">
+                        <input type="text" id="proxy_addr_chome" class="ocr" placeholder="丁目" style="flex:0.5">
+                        <input type="text" id="proxy_addr_banchi" class="ocr" placeholder="番地" style="flex:2; text-align:left;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>下部・記入欄</h2>
+        <div class="section">
+            <div class="row">
+                <div class="col">
+                    <label>解体報告記録がなされた年月日</label>
+                    <div class="multi-input">
+                        <span>令和</span>
+                        <input type="text" id="kaitai_year" style="width:40px">
+                        <span>年</span>
+                        <input type="text" id="kaitai_month" style="width:40px">
+                        <span>月</span>
+                        <input type="text" id="kaitai_day" style="width:40px">
+                        <span>日</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>申請人・届出人 (住所・氏名)</label>
+                    <input type="text" id="manual_applicant_address" placeholder="住所">
+                    <input type="text" id="manual_applicant_name" placeholder="氏名" style="margin-top:5px;">
+                </div>
+                <div class="col">
+                    <label>申請代理人 (住所・氏名)</label>
+                    <input type="text" id="manual_agent_address" placeholder="住所">
+                    <input type="text" id="manual_agent_name" placeholder="氏名" style="margin-top:5px;">
+                </div>
+            </div>
+        </div>
+
+        <button type="button" onclick="generatePDF()">PDFを作成 (Type3-3)</button>
+    </form>
+</div>
+
+<script>
+    const { PDFDocument, rgb } = PDFLib;
+
+    async function generatePDF() {
+        let pdfBytes, fontBytes;
+        try {
+            // 第3号様式の3のPDFファイル
+            const pdfUrl = 'template_type3_3.pdf'; 
+            const fontUrl = 'font.ttf'; 
+            [pdfBytes, fontBytes] = await Promise.all([
+                fetch(pdfUrl).then(res => res.arrayBuffer()),
+                fetch(fontUrl).then(res => res.arrayBuffer())
+            ]);
+        } catch (e) {
+            alert("template_type3_3.pdf または font.ttf が見つかりません。");
+            return;
+        }
+
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+        pdfDoc.registerFontkit(fontkit);
+        const customFont = await pdfDoc.embedFont(fontBytes);
+        const page = pdfDoc.getPages()[0];
+        
+        // OCR用のマス目幅（Spacing）定義
+        // 第3号様式の3はマス目が細かいため、印刷結果を見て調整してください。
+        const OCR_S = 17.5; // 標準的なマス幅
+        const OCR_NARROW = 14; // 少し狭い箇所の幅（もしあれば）
+
+        // 描画関数
+        const draw = (text, x, y, size = 10, spacing = 0, align = 'left') => {
+            if (!text) return;
+            text = String(text);
+            
+            if (spacing > 0) {
+                // OCRモード
+                for (let i = 0; i < text.length; i++) {
+                    page.drawText(text[i], { x: x + (i * spacing), y, size, font: customFont, color: rgb(0, 0, 0) });
+                }
+            } else {
+                // 通常テキスト
+                page.drawText(text, { x, y, size, font: customFont, color: rgb(0, 0, 0) });
+            }
+        };
+
+        const drawCheck = (id, x, y) => {
+            if (document.getElementById(id).checked) {
+                page.drawText('1', { x, y, size: 12, font: customFont }); // チェック枠に「1」を入れるタイプの場合
+                // もしレ点なら '✔' などに変更
+            }
+        };
+
+        const v = (id) => document.getElementById(id).value;
+
+        // ==========================================
+        //  座標定義 (第3号様式の3 画像からの推定値)
+        //  ※PDFの左下が(0,0)。A4横想定で Width ~842。
+        // ==========================================
+        
+        // 1. 上部エリア
+        const Y_TOP = 505; 
+        draw(v('code_gyomu'), 50, Y_TOP, 14, OCR_S);    // ①業務
+        draw(v('code_shucho'), 140, Y_TOP, 14, OCR_S);  // ⑨出張
+        draw(v('code_shori'), 185, Y_TOP, 14, OCR_S);   // ⑪処理
+        draw(v('code_seigen'), 255, Y_TOP, 14, OCR_S);  // ⑰制限
+        draw(v('code_kanpu'), 305, Y_TOP, 14, OCR_S);   // ⑩重還付(0/1)
+
+        // 自動車登録番号
+        draw(v('car_area'), 360, Y_TOP, 11);            // 品川
+        draw(v('car_class'), 465, Y_TOP, 14, OCR_S);    // 300
+        draw(v('car_hira'), 525, Y_TOP, 11);            // あ
+        draw(v('car_no'), 560, Y_TOP, 14, OCR_S);       // 1234
+        
+        // 車台番号 (下7桁)
+        draw(v('chassis_no'), 700, Y_TOP, 14, OCR_S);
+        
+        // 移動報告番号 (2段目右)
+        draw(v('mobile_report_no'), 645, 470, 14, OCR_S);
+
+
+        // 2. 申請者（所有者）エリア
+        // 座標基準
+        const Y_APP_KANA = 430;
+        const Y_APP_KANJI = 395;
+        const Y_APP_ADDR = 360;
+        const Y_APP_INFO = 325; // 郵便番号や電話番号
+
+        // 人格区分 (左端)
+        if (v('applicant_type') === '1') draw('1', 35, Y_APP_KANA, 12); // 個人
+        if (v('applicant_type') === '2') draw('2', 35, Y_APP_KANA - 15, 12); // 法人
+
+        // ⑪氏名カナ
+        draw(v('app_kana'), 65, Y_APP_KANA, 14, OCR_S);
+        drawCheck('chk_kana_comp', 815, Y_APP_KANA); // カナ補完
+
+        // ⑪氏名漢字
+        draw(v('app_kanji'), 65, Y_APP_KANJI, 14, OCR_S); // 漢字もマス目合わせの場合
+        drawCheck('chk_kanji_comp', 815, Y_APP_KANJI + 7); // 漢字補完
+        drawCheck('chk_gaiji', 815, Y_APP_KANJI - 7);      // 外字
+
+        // ⑫住所
+        draw(v('addr_code_1'), 65, Y_APP_ADDR, 14, OCR_S);  // 都道
+        draw(v('addr_code_2'), 118, Y_APP_ADDR, 14, OCR_S); // 市区
+        draw(v('addr_code_3'), 188, Y_APP_ADDR, 14, OCR_S); // 町村
+        draw(v('addr_chome'), 295, Y_APP_ADDR, 14, OCR_S);  // 丁目
+        draw(v('addr_banchi'), 345, Y_APP_ADDR, 14, OCR_S); // 番地
+        drawCheck('chk_addr_comp', 815, Y_APP_ADDR);        // 住所補完
+
+        // ⑬郵便番号・⑭電話番号・その他
+        draw(v('app_zip'), 65, Y_APP_INFO, 14, OCR_S);    // 郵便
+        draw(v('app_tel'), 205, Y_APP_INFO, 14, OCR_S);   // 電話
+        
+        // ⑮代理受領有無 (1:なし)
+        if (v('proxy_receve_flag') === '1') draw('1', 545, Y_APP_INFO, 14);
+        // ⑯共同所有 (1:有)
+        if (v('joint_owner_flag') === '1') draw('1', 615, Y_APP_INFO, 14);
+        
+        draw(v('owner_code'), 685, Y_APP_INFO, 14, OCR_S); // ⑱所有者コード
+
+
+        // 3. 振込先口座エリア
+        const Y_BANK_1 = 280;
+        const Y_BANK_2 = 245;
+        const Y_MYNUM = 210;
+
+        // ⑰金融機関種別
+        draw(v('bank_type'), 430, Y_BANK_1, 14); 
+        // ⑲支店種別
+        draw(v('branch_type'), 660, Y_BANK_1, 14);
+        // ㉒金融機関名称
+        draw(v('bank_name'), 65, Y_BANK_1, 14, OCR_S); 
+
+        // ㉓支店名
+        draw(v('branch_name'), 65, Y_BANK_2, 14, OCR_S);
+        // ㉕口座種類
+        draw(v('account_type'), 400, Y_BANK_2, 14);
+        // ㉔口座番号
+        draw(v('account_no'), 455, Y_BANK_2, 14, OCR_S);
+
+        // ㉗マイナンバー (個人番号)
+        draw(v('my_number'), 65, Y_MYNUM, 14, OCR_S);
+        // 確認区分
+        draw(v('mynum_confirm'), 810, Y_MYNUM, 14);
+
+
+        // 4. 代理受領者エリア
+        // 申請者欄と似た構造
+        const Y_PROXY_KANA = 175;
+        const Y_PROXY_KANJI = 140;
+        const Y_PROXY_ADDR = 105;
+        
+        draw(v('proxy_kana'), 65, Y_PROXY_KANA, 14, OCR_S);
+        draw(v('proxy_kanji'), 65, Y_PROXY_KANJI, 14, OCR_S);
+        
+        draw(v('proxy_addr_code'), 65, Y_PROXY_ADDR, 14, OCR_S); // 簡易実装
+        draw(v('proxy_addr_chome'), 295, Y_PROXY_ADDR, 14, OCR_S);
+        draw(v('proxy_addr_banchi'), 345, Y_PROXY_ADDR, 14, OCR_S);
+        // ㉜登録識別情報などが必要なら追加
+
+
+        // 5. 最下部 (手書き欄)
+        const Y_BOTTOM_DATE = 55;
+        const Y_BOTTOM_TEXT = 40; // 申請人住所などの行
+        
+        // 解体日
+        draw(v('kaitai_year'), 320, Y_BOTTOM_DATE, 10);
+        draw(v('kaitai_month'), 355, Y_BOTTOM_DATE, 10);
+        draw(v('kaitai_day'), 385, Y_BOTTOM_DATE, 10);
+
+        // 申請人・代理人
+        draw(v('manual_applicant_address'), 50, Y_BOTTOM_TEXT, 9);
+        draw(v('manual_applicant_name'), 50, Y_BOTTOM_TEXT - 15, 10);
+        
+        draw(v('manual_agent_address'), 420, Y_BOTTOM_TEXT, 9);
+        draw(v('manual_agent_name'), 420, Y_BOTTOM_TEXT - 15, 10);
+
+
+        // 保存
+        const fileName = `第3号様式の3_${v('app_kanji')}.pdf`;
+        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        const link = document.createElement('a');
+        link.href = pdfDataUri;
+        link.download = fileName;
+        link.click();
+    }
+</script>
+</body>
+</html>

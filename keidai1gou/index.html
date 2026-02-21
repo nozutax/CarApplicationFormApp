@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>軽第1号様式 作成アプリ</title>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+    <style>
+        body { font-family: "Helvetica Neue", Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f0f4f8; color: #333; }
+        .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { text-align: center; font-size: 24px; margin-bottom: 5px; color: #2c3e50; }
+        p.subtitle { text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 30px; }
+        
+        h2 { font-size: 16px; background: #eef2f7; border-left: 5px solid #3498db; padding: 8px 12px; margin-top: 30px; margin-bottom: 15px; font-weight: bold; }
+        
+        .row { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 15px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 100px; }
+        .col-narrow { flex: 0 0 70px; }
+        
+        label { display: block; font-weight: bold; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .hint { font-size: 11px; color: #95a5a6; margin-top: 2px; }
+
+        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #dcdcdc; border-radius: 4px; font-size: 15px; box-sizing: border-box; }
+        input[type="text"]:focus { border-color: #3498db; outline: none; }
+        input[type="text"].ocr { font-family: monospace; letter-spacing: 1px; background-color: #fffcf5; border-color: #e0d8b0; text-align: center; }
+        
+        .checkbox-label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; color: #2980b9; font-weight: bold; margin-bottom: 5px; }
+        .checkbox-label input { transform: scale(1.2); }
+
+        .addr-group { display: flex; gap: 5px; align-items: center; }
+        
+        button { display: block; width: 100%; padding: 18px; background-color: #3498db; color: white; border: none; border-radius: 6px; font-size: 18px; cursor: pointer; margin-top: 40px; font-weight: bold; transition: background 0.2s; }
+        button:hover { background-color: #2980b9; }
+
+        /* 右上の詳細設定（初期は隠すなどの対応も可） */
+        .advanced-options { border: 1px dashed #ccc; padding: 15px; background: #fafafa; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>軽第1号様式 申請書作成</h1>
+    <p class="subtitle">軽自動車検査証記入申請書・OCRシート</p>
+
+    <form id="pdfForm">
+        
+        <!-- 最上段：業務種別など -->
+        <div class="row">
+            <div class="col-narrow">
+                <label>50業務</label>
+                <input type="text" id="code_50_gyomu" maxlength="1" class="ocr" placeholder="4">
+                <div class="hint">1:新規 4:記載変更</div>
+            </div>
+            <div class="col-narrow">
+                <label>51番号</label>
+                <input type="text" id="code_51_num" maxlength="1" class="ocr">
+            </div>
+            <div class="col-narrow">
+                <label>52手数料</label>
+                <input type="text" id="code_52_fee" maxlength="1" class="ocr">
+            </div>
+            <div class="col-narrow">
+                <label>54呈示</label>
+                <input type="text" id="code_54_pres" maxlength="1" class="ocr">
+            </div>
+            <div class="col-narrow">
+                <label>55番号</label>
+                <input type="text" id="code_55_ind" maxlength="1" class="ocr">
+            </div>
+            <div class="col-narrow">
+                <label>56距離</label>
+                <input type="text" id="code_56_dist" maxlength="6" class="ocr">
+                <div class="hint">走行距離</div>
+            </div>
+        </div>
+
+        <h2>①車両番号・②希望番号・③車台番号</h2>
+        <div class="row">
+            <div class="col">
+                <label>①車両番号（現在のナンバー）</label>
+                <div class="addr-group">
+                    <input type="text" id="car_no_1" placeholder="練馬" style="flex:1.5">
+                    <input type="text" id="car_no_2" placeholder="580" class="ocr" style="flex:1">
+                    <input type="text" id="car_no_3" placeholder="あ" style="flex:0.5">
+                    <input type="text" id="car_no_4" placeholder="1234" class="ocr" style="flex:1">
+                </div>
+            </div>
+            <div class="col">
+                <label>②希望車両番号（希望ナンバー時）</label>
+                <div class="addr-group">
+                    <input type="text" id="hope_no_1" placeholder="583" class="ocr" style="flex:1">
+                    <input type="text" id="hope_no_2" placeholder="あ" style="flex:0.5">
+                    <input type="text" id="hope_no_3" placeholder="8888" class="ocr" style="flex:1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>③車台番号（下7桁など）</label>
+                <input type="text" id="chassis_no" maxlength="20" class="ocr" placeholder="ABC-1234567" style="letter-spacing: 3px;">
+            </div>
+        </div>
+
+        <h2>④使用者（氏名・名称）</h2>
+        <div class="row">
+            <div class="col">
+                <label>氏名又は名称（漢字）</label>
+                <input type="text" id="user_name" placeholder="軽 太郎" class="ocr" style="text-align:left; letter-spacing: 8px;">
+                <div class="hint">※マス目に合わせて左詰め</div>
+            </div>
+        </div>
+
+        <h2>⑤使用者（住所）</h2>
+        <div class="row">
+            <div class="col">
+                <label>住所コード (都道府県-市区町村)</label>
+                <div class="addr-group">
+                    <input type="text" id="user_addr_code_1" maxlength="2" class="ocr" placeholder="13" style="width:60px;">
+                    <span>-</span>
+                    <input type="text" id="user_addr_code_2" maxlength="3" class="ocr" placeholder="100" style="width:80px;">
+                </div>
+            </div>
+            <div class="col">
+                <label>丁目・番・号・棟など</label>
+                <div class="addr-group">
+                    <input type="text" id="user_addr_chome" class="ocr" placeholder="丁目">
+                    <span>-</span>
+                    <input type="text" id="user_addr_banchi" class="ocr" placeholder="番地・号など" style="flex:2; text-align:left;">
+                </div>
+            </div>
+        </div>
+
+        <h2>⑥所有者（氏名・名称）</h2>
+        <div class="row">
+            <div class="col">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="chk_owner_same" onchange="toggleSame('owner')"> 
+                    「1 使用者に同じ」にする
+                </label>
+                <label>氏名又は名称（漢字）</label>
+                <input type="text" id="owner_name" placeholder="軽 太郎" class="ocr" style="text-align:left; letter-spacing: 8px;">
+            </div>
+        </div>
+
+        <h2>⑦所有者（住所）</h2>
+        <div class="row">
+            <div class="col">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="chk_owner_addr_same" onchange="toggleSame('owner_addr')"> 
+                    「1 使用者住所に同じ」にする
+                </label>
+                <div class="row">
+                    <div class="col">
+                        <label>住所コード</label>
+                        <div class="addr-group">
+                            <input type="text" id="owner_addr_code_1" maxlength="2" class="ocr">
+                            <span>-</span>
+                            <input type="text" id="owner_addr_code_2" maxlength="3" class="ocr">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>丁目・番地等</label>
+                        <div class="addr-group">
+                            <input type="text" id="owner_addr_chome" class="ocr">
+                            <span>-</span>
+                            <input type="text" id="owner_addr_banchi" class="ocr" style="flex:2; text-align:left;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>⑧⑨使用の本拠の位置</h2>
+        <div class="row">
+            <div class="col">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="chk_base_same" onchange="toggleSame('base')"> 
+                    「1 使用者住所に同じ」にする
+                </label>
+                <div class="row">
+                    <div class="col">
+                        <label>住所コード</label>
+                        <div class="addr-group">
+                            <input type="text" id="base_addr_code_1" maxlength="2" class="ocr">
+                            <span>-</span>
+                            <input type="text" id="base_addr_code_2" maxlength="3" class="ocr">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>丁目・番地等</label>
+                        <div class="addr-group">
+                            <input type="text" id="base_addr_chome" class="ocr">
+                            <span>-</span>
+                            <input type="text" id="base_addr_banchi" class="ocr" style="flex:2; text-align:left;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="advanced-options">
+            <div class="row">
+                <div class="col">
+                    <label>⑩型式指定番号</label>
+                    <input type="text" id="model_no" maxlength="5" class="ocr">
+                </div>
+                <div class="col">
+                    <label>類別区分番号</label>
+                    <input type="text" id="class_no" maxlength="4" class="ocr">
+                </div>
+                <div class="col">
+                    <label>57整備工場コード</label>
+                    <input type="text" id="factory_code" maxlength="7" class="ocr">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-narrow">
+                    <label>97受検</label>
+                    <input type="text" id="code_97" maxlength="1" class="ocr">
+                </div>
+                <div class="col-narrow">
+                    <label>98点検</label>
+                    <input type="text" id="code_98" maxlength="1" class="ocr">
+                </div>
+            </div>
+        </div>
+
+        <h2>下部 申請人・届出人（手書き欄への印字）</h2>
+        <div class="row">
+            <div class="col">
+                <label>申請者（使用者）氏名</label>
+                <input type="text" id="app_user_name">
+                <label style="margin-top:5px">申請者（使用者）住所</label>
+                <input type="text" id="app_user_addr">
+            </div>
+            <div class="col">
+                <label>申請者（所有者）氏名</label>
+                <input type="text" id="app_owner_name">
+                <label style="margin-top:5px">申請者（所有者）住所</label>
+                <input type="text" id="app_owner_addr">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>旧所有者 氏名</label>
+                <input type="text" id="old_owner_name">
+                <label style="margin-top:5px">旧所有者 住所</label>
+                <input type="text" id="old_owner_addr">
+            </div>
+            <div class="col">
+                <label>受検者 氏名</label>
+                <input type="text" id="examiner_name">
+                <label style="margin-top:5px">受検者 住所</label>
+                <input type="text" id="examiner_addr">
+            </div>
+        </div>
+
+        <button type="button" onclick="generatePDF()">PDFを作成 (軽第1号様式)</button>
+    </form>
+</div>
+
+<script>
+    const { PDFDocument, rgb } = PDFLib;
+
+    function toggleSame(target) {
+        // 必要ならフォームの入力制御を行う
+        // ここではPDF出力時のチェックマーク制御のみに使用
+    }
+
+    async function generatePDF() {
+        let pdfBytes, fontBytes;
+        try {
+            // 軽第1号様式のPDFファイル
+            const pdfUrl = 'template_kei1.pdf'; 
+            const fontUrl = 'font.ttf'; 
+            [pdfBytes, fontBytes] = await Promise.all([
+                fetch(pdfUrl).then(res => res.arrayBuffer()),
+                fetch(fontUrl).then(res => res.arrayBuffer())
+            ]);
+        } catch (e) {
+            alert("template_kei1.pdf または font.ttf が見つかりません。");
+            return;
+        }
+
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+        pdfDoc.registerFontkit(fontkit);
+        const customFont = await pdfDoc.embedFont(fontBytes);
+        const page = pdfDoc.getPages()[0];
+        const { height } = page.getSize(); // 縦長 A4 (height=842程度)
+
+        // 描画ヘルパー
+        // spacing: OCRマスのピッチ。軽自動車様式は標準18pt程度だが、箇所によって異なる
+        const draw = (text, x, y, size = 10, spacing = 0) => {
+            if (!text) return;
+            text = String(text);
+            if (spacing > 0) {
+                for (let i = 0; i < text.length; i++) {
+                    page.drawText(text[i], { x: x + (i * spacing), y, size, font: customFont, color: rgb(0, 0, 0) });
+                }
+            } else {
+                page.drawText(text, { x, y, size, font: customFont, color: rgb(0, 0, 0) });
+            }
+        };
+
+        const drawCheck = (id, x, y) => {
+            if (document.getElementById(id).checked) {
+                // チェック枠に「1」を印字
+                page.drawText('1', { x, y, size: 14, font: customFont, color: rgb(0, 0, 0) });
+            }
+        };
+
+        const v = (id) => document.getElementById(id).value;
+
+        // ==========================================
+        //  座標定義 (軽第1号様式 画像からの推定)
+        //  ※PDFの左下原点 (0,0)。A4縦(595 x 842)想定
+        // ==========================================
+        
+        const OCR_W = 18; // 標準的なOCR枠幅
+
+        // 1. ヘッダー・コード類 (上部)
+        const Y_CODE = 795;
+        draw(v('code_50_gyomu'), 50, Y_CODE, 14, OCR_W);  // 50業務
+        draw(v('code_51_num'), 115, Y_CODE, 14, OCR_W);   // 51番号
+        draw(v('code_52_fee'), 150, Y_CODE, 14, OCR_W);   // 52手数料
+        draw(v('code_54_pres'), 190, Y_CODE, 14, OCR_W);  // 54呈示
+        draw(v('code_55_ind'), 230, Y_CODE, 14, OCR_W);   // 55番号
+        draw(v('code_56_dist'), 430, Y_CODE, 14, OCR_W);  // 56距離
+
+        // 2. 車両番号など
+        const Y_CAR = 730;
+        // ①車両番号
+        draw(v('car_no_1'), 50, Y_CAR, 12);               // 練馬(漢字)
+        draw(v('car_no_2'), 110, Y_CAR, 14, OCR_W);       // 580
+        draw(v('car_no_3'), 175, Y_CAR, 12);              // あ
+        draw(v('car_no_4'), 210, Y_CAR, 14, OCR_W);       // 1234
+        
+        // ②希望番号
+        draw(v('hope_no_1'), 300, Y_CAR, 14, OCR_W);      // 583
+        draw(v('hope_no_2'), 360, Y_CAR, 12);             // あ
+        draw(v('hope_no_3'), 400, Y_CAR, 14, OCR_W);      // 8888
+        
+        // ③車台番号 (OCR枠)
+        // 座標推定: 下7桁でなくもっと長い枠がある場合は調整
+        draw(v('chassis_no'), 50, 675, 14, OCR_W);
+
+
+        // 3. 使用者・所有者・本拠 (ここが縦に並ぶ)
+        // ④使用者 氏名 (漢字)
+        const Y_USER_NAME = 615;
+        draw(v('user_name'), 50, Y_USER_NAME, 14, 25); // 漢字はピッチ広め(約25pt)
+
+        // ⑤使用者 住所
+        const Y_USER_ADDR = 570;
+        draw(v('user_addr_code_1'), 50, Y_USER_ADDR, 14, OCR_W); // 都道
+        draw(v('user_addr_code_2'), 100, Y_USER_ADDR, 14, OCR_W); // 市区
+        draw(v('user_addr_chome'), 200, Y_USER_ADDR, 14, OCR_W); // 丁目
+        draw(v('user_addr_banchi'), 250, Y_USER_ADDR, 14, OCR_W); // 番地等
+
+        // ⑥所有者 氏名
+        const Y_OWNER_NAME = 510;
+        drawCheck('chk_owner_same', 40, Y_OWNER_NAME); // 「1」を左端に
+        if (!document.getElementById('chk_owner_same').checked) {
+            draw(v('owner_name'), 80, Y_OWNER_NAME, 14, 25);
+        }
+
+        // ⑦所有者 住所
+        const Y_OWNER_ADDR = 465;
+        drawCheck('chk_owner_addr_same', 40, Y_OWNER_ADDR);
+        if (!document.getElementById('chk_owner_addr_same').checked) {
+            draw(v('owner_addr_code_1'), 80, Y_OWNER_ADDR, 14, OCR_W);
+            draw(v('owner_addr_code_2'), 130, Y_OWNER_ADDR, 14, OCR_W);
+            draw(v('owner_addr_chome'), 230, Y_OWNER_ADDR, 14, OCR_W);
+            draw(v('owner_addr_banchi'), 280, Y_OWNER_ADDR, 14, OCR_W);
+        }
+
+        // ⑧⑨使用の本拠の位置
+        const Y_BASE = 410; // チェック欄
+        const Y_BASE_ADDR = 370; // 住所欄
+        // ⑧チェック
+        drawCheck('chk_base_same', 40, Y_BASE);
+
+        // ⑨住所 (チェックがない場合)
+        if (!document.getElementById('chk_base_same').checked) {
+            draw(v('base_addr_code_1'), 80, Y_BASE_ADDR, 14, OCR_W);
+            draw(v('base_addr_code_2'), 130, Y_BASE_ADDR, 14, OCR_W);
+            draw(v('base_addr_chome'), 230, Y_BASE_ADDR, 14, OCR_W);
+            draw(v('base_addr_banchi'), 280, Y_BASE_ADDR, 14, OCR_W);
+        }
+
+        // 詳細設定（型式・類別など）
+        const Y_MODEL = 295;
+        draw(v('model_no'), 50, Y_MODEL, 14, OCR_W);
+        draw(v('class_no'), 175, Y_MODEL, 14, OCR_W);
+        draw(v('factory_code'), 350, Y_MODEL, 14, OCR_W);
+        
+        const Y_BOTTOM_CODE = 220; // 97,98など
+        draw(v('code_97'), 50, Y_BOTTOM_CODE, 14, OCR_W);
+        draw(v('code_98'), 100, Y_BOTTOM_CODE, 14, OCR_W);
+
+
+        // 下部テキスト欄（手書き欄への印字）
+        // 座標は画像の点線部分に合わせて調整
+        let yText = 150;
+        const xLeft = 50;
+        const xRight = 320;
+        const lineH = 20;
+
+        // 申請者（使用者）
+        draw(v('app_user_name'), xLeft, yText, 9);
+        draw(v('app_user_addr'), xLeft, yText - 10, 8);
+        
+        // 申請者（所有者）
+        draw(v('app_owner_name'), xLeft, yText - 40, 9);
+        draw(v('app_owner_addr'), xLeft, yText - 50, 8);
+
+        // 旧所有者 (右側)
+        draw(v('old_owner_name'), xRight, yText, 9);
+        draw(v('old_owner_addr'), xRight, yText - 10, 8);
+
+        // 受検者
+        draw(v('examiner_name'), xRight, yText - 40, 9);
+        draw(v('examiner_addr'), xRight, yText - 50, 8);
+
+
+        // ファイル保存
+        const fileName = `軽第1号様式_${v('user_name') || '申請書'}.pdf`;
+        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        const link = document.createElement('a');
+        link.href = pdfDataUri;
+        link.download = fileName;
+        link.click();
+    }
+</script>
+</body>
+</html>
