@@ -219,29 +219,6 @@
             </div>
         </div>
 
-        <h2>代理受領者（必要な場合のみ）</h2>
-        <div class="row">
-            <div class="col">
-                <label>43氏名又は名称（フリガナ）</label>
-                <input type="text" id="proxy_kana" class="ocr" style="text-align:left;">
-            </div>
-            <div class="col">
-                <label>43氏名又は名称（漢字）</label>
-                <input type="text" id="proxy_kanji" class="ocr" style="text-align:left;">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label>45住所 (コード・丁目・番地)</label>
-                <div class="multi-input">
-                    <input type="text" id="proxy_addr_code_1" class="ocr" style="width:40px">
-                    <input type="text" id="proxy_addr_code_2" class="ocr" style="width:50px">
-                    <input type="text" id="proxy_addr_chome" class="ocr" style="width:50px">
-                    <input type="text" id="proxy_addr_banchi" class="ocr" style="flex:1; text-align:left;">
-                </div>
-            </div>
-        </div>
-
         <h2>下部・記入欄</h2>
         <div class="row">
             <div class="col">
@@ -267,13 +244,9 @@
                 <input type="text" id="txt_owner_name" placeholder="氏名">
                 <input type="text" id="txt_owner_addr" placeholder="住所" style="margin-top:5px">
             </div>
-            <div class="col">
-                <label>代理受領者 氏名</label>
-                <input type="text" id="txt_proxy_name">
-            </div>
         </div>
 
-        <button type="button" onclick="generatePDF()">PDFを作成 (軽第4号様式の3)</button>
+        <button type="button" onclick="generatePDF()">PDFを作成</button>
     </form>
 </div>
 
@@ -283,14 +256,14 @@
     async function generatePDF() {
         let pdfBytes, fontBytes;
         try {
-            const pdfUrl = 'template_kei4_3.pdf'; 
+            const pdfUrl = 'template.pdf'; 
             const fontUrl = 'font.ttf'; 
             [pdfBytes, fontBytes] = await Promise.all([
                 fetch(pdfUrl).then(res => res.arrayBuffer()),
                 fetch(fontUrl).then(res => res.arrayBuffer())
             ]);
         } catch (e) {
-            alert("template_kei4_3.pdf または font.ttf が見つかりません。");
+            alert("template.pdf または font.ttf が見つかりません。");
             return;
         }
 
@@ -397,19 +370,7 @@
         // 19マイナンバー
         draw(v('my_number'), 45, Y_MYNUM, 14, OCR_W);
 
-        // 5. 代理受領者
-        const Y_PROXY_KANA = 330;
-        const Y_PROXY_KANJI = 300;
-        const Y_PROXY_ADDR = 270;
-        draw(v('proxy_kana'), 60, Y_PROXY_KANA, 14, OCR_W);
-        draw(v('proxy_kanji'), 60, Y_PROXY_KANJI, 14, OCR_W);
-        
-        draw(v('proxy_addr_code_1'), 60, Y_PROXY_ADDR, 14, OCR_W);
-        draw(v('proxy_addr_code_2'), 110, Y_PROXY_ADDR, 14, OCR_W);
-        draw(v('proxy_addr_chome'), 210, Y_PROXY_ADDR, 14, OCR_W);
-        draw(v('proxy_addr_banchi'), 260, Y_PROXY_ADDR, 14, OCR_W);
-
-        // 6. 下部テキスト欄
+        // 5. 下部テキスト欄
         const Y_DATE = 210;
         draw(v('kaitai_year'), 320, Y_DATE, 10);
         draw(v('kaitai_month'), 350, Y_DATE, 10);
@@ -423,13 +384,12 @@
         // 届出者（所有者）
         draw(v('txt_owner_name'), 150, Y_TXT - 40, 10);
         draw(v('txt_owner_addr'), 150, Y_TXT - 55, 9);
-        
-        // 代理受領者
-        draw(v('txt_proxy_name'), 430, Y_TXT, 10);
-
 
         // ファイル保存
-        const fileName = `軽第4号様式の3_${v('app_kanji')}.pdf`;
+        const d = new Date();
+        const dateStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('');
+        const applicantName = (v('app_kanji') || '').replace(/[\\/:*?"<>|]/g, '_').trim() || '申請者';
+        const fileName = `${dateStr}_${applicantName}_軽第4号様式の3.pdf`;
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');
         link.href = pdfDataUri;
