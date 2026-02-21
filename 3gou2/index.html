@@ -51,9 +51,9 @@
         <h2>上部 OCR コード入力欄</h2>
         <div class="row">
             <div class="col" style="flex:2;">
-                <label>①業務種別 (2桁)</label>
-                <input type="text" id="code_gyomu" maxlength="2" placeholder="91" class="ocr-input">
-                <div class="hint">例: 15(輸出), 91(抹消)</div>
+                <label>①業務種別 (1桁)</label>
+                <input type="text" id="code_gyomu" maxlength="1" placeholder="9" class="ocr-input">
+                <div class="hint">例: 1桁で入力</div>
             </div>
             <div class="col" style="flex:1;">
                 <label>②手数料</label>
@@ -88,21 +88,9 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <label>㉒車台番号 (下7桁)</label>
-                <input type="text" id="chassis_no" maxlength="7" placeholder="ABC1234" class="ocr-input">
-            </div>
-            <div class="col">
-                <label>⑱輸出予定日</label>
-                <div class="row" style="gap:5px;">
-                    <input type="text" id="export_gengo" placeholder="1" style="width:40px; text-align:center;" class="ocr-input">
-                    <input type="text" id="export_year" placeholder="05" style="flex:1; text-align:center;" class="ocr-input">
-                    <input type="text" id="export_month" placeholder="12" style="flex:1; text-align:center;" class="ocr-input">
-                    <input type="text" id="export_day" placeholder="01" style="flex:1; text-align:center;" class="ocr-input">
-                </div>
-                <div class="hint">元号: 1(明治) 2(大正) 3(昭和) 4(平成) 5(令和)</div>
-            </div>
+        <div class="form-group">
+            <label>㉒車台番号 (下7桁)</label>
+            <input type="text" id="chassis_no" maxlength="7" placeholder="ABC1234" class="ocr-input">
         </div>
 
         <h2>申請人・届出人</h2>
@@ -149,26 +137,16 @@
             <input type="text" id="owner_address">
         </div>
 
-        <!-- 代理人 -->
-        <div class="form-group">
-            <label>申請代理人 氏名</label>
-            <input type="text" id="agent_name">
-        </div>
-        <div class="form-group">
-            <label>申請代理人 住所</label>
-            <input type="text" id="agent_address">
-        </div>
-
         <h2>登録又は届出の原因（右下枠）</h2>
         <div class="row">
             <div class="col">
                 <label>原因を選択（チェック）</label>
                 <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" id="check_messhitsu"> 滅失</label>
                     <label class="checkbox-item"><input type="checkbox" id="check_kaitai"> 解体（使用済自動車の解体を除く）</label>
                     <label class="checkbox-item"><input type="checkbox" id="check_yoto_haishi"> 用途廃止</label>
                     <label class="checkbox-item"><input type="checkbox" id="check_no_exist"> 車台が新規登録を受けた際に...</label>
                     <label class="checkbox-item"><input type="checkbox" id="check_temp_stop"> 一時使用中止</label>
-                    <label class="checkbox-item"><input type="checkbox" id="check_messhitsu"> 滅失</label>
                 </div>
             </div>
             <div class="col">
@@ -269,7 +247,7 @@
         // ⑰制限解除
         draw(v('code_seigen'), 440, Y_OCR_TOP, 14, OCR_W);
 
-        // --- 2. 車両情報・輸出予定日 ---
+        // --- 2. 車両情報 ---
         // ㉑自動車登録番号
         draw(v('car_area'), 55, Y_CAR_INFO, 12); // 品川
         draw(v('car_class'), 160, Y_CAR_INFO, 14, OCR_W); // 300
@@ -279,17 +257,7 @@
         // ㉒車台番号 (下7桁)
         draw(v('chassis_no'), 380, Y_CAR_INFO, 14, OCR_W);
 
-        // ⑱輸出予定日 (右端枠)
-        // 座標は推定です
-        const Y_EXPORT = Y_CAR_INFO; 
-        const X_EXPORT = 650; // かなり右
-        // ※第3号様式の2の画像配置からすると、車台番号の右側にあります
-        draw(v('export_gengo'), 650, Y_EXPORT, 14);
-        draw(v('export_year'), 680, Y_EXPORT, 14, OCR_W);
-        draw(v('export_month'), 725, Y_EXPORT, 14, OCR_W);
-        draw(v('export_day'), 770, Y_EXPORT, 14, OCR_W);
-
-        // --- 3. 申請人・使用者・所有者など ---
+        // --- 3. 申請人・使用者・所有者 ---
         // 画像の「申請人・届出人」欄の位置に合わせて座標を設定します
         // 左側の枠内
         let y = 380; // 左下の開始位置（推定）
@@ -312,36 +280,22 @@
         draw(v('owner_name'), X_TEXT, y, 10);
         y -= LINE_H;
         draw(v('owner_address'), X_TEXT, y, 10);
-        y -= (LINE_H * 1.5);
-
-        // 申請代理人
-        draw(v('agent_name'), X_TEXT, y, 10);
-        y -= LINE_H;
-        draw(v('agent_address'), X_TEXT, y, 10);
 
         // --- 4. 右下：原因・使用の本拠 ---
-        // 原因チェックボックス (座標は目分量です、テスト出力して調整してください)
+        // 原因チェックボックス（滅失を1番目に）
         const X_REASON = 480;
         let yReason = 280;
         const R_GAP = 18;
 
-        drawCheck('check_kaitai', X_REASON, yReason);
-        // 「解体」の行
-        
-        yReason -= R_GAP; 
-        // 「解体（使用済～除く）」の位置かも確認が必要ですが、とりあえず上から順
-        
+        drawCheck('check_messhitsu', X_REASON, yReason); // 滅失（1番目）
+        yReason -= R_GAP;
+        drawCheck('check_kaitai', X_REASON, yReason); // 解体
         yReason -= R_GAP;
         drawCheck('check_yoto_haishi', X_REASON, yReason); // 用途廃止
-        
         yReason -= R_GAP;
         drawCheck('check_no_exist', X_REASON, yReason); // 車台が新規登録～
-        
         yReason -= R_GAP;
         drawCheck('check_temp_stop', X_REASON, yReason); // 一時使用中止
-        
-        yReason -= R_GAP;
-        drawCheck('check_messhitsu', X_REASON, yReason); // 滅失
 
         // 使用の本拠の位置
         draw(v('base_location'), X_REASON, 330, 10);
