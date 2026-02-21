@@ -7,12 +7,12 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
     <style>
-        body { font-family: "Helvetica Neue", Arial, sans-serif; max-width: 950px; margin: 0 auto; padding: 20px; background-color: #f7f9fc; color: #333; }
+        body { font-family: "Helvetica Neue", Arial, sans-serif; max-width: 950px; margin: 0 auto; padding: 20px; background-color: #f5f5f5; color: #333; }
         .container { background: white; padding: 35px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         h1 { text-align: center; font-size: 22px; margin-bottom: 5px; color: #2c3e50; }
         p.subtitle { text-align: center; color: #7f8c8d; font-size: 13px; margin-bottom: 25px; }
         
-        h2 { font-size: 15px; background: #eef2f7; border-left: 5px solid #2980b9; padding: 8px 12px; margin-top: 30px; margin-bottom: 15px; font-weight: bold; }
+        h2 { font-size: 15px; background: white; border-left: 5px solid #2980b9; padding: 8px 12px; margin-top: 30px; margin-bottom: 15px; font-weight: bold; }
         
         .row { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 15px; flex-wrap: wrap; }
         .col { flex: 1; min-width: 100px; }
@@ -22,8 +22,8 @@
         label { display: block; font-weight: bold; font-size: 12px; color: #555; margin-bottom: 5px; }
         .hint { font-size: 11px; color: #95a5a6; margin-top: 2px; }
 
-        input[type="text"], select { width: 100%; padding: 9px; border: 1px solid #dcdcdc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
-        input[type="text"].ocr { font-family: monospace; letter-spacing: 1px; background-color: #fffcf5; border-color: #e0d8b0; text-align: center; }
+        input[type="text"], select { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; background-color: #fff; }
+        input[type="text"].ocr { font-family: monospace; letter-spacing: 1px; background-color: #fff; border-color: #ccc; text-align: center; }
         
         /* 住所コードなどの連結入力欄 */
         .multi-input { display: flex; align-items: center; gap: 5px; }
@@ -43,28 +43,6 @@
         
         <!-- 最上段 -->
         <div class="row">
-            <div class="col-narrow">
-                <label>50業務</label>
-                <input type="text" id="code_50" maxlength="1" class="ocr" placeholder="7">
-                <div class="hint">7:返納 8:解体</div>
-            </div>
-            <div class="col-narrow">
-                <label>60処理</label>
-                <input type="text" id="code_60" maxlength="1" class="ocr">
-            </div>
-            <div class="col-narrow">
-                <label>61例外</label>
-                <input type="text" id="code_61" maxlength="1" class="ocr">
-            </div>
-            <div class="col-narrow">
-                <label>95制限</label>
-                <input type="text" id="code_95" maxlength="1" class="ocr">
-            </div>
-            <div class="col-narrow">
-                <label>71返納</label>
-                <input type="text" id="code_71" maxlength="1" class="ocr">
-                <div class="hint">1:解体返納</div>
-            </div>
             <div class="col-narrow">
                 <label>80重還</label>
                 <input type="text" id="code_80" maxlength="1" class="ocr" placeholder="1">
@@ -106,27 +84,18 @@
             <div class="col">
                 <label>31氏名又は名称（フリガナ）</label>
                 <input type="text" id="app_kana" class="ocr" style="text-align:left;">
-                <label class="checkbox-label"><input type="checkbox" id="chk_kana_comp"> カナ補完有(1)</label>
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <label>31氏名又は名称（漢字）</label>
                 <input type="text" id="app_kanji" class="ocr" style="text-align:left;">
-                <div class="multi-input">
-                     <label class="checkbox-label"><input type="checkbox" id="chk_kanji_comp"> 漢字補完有(1)</label>
-                     <label class="checkbox-label"><input type="checkbox" id="chk_gaiji"> 外字有(2)</label>
-                </div>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <label>32住所コード (都道府県-市区町村)</label>
-                <div class="multi-input">
-                    <input type="text" id="addr_code_1" maxlength="2" class="ocr" style="width:50px">
-                    <span>-</span>
-                    <input type="text" id="addr_code_2" maxlength="3" class="ocr" style="width:60px">
-                </div>
+                <label>32住所コード（12桁）</label>
+                <input type="text" id="addr_code" maxlength="12" class="ocr" placeholder="都道府県市区町村コード">
             </div>
             <div class="col">
                 <label>丁目・小字コード・番地</label>
@@ -135,17 +104,26 @@
                     <span>-</span>
                     <input type="text" id="addr_banchi" class="ocr" placeholder="番地・号・棟" style="flex:2; text-align:left;">
                 </div>
-                <label class="checkbox-label"><input type="checkbox" id="chk_addr_comp"> 住所補完有(1)</label>
             </div>
         </div>
         <div class="row">
             <div class="col-mid">
                 <label>33郵便番号</label>
-                <input type="text" id="app_zip" maxlength="7" class="ocr">
+                <div class="multi-input">
+                    <input type="text" id="app_zip_1" maxlength="3" class="ocr" placeholder="123" style="width:55px; text-align:center;">
+                    <span>-</span>
+                    <input type="text" id="app_zip_2" maxlength="4" class="ocr" placeholder="4567" style="width:65px; text-align:center;">
+                </div>
             </div>
             <div class="col">
-                <label>34電話番号 (左詰め)</label>
-                <input type="text" id="app_tel" class="ocr" style="text-align:left;">
+                <label>34電話番号（6桁-4桁-4桁）</label>
+                <div class="multi-input">
+                    <input type="text" id="app_tel_1" maxlength="6" class="ocr" placeholder="123456" style="width:85px; text-align:center;">
+                    <span>-</span>
+                    <input type="text" id="app_tel_2" maxlength="4" class="ocr" placeholder="1234" style="width:55px; text-align:center;">
+                    <span>-</span>
+                    <input type="text" id="app_tel_3" maxlength="4" class="ocr" placeholder="5678" style="width:55px; text-align:center;">
+                </div>
             </div>
             <div class="col-mid">
                 <label>35代理受領</label>
@@ -314,11 +292,6 @@
         
         // 1. コード行 (最上段)
         const Y_CODE = 790;
-        draw(v('code_50'), 45, Y_CODE, 14, OCR_W); // 50
-        draw(v('code_60'), 100, Y_CODE, 14, OCR_W); // 60
-        draw(v('code_61'), 160, Y_CODE, 14, OCR_W); // 61
-        draw(v('code_95'), 205, Y_CODE, 14, OCR_W); // 95
-        draw(v('code_71'), 250, Y_CODE, 14, OCR_W); // 71
         draw(v('code_80'), 360, Y_CODE, 14, OCR_W); // 80 (重還付有無)
 
         // 29 移動報告番号
@@ -343,24 +316,23 @@
         const Y_NAME_KANA = 680;
         const Y_NAME_KANJI = 650;
         draw(v('app_kana'), 60, Y_NAME_KANA, 14, OCR_W);
-        drawCheck('chk_kana_comp', 535, Y_NAME_KANA);
-
         draw(v('app_kanji'), 60, Y_NAME_KANJI, 14, OCR_W);
-        drawCheck('chk_kanji_comp', 535, Y_NAME_KANJI + 5);
-        drawCheck('chk_gaiji', 535, Y_NAME_KANJI - 5);
 
         // 32 住所
         const Y_ADDR = 620;
-        draw(v('addr_code_1'), 60, Y_ADDR, 14, OCR_W); // 都道
-        draw(v('addr_code_2'), 110, Y_ADDR, 14, OCR_W); // 市区
-        draw(v('addr_chome'), 210, Y_ADDR, 14, OCR_W); // 丁目・小字
-        draw(v('addr_banchi'), 260, Y_ADDR, 14, OCR_W); // 番地
-        drawCheck('chk_addr_comp', 535, Y_ADDR);
+        var addrCode = v('addr_code') || '';
+        draw(addrCode.substring(0, 2), 60, Y_ADDR, 14, OCR_W);
+        draw(addrCode.substring(2, 5), 110, Y_ADDR, 14, OCR_W);
+        draw(v('addr_chome'), 210, Y_ADDR, 14, OCR_W);
+        draw(v('addr_banchi'), 260, Y_ADDR, 14, OCR_W);
 
-        // 33 郵便番号等
+        // 33 郵便番号・34 電話番号等
         const Y_INFO = 590;
-        draw(v('app_zip'), 40, Y_INFO, 14, OCR_W);
-        draw(v('app_tel'), 200, Y_INFO, 14, OCR_W);
+        draw(v('app_zip_1'), 40, Y_INFO, 14, OCR_W);
+        draw(v('app_zip_2'), 95, Y_INFO, 14, OCR_W);
+        draw(v('app_tel_1'), 200, Y_INFO, 14, OCR_W);
+        draw(v('app_tel_2'), 308, Y_INFO, 14, OCR_W);
+        draw(v('app_tel_3'), 358, Y_INFO, 14, OCR_W);
 
         // 35 代理, 36 共同
         if (v('proxy_flag') === '1') draw('1', 355, Y_INFO, 14);
