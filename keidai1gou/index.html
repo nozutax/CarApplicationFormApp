@@ -223,11 +223,12 @@
             <label>⑩型式指定番号・類別区分番号・57整備工場コード</label>
             <div class="row" style="align-items: flex-end;">
                 <div class="col" style="flex: 0 0 100px;">
-                    <label class="hint" style="margin-bottom:4px;">型式指定番号</label>
+                    <label class="hint" style="margin-bottom:4px;">型式指定番号（5桁）</label>
                     <input type="text" id="model_no" maxlength="5">
                 </div>
+                <div style="flex: 0 0 auto; padding-bottom:10px;">－</div>
                 <div class="col" style="flex: 0 0 100px;">
-                    <label class="hint" style="margin-bottom:4px;">類別区分番号</label>
+                    <label class="hint" style="margin-bottom:4px;">類別区分番号（4桁）</label>
                     <input type="text" id="class_no" maxlength="4">
                 </div>
                 <div class="col" style="flex: 0 0 120px;">
@@ -461,7 +462,10 @@
 
 
         // ファイル保存
-        const fileName = `軽第1号様式_${v('user_name') || '申請書'}.pdf`;
+        const d = new Date();
+        const dateStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('');
+        const applicantName = (v('app_user_name') || '').replace(/[\\/:*?"<>|]/g, '_').trim() || '申請者';
+        const fileName = `${dateStr}_${applicantName}_軽第1号.pdf`;
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');
         link.href = pdfDataUri;
