@@ -147,39 +147,75 @@
 
         <h2>振込先口座（重量税還付申請用）</h2>
         <div class="row">
-            <div class="col-narrow">
-                <label>37機関種</label>
-                <input type="text" id="bank_type" maxlength="1" class="ocr">
-                <div class="hint">1:銀行等</div>
-            </div>
             <div class="col">
-                <label>41金融機関名称</label>
+                <label>金融機関名</label>
                 <input type="text" id="bank_name" class="ocr" style="text-align:left;">
             </div>
-            <div class="col-narrow">
-                <label>38支店種</label>
-                <input type="text" id="branch_type" maxlength="1" class="ocr">
-                <div class="hint">2:支店等</div>
-            </div>
+        </div>
+        <div class="row">
             <div class="col">
-                <label>42支店名</label>
+                <label>金融機関別種別</label>
+                <select id="bank_type" class="ocr" style="max-width: 25%;">
+                    <option value="">選択</option>
+                    <option value="0">0:郵便局</option>
+                    <option value="1">1:銀行</option>
+                    <option value="2">2:信金</option>
+                    <option value="3">3:信用組合</option>
+                    <option value="4">4:労金</option>
+                    <option value="5">5:信用農協連合会</option>
+                    <option value="6">6:農協</option>
+                    <option value="7">7:信用漁協</option>
+                    <option value="8">8:漁協</option>
+                    <option value="9">9:その他</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>支店名</label>
                 <input type="text" id="branch_name" class="ocr" style="text-align:left;">
             </div>
         </div>
         <div class="row">
-            <div class="col-narrow">
-                <label>43座種</label>
-                <input type="text" id="account_type" maxlength="1" class="ocr">
-                <div class="hint">1:普通</div>
-            </div>
             <div class="col">
-                <label>40口座番号又は記号番号</label>
+                <label>支店種別</label>
+                <select id="branch_type" class="ocr" style="max-width: 25%;">
+                    <option value="">選択</option>
+                    <option value="1">1:本店</option>
+                    <option value="2">2:支店</option>
+                    <option value="3">3:出張所</option>
+                    <option value="4">4:代理店</option>
+                    <option value="5">5:本所</option>
+                    <option value="6">6:支所</option>
+                    <option value="9">9:その他</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>口座番号または記号番号</label>
                 <input type="text" id="account_no" class="ocr" style="text-align:left; letter-spacing:3px;">
             </div>
+        </div>
+        <div class="row">
             <div class="col">
-                <label>19個人番号/法人番号</label>
+                <label>口座種類</label>
+                <select id="account_type" class="ocr" style="max-width: 25%;">
+                    <option value="">選択</option>
+                    <option value="1">1:普通</option>
+                    <option value="2">2:当座</option>
+                    <option value="3">3:納税準備預金</option>
+                    <option value="4">4:通知預金</option>
+                    <option value="5">5:別段預金</option>
+                    <option value="6">6:貯蓄預金</option>
+                    <option value="9">9:その他</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>個人番号または法人番号</label>
                 <input type="text" id="my_number" class="ocr" style="text-align:left; letter-spacing:3px;">
-                <label class="checkbox-label"><input type="checkbox" id="chk_mynum"> 確認区分(1)</label>
             </div>
         </div>
 
@@ -360,7 +396,6 @@
 
         // 19マイナンバー
         draw(v('my_number'), 45, Y_MYNUM, 14, OCR_W);
-        drawCheck('chk_mynum', 535, Y_MYNUM); // 確認区分
 
         // 5. 代理受領者
         const Y_PROXY_KANA = 330;
