@@ -73,15 +73,15 @@
 
         <h2>基本情報</h2>
         <div class="form-group">
-            <label>50業務・51番号・52手数料・54呈示・55番号・56距離</label>
+            <label></label>
             <div class="row" style="align-items: flex-end;">
                 <div class="col" style="flex: 0 0 80px;">
                     <label class="hint" style="margin-bottom:4px;">50業務</label>
-                    <input type="text" id="code_50_gyomu" maxlength="1" placeholder="4">
-                    <div class="hint">1:新規 4:記載変更</div>
+                    <input type="text" id="code_50_gyomu" maxlength="1" >
+                    
                 </div>
                 <div class="col" style="flex: 0 0 60px;">
-                    <label class="hint" style="margin-bottom:4px;">51番号</label>
+                    <label class="hint" style="margin-bottom:4px;">51車両提示</label>
                     <input type="text" id="code_51_num" maxlength="1">
                 </div>
                 <div class="col" style="flex: 0 0 60px;">
@@ -89,16 +89,20 @@
                     <input type="text" id="code_52_fee" maxlength="1">
                 </div>
                 <div class="col" style="flex: 0 0 60px;">
-                    <label class="hint" style="margin-bottom:4px;">54呈示</label>
-                    <input type="text" id="code_54_pres" maxlength="1">
+                    <label class="hint" style="margin-bottom:4px;">55 用途１</label>
+                    <input type="text" id="code_55_use_1" maxlength="1">
                 </div>
                 <div class="col" style="flex: 0 0 60px;">
-                    <label class="hint" style="margin-bottom:4px;">55番号</label>
-                    <input type="text" id="code_55_ind" maxlength="1">
+                    <label class="hint" style="margin-bottom:4px;">55 用途２</label>
+                    <input type="text" id="code_55_use_2" maxlength="1">
                 </div>
-                <div class="col" style="flex: 0 0 120px;">
-                    <label class="hint" style="margin-bottom:4px;">56距離（走行）</label>
-                    <input type="text" id="code_56_dist" maxlength="6" placeholder="走行距離">
+                <div class="col" style="flex: 0 0 60px;">
+                    <label class="hint" style="margin-bottom:4px;">55 標板１</label>
+                    <input type="text" id="code_55_hyo_1" maxlength="1">
+                </div>
+                <div class="col" style="flex: 0 0 60px;">
+                    <label class="hint" style="margin-bottom:4px;">55 標板２</label>
+                    <input type="text" id="code_55_hyo_2" maxlength="1">
                 </div>
             </div>
         </div>
@@ -372,12 +376,13 @@
 
         // 1. ヘッダー・コード類 (上部)
         const Y_CODE = 795;
-        draw(v('code_50_gyomu'), 50, Y_CODE, 14, OCR_W);  // 50業務
+        draw(v('code_50_gyomu'), 50, Y_CODE, 14, OCR_W);   // 50業務
         draw(v('code_51_num'), 115, Y_CODE, 14, OCR_W);   // 51番号
         draw(v('code_52_fee'), 150, Y_CODE, 14, OCR_W);   // 52手数料
-        draw(v('code_54_pres'), 190, Y_CODE, 14, OCR_W);  // 54呈示
-        draw(v('code_55_ind'), 230, Y_CODE, 14, OCR_W);   // 55番号
-        draw(v('code_56_dist'), 430, Y_CODE, 14, OCR_W);  // 56距離
+        draw(v('code_55_use_1'), 190, Y_CODE, 14, OCR_W);  // 55用途１
+        draw(v('code_55_use_2'), 208, Y_CODE, 14, OCR_W);  // 55用途２
+        draw(v('code_55_hyo_1'), 226, Y_CODE, 14, OCR_W); // 55標板１
+        draw(v('code_55_hyo_2'), 244, Y_CODE, 14, OCR_W);  // 55標板２
 
         // 2. 車両番号など
         const Y_CAR = 730;
