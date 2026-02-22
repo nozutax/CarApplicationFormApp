@@ -442,16 +442,16 @@
         drawText(v('factory_code_2'), 710, Y_FACTORY, 14, BOX_W);
 
         // 申請人（新所有者・使用者・使用者本拠の位置：各氏名・住所）
-        const Y_APP_BASE = Y_ROW_ADD - 168;
-        const APP_LINE = 22;
+        const Y_APP_BASE = Y_ROW_ADD - 169;
+        const APP_LINE = 21.5;
         let yApp = Y_APP_BASE;
-        drawText(v('app_new_owner_name'), 100, yApp, 10);
-        drawText(v('app_new_owner_address'), 100, yApp - APP_LINE, 9);
+        drawText(v('app_new_owner_name'), 100, yApp, 8);
+        drawText(v('app_new_owner_address'), 100, yApp - APP_LINE, 8);
         
-        drawText(v('app_user_name'), 100, yApp- APP_LINE*2, 10);
-        drawText(v('app_user_address'), 100, yApp - APP_LINE*3, 9);
+        drawText(v('app_user_name'), 100, yApp- APP_LINE*2, 8);
+        drawText(v('app_user_address'), 100, yApp - APP_LINE*3, 8);
         
-        drawText(v('app_user_base_address'), 710, yApp- APP_LINE*3, 9);
+        drawText(v('app_user_base_address'), 700, yApp- APP_LINE, 8);
 
         // --- ファイル名生成とダウンロード ---
         const now = new Date();
