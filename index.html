@@ -46,6 +46,9 @@
             color: #444;
             text-align: left;
         }
+        .group-title:first-child {
+            margin-top: 0;
+        }
         .btn {
             display: block;
             padding: 20px;
@@ -86,33 +89,33 @@
     <p>作成したい様式を選択してください。</p>
 
     <div class="btn-container">
-        <!-- 軽専用1号様式へのリンク -->
-        <a href="keisenn1/index.html" class="btn btn-kei">
-            <span class="icon">📋</span>軽専用 第1号様式
-            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">自動車検査証記入申請書</div>
+        <!-- 普通自動車 -->
+        <div class="group-title">普通自動車</div>
+        <a href="1gou/index.html" class="btn btn-senyo">
+            <span class="icon">📄</span>第1号様式
+            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">自動車登録申請書（新規・移転・変更等）</div>
         </a>
-
-        <!-- 軽専用2号様式へのリンク -->
-        <a href="keisenn2/index.html" class="btn btn-kei">
-            <span class="icon">🚙</span>軽専用 第2号様式
-            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">軽自動車の継続検査用</div>
-        </a>
-
-        <!-- 専用3号様式へのリンク -->
         <a href="senyo3/index.html" class="btn btn-senyo">
             <span class="icon">🚗</span>専用 第3号様式
             <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">登録自動車の継続検査用</div>
         </a>
 
-        <!-- 車庫証明グループ -->
-        <div class="group-title">車庫証明</div>
+        <!-- 軽自動車 -->
+        <div class="group-title">軽自動車</div>
+        <a href="keisenn1/index.html" class="btn btn-kei">
+            <span class="icon">📋</span>軽専用 第1号様式
+            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">自動車検査証記入申請書</div>
+        </a>
+        <a href="keisenn2/index.html" class="btn btn-kei">
+            <span class="icon">🚙</span>軽専用 第2号様式
+            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">軽自動車の継続検査用</div>
+        </a>
 
-        <!-- 自動車保管場所現地調査結果報告書へのリンク -->
+        <!-- 車庫証明 -->
+        <div class="group-title">車庫証明</div>
         <a href="shako_houkoku/index.html" class="btn btn-shako">
             <span class="icon">📝</span>自動車保管場所現地調査結果報告書
         </a>
-
-        <!-- 車庫証明図へのリンク -->
         <a href="shako_zu/index.html" class="btn btn-shako">
             <span class="icon">📐</span>車庫証明図
         </a>
