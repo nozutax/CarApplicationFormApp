@@ -357,8 +357,8 @@
         draw(v('code_51_num'), 237, Y_CODE, 12, OCR_W);   // 51番号
         draw(v('code_55_use_1'), 385, Y_CODE, 12, OCR_W);  // 55用途１
         draw(v('code_55_use_2'), 425, Y_CODE, 12, OCR_W);  // 55用途２
-        draw(v('code_55_hyo_1'), 470, Y_CODE, 12, OCR_W); // 55標板１
-        draw(v('code_55_hyo_2'), 510, Y_CODE, 12, OCR_W);  // 55標板２
+        draw(v('code_55_hyo_1'), 476, Y_CODE, 12, OCR_W); // 55標板１
+        draw(v('code_55_hyo_2'), 516, Y_CODE, 12, OCR_W);  // 55標板２
 
         // 2. 車両番号など
         const Y_CAR = 495;
@@ -369,34 +369,34 @@
         draw(v('hope_no_3'), 268, Y_CAR, 12, OCR_W);      // 8888
 
         // ①車両番号
-        draw(v('car_no_1'), 45, Y_CAR-43, 12,30);               // 練馬(漢字)
-        draw(v('car_no_2'), 170, Y_CAR-43, 12, OCR_W);       // 580
-        draw(v('car_no_3'), 136, Y_CAR-43, 12);              // あ
-        draw(v('car_no_4'), 268, Y_CAR-43, 12, OCR_W);       // 1234
+        draw(v('car_no_1'), 45, Y_CAR-45, 12,30);               // 練馬(漢字)
+        draw(v('car_no_2'), 170, Y_CAR-45, 12, OCR_W);       // 580
+        draw(v('car_no_3'), 286, Y_CAR-45, 12);              // あ
+        draw(v('car_no_4'), 268, Y_CAR-45, 12, OCR_W);       // 1234
 
         // ③車台番号 (OCR枠)
-        draw(v('chassis_no'), 375, Y_CAR-43, 12, OCR_W);
+        draw(v('chassis_no'), 375, Y_CAR-45, 12, OCR_W);
 
 
         // 3. 使用者・所有者・本拠 (ここが縦に並ぶ)
         // ④使用者 氏名 (漢字)
         const Y_USER_NAME = Y_CAR-92;
-        draw(v('user_name'), 75, Y_USER_NAME, 14, 25); // 漢字はピッチ広め(約25pt)
+        draw(v('user_name'), 75, Y_USER_NAME, 14, 30); // 漢字はピッチ広め(約25pt)
 
         // ⑤使用者 住所（住所コード12桁を1欄で出力）
         const Y_USER_ADDR = Y_CAR-137;
         var userCode = (v('user_address_code') || '').substring(0, 12);
-        draw(userCode, 72, Y_USER_ADDR, 14, OCR_W);
-        draw(v('user_addr_chome'), 200, Y_USER_ADDR, 14, OCR_W);
-        draw(v('user_addr_banchi'), 250, Y_USER_ADDR, 14, OCR_W);
+        draw(userCode, 68, Y_USER_ADDR, 14, OCR_W);
+        draw(v('user_addr_chome'), 284, Y_USER_ADDR, 14, OCR_W);
+        draw(v('user_addr_banchi'), 334, Y_USER_ADDR, 14, OCR_W);
 
         // ⑥所有者 氏名
-        const Y_OWNER_NAME = 510;
+        const Y_OWNER_NAME = 300;
         drawCheck('chk_owner_same_as_user', 40, Y_OWNER_NAME); // 「使用者に同じ」チェック時は「1」を出力
         draw(v('owner_name'), 80, Y_OWNER_NAME, 14, 25);
 
         // ⑦所有者 住所
-        const Y_OWNER_ADDR = 465;
+        const Y_OWNER_ADDR = 260;
         drawCheck('chk_owner_addr_same', 40, Y_OWNER_ADDR);
         if (!document.getElementById('chk_owner_addr_same').checked) {
             var ownerCode = (v('owner_address_code') || '').substring(0, 12);
@@ -406,12 +406,12 @@
         }
 
         // 所有者コード（5桁）
-        const Y_OWNER_CODE = 420;
+        const Y_OWNER_CODE = Y_OWNER_NAME;
         draw(v('owner_code'), 80, Y_OWNER_CODE, 14, OCR_W);
 
         // ⑧⑨使用の本拠の位置
-        const Y_BASE = 410; // チェック欄
-        const Y_BASE_ADDR = 370; // 住所欄
+        const Y_BASE = 220; // チェック欄
+        const Y_BASE_ADDR = 180; // 住所欄
         // ⑧チェック
         drawCheck('chk_base_same', 40, Y_BASE);
 
