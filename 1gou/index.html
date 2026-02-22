@@ -373,8 +373,14 @@
         const ONE_USER_ADDR = { x: 350, y: Y_ROW_ADD - 45 };   // 使用者欄「所有者と同じ」住所の「１」
         const ONE_BASE_SAME = { x: 350, y: Y_ROW_ADD - 75 };   // 使用の本拠「使用者住所と同じ」の「１」
 
-        // ①業務種別
-        drawText(v('job_type'), 127, Y_ROW_TOP, 14, BOX_W);
+        // ①業務種別（右詰め：右端 127 + 2*BOX_W に合わせる）
+        (function() {
+            const jobVal = v('job_type');
+            if (!jobVal) return;
+            const rightEdge = 127 + 2 * BOX_W;
+            const startX = rightEdge - (String(jobVal).length * BOX_W);
+            drawText(jobVal, startX, Y_ROW_TOP, 14, BOX_W);
+        })();
 
         // ６番号指示（種別1桁・用途2桁・標板2桁）
         const Y_NUMBER_IND = Y_ROW_TOP ;
@@ -437,9 +443,9 @@
         }
 
         // 整備工場コード（2桁－5桁）
-        const Y_FACTORY = Y_BASE - 43;
+        const Y_FACTORY = Y_BASE - 44;
         drawText(v('factory_code_1'), 567, Y_FACTORY, 14, BOX_W);
-        drawText(v('factory_code_2'), 607, Y_FACTORY, 14, BOX_W);
+        drawText(v('factory_code_2'), 608, Y_FACTORY, 14, BOX_W);
 
         // 申請人（新所有者・使用者・使用者本拠の位置：各氏名・住所）
         const Y_APP_BASE = Y_ROW_ADD - 169;
