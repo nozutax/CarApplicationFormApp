@@ -206,13 +206,13 @@
 
         // --- 1段目 (OCRコード群) ---
         // ①業務
-        draw(v('ocr_1_gyomu'), 50+75, Y_ROW1, 14, OCR_W);
+        draw(v('ocr_1_gyomu'), 128, Y_ROW1, 14, OCR_W);
 
         // --- 2段目 (希望番号・車台番号) ---
         // ⑫希望番号 (hope_area 削除)
-        draw(v('hope_class'), 50+80+55, Y_ROW2, 14, OCR_W); // 分類
-        draw(v('hope_hira'), 110+80+55, Y_ROW2, 11); // ひらがな
-        draw(v('hope_no'), 145+80+55, Y_ROW2, 14, OCR_W); // 一連
+        draw(v('hope_class'), 185, Y_ROW2, 14, OCR_W); // 分類
+        draw(v('hope_hira'), 245, Y_ROW2, 11); // ひらがな
+        draw(v('hope_no'), 283, Y_ROW2, 14, OCR_W); // 一連
         
         // ㉒車台番号 (非常に長い枠)
         // 右側の長いエリア。開始X座標を調整
@@ -220,14 +220,14 @@
 
         // --- 3段目 (登録番号・整備工場) ---
         // ㉑登録番号
-        draw(v('reg_area'), 53, Y_ROW3, 12,30);
-        draw(v('reg_class'), 183, Y_ROW3, 11, OCR_W);
-        draw(v('reg_hira'), 220+23, Y_ROW3, 11);
-        draw(v('reg_no'), 255+23+5, Y_ROW3, 11, OCR_W);
+        draw(v('reg_area'), 53, Y_ROW3, 12,30.5);
+        draw(v('reg_class'), 185, Y_ROW3, 11, OCR_W);
+        draw(v('reg_hira'), 245, Y_ROW3, 11);
+        draw(v('reg_no'), 283, Y_ROW3, 11, OCR_W);
 
         // ㉓整備工場コード
-        draw(v('garage_code_1'), 700-20-3, Y_ROW3, 14, OCR_W); // 前2桁
-        draw(v('garage_code_2'), 750-20-8, Y_ROW3, 14, OCR_W); // 後5桁
+        draw(v('garage_code_1'), 676, Y_ROW3, 14, OCR_W); // 前2桁
+        draw(v('garage_code_2'), 718, Y_ROW3, 14, OCR_W); // 後5桁
 
         // --- 下部 (４．申請人：所有者・使用者の氏名・住所) ---
         let y = Y_ADDR_START;
