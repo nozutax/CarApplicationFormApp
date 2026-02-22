@@ -85,10 +85,6 @@
                     <input type="text" id="code_51_num" maxlength="1">
                 </div>
                 <div class="col" style="flex: 0 0 60px;">
-                    <label class="hint" style="margin-bottom:4px;">52手数料</label>
-                    <input type="text" id="code_52_fee" maxlength="1">
-                </div>
-                <div class="col" style="flex: 0 0 60px;">
                     <label class="hint" style="margin-bottom:4px;">55 用途１</label>
                     <input type="text" id="code_55_use_1" maxlength="1">
                 </div>
@@ -353,46 +349,44 @@
         //  ※PDFの左下原点 (0,0)。A4縦(595 x 842)想定
         // ==========================================
         
-        const OCR_W = 18; // 標準的なOCR枠幅
+        const OCR_W = 17; // 標準的なOCR枠幅
 
         // 1. ヘッダー・コード類 (上部)
-        const Y_CODE = 795;
+        const Y_CODE = 550;
         draw(v('code_50_gyomu'), 50, Y_CODE, 14, OCR_W);   // 50業務
         draw(v('code_51_num'), 115, Y_CODE, 14, OCR_W);   // 51番号
-        draw(v('code_52_fee'), 150, Y_CODE, 14, OCR_W);   // 52手数料
         draw(v('code_55_use_1'), 190, Y_CODE, 14, OCR_W);  // 55用途１
         draw(v('code_55_use_2'), 208, Y_CODE, 14, OCR_W);  // 55用途２
         draw(v('code_55_hyo_1'), 226, Y_CODE, 14, OCR_W); // 55標板１
         draw(v('code_55_hyo_2'), 244, Y_CODE, 14, OCR_W);  // 55標板２
 
         // 2. 車両番号など
-        const Y_CAR = 730;
-        // ①車両番号
-        draw(v('car_no_1'), 50, Y_CAR, 12);               // 練馬(漢字)
-        draw(v('car_no_2'), 110, Y_CAR, 14, OCR_W);       // 580
-        draw(v('car_no_3'), 175, Y_CAR, 12);              // あ
-        draw(v('car_no_4'), 210, Y_CAR, 14, OCR_W);       // 1234
+        const Y_CAR = 520;
         
         // ②希望番号
-        draw(v('hope_no_1'), 300, Y_CAR, 14, OCR_W);      // 583
+        draw(v('hope_no_1'), 300, Y_CAR, 12, OCR_W);      // 583
         draw(v('hope_no_2'), 360, Y_CAR, 12);             // あ
-        draw(v('hope_no_3'), 400, Y_CAR, 14, OCR_W);      // 8888
-        
+        draw(v('hope_no_3'), 400, Y_CAR, 12, OCR_W);      // 8888
+
+        // ①車両番号
+        draw(v('car_no_1'), 50, Y_CAR-30, 12);               // 練馬(漢字)
+        draw(v('car_no_2'), 110, Y_CAR-30, 12, OCR_W);       // 580
+        draw(v('car_no_3'), 175, Y_CAR-30, 12);              // あ
+        draw(v('car_no_4'), 210, Y_CAR-30, 12, OCR_W);       // 1234
+
         // ③車台番号 (OCR枠)
-        // 座標推定: 下7桁でなくもっと長い枠がある場合は調整
-        draw(v('chassis_no'), 50, 675, 14, OCR_W);
+        draw(v('chassis_no'), 50, Y_CAR-30, 12, OCR_W);
 
 
         // 3. 使用者・所有者・本拠 (ここが縦に並ぶ)
         // ④使用者 氏名 (漢字)
-        const Y_USER_NAME = 615;
+        const Y_USER_NAME = Y_CAR-60;
         draw(v('user_name'), 50, Y_USER_NAME, 14, 25); // 漢字はピッチ広め(約25pt)
 
-        // ⑤使用者 住所
-        const Y_USER_ADDR = 570;
-        var userCode = v('user_address_code') || '';
-        draw(userCode.substring(0, 2), 50, Y_USER_ADDR, 14, OCR_W);
-        draw(userCode.substring(2, 5), 100, Y_USER_ADDR, 14, OCR_W);
+        // ⑤使用者 住所（住所コード12桁を1欄で出力）
+        const Y_USER_ADDR = Y_CAR-90;
+        var userCode = (v('user_address_code') || '').substring(0, 12);
+        draw(userCode, 50, Y_USER_ADDR, 14, OCR_W);
         draw(v('user_addr_chome'), 200, Y_USER_ADDR, 14, OCR_W);
         draw(v('user_addr_banchi'), 250, Y_USER_ADDR, 14, OCR_W);
 
@@ -405,9 +399,8 @@
         const Y_OWNER_ADDR = 465;
         drawCheck('chk_owner_addr_same', 40, Y_OWNER_ADDR);
         if (!document.getElementById('chk_owner_addr_same').checked) {
-            var ownerCode = v('owner_address_code') || '';
-            draw(ownerCode.substring(0, 2), 80, Y_OWNER_ADDR, 14, OCR_W);
-            draw(ownerCode.substring(2, 5), 130, Y_OWNER_ADDR, 14, OCR_W);
+            var ownerCode = (v('owner_address_code') || '').substring(0, 12);
+            draw(ownerCode, 80, Y_OWNER_ADDR, 14, OCR_W);
             draw(v('owner_addr_chome'), 230, Y_OWNER_ADDR, 14, OCR_W);
             draw(v('owner_addr_banchi'), 280, Y_OWNER_ADDR, 14, OCR_W);
         }
@@ -424,9 +417,8 @@
 
         // ⑨住所 (チェックがない場合)
         if (!document.getElementById('chk_base_same').checked) {
-            var baseCode = v('base_address_code') || '';
-            draw(baseCode.substring(0, 2), 80, Y_BASE_ADDR, 14, OCR_W);
-            draw(baseCode.substring(2, 5), 130, Y_BASE_ADDR, 14, OCR_W);
+            var baseCode = (v('base_address_code') || '').substring(0, 12);
+            draw(baseCode, 80, Y_BASE_ADDR, 14, OCR_W);
             draw(v('base_addr_chome'), 230, Y_BASE_ADDR, 14, OCR_W);
             draw(v('base_addr_banchi'), 280, Y_BASE_ADDR, 14, OCR_W);
         }
