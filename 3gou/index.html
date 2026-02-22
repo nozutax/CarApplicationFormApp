@@ -52,37 +52,12 @@
 
     <form id="pdfForm">
 
-        <h2>1. 業務種別・手数料・番号指示 (最上段)</h2>
+        <h2>1. 業務種別</h2>
         <div class="form-section">
             <div class="row ocr-row-even">
                 <div class="col-equal">
                     <label>①業務</label>
                     <input type="text" id="ocr_1_gyomu" maxlength="1" class="ocr">
-                </div>
-                <div class="col-equal">
-                    <label>②手数料</label>
-                    <div class="ocr-box-group">
-                        <input type="text" id="ocr_2_fee_type" maxlength="1" class="ocr">
-                        <input type="text" id="ocr_2_fee_use" maxlength="1" class="ocr">
-                    </div>
-                </div>
-                <div class="col-equal">
-                    <label>⑥番号指示</label>
-                    <div class="ocr-box-group">
-                        <input type="text" id="ocr_6_type" maxlength="1" class="ocr">
-                        <input type="text" id="ocr_6_use1" maxlength="1" class="ocr">
-                        <input type="text" id="ocr_6_use2" maxlength="1" class="ocr">
-                        <input type="text" id="ocr_6_plate1" maxlength="1" class="ocr">
-                        <input type="text" id="ocr_6_plate2" maxlength="1" class="ocr">
-                    </div>
-                </div>
-                <div class="col-equal">
-                    <label>⑦期間</label>
-                    <input type="text" id="ocr_7_term" maxlength="1" class="ocr">
-                </div>
-                <div class="col-equal">
-                    <label>⑨出張</label>
-                    <input type="text" id="ocr_9_trip" maxlength="1" class="ocr">
                 </div>
             </div>
         </div>
@@ -99,7 +74,7 @@
                     </div>
                 </div>
                 <div class="col" style="flex:1.5">
-                    <label>㉒車台番号 (下23桁まで記入可)</label>
+                    <label>㉒車台番号 </label>
                     <input type="text" id="chassis_no" maxlength="23" placeholder="1234567" class="ocr" style="text-align:center;">
                 </div>
             </div>
@@ -128,12 +103,22 @@
         <h2>4. 申請人</h2>
         <div class="form-section">
             <div class="form-group">
-                <label>氏名又は名称</label>
-                <input type="text" id="app_name" placeholder="申請 太郎">
+                <label>所有者</label>
+                <div style="margin-left: 0.5em;">
+                    <label class="hint" style="margin-bottom:4px;">氏名又は名称</label>
+                    <input type="text" id="app_owner_name" placeholder="申請 太郎">
+                    <label class="hint" style="margin-bottom:4px; margin-top:8px;">住所</label>
+                    <input type="text" id="app_owner_addr" placeholder="東京都千代田区...">
+                </div>
             </div>
             <div class="form-group">
-                <label>住所</label>
-                <input type="text" id="app_addr" placeholder="東京都千代田区...">
+                <label>使用者</label>
+                <div style="margin-left: 0.5em;">
+                    <label class="hint" style="margin-bottom:4px;">氏名又は名称</label>
+                    <input type="text" id="app_user_name" placeholder="申請 太郎">
+                    <label class="hint" style="margin-bottom:4px; margin-top:8px;">住所</label>
+                    <input type="text" id="app_user_addr" placeholder="東京都千代田区...">
+                </div>
             </div>
         </div>
 
@@ -212,69 +197,61 @@
         
         const OCR_W = 17.6; // OCRマスの幅
         // 行の高さ基準 (上から)
-        const Y_ROW1 = 515; // ①業務種別などの行
-        const Y_ROW2 = 450; // ⑫希望番号、㉒車台番号
-        const Y_ROW3 = 385; // ㉑登録番号、㉓整備工場
-        const Y_ROW4 = 320; // ⑱点検、⑩走行距離など
+        const Y_ROW1 = 515+20; // ①業務種別などの行
+        const Y_ROW2 = 450+5; // ⑫希望番号、㉒車台番号
+        const Y_ROW3 = 385+8; // ㉑登録番号、㉓整備工場
         
         const Y_ADDR_START = 265; // 申請人欄の開始Y座標
         const LINE_H = 18; // 住所欄の行間
 
         // --- 1段目 (OCRコード群) ---
         // ①業務
-        draw(v('ocr_1_gyomu'), 50, Y_ROW1, 14, OCR_W);
-        // ②手数料 (種別・用途)
-        draw(v('ocr_2_fee_type'), 115, Y_ROW1, 14, OCR_W);
-        draw(v('ocr_2_fee_use'), 133, Y_ROW1, 14, OCR_W);
-        // ⑥番号指示 (5枠)
-        draw(v('ocr_6_type'), 190, Y_ROW1, 14, OCR_W);
-        draw(v('ocr_6_use1'), 208, Y_ROW1, 14, OCR_W);
-        draw(v('ocr_6_use2'), 226, Y_ROW1, 14, OCR_W);
-        draw(v('ocr_6_plate1'), 244, Y_ROW1, 14, OCR_W);
-        draw(v('ocr_6_plate2'), 262, Y_ROW1, 14, OCR_W);
-        // ⑦期間
-        draw(v('ocr_7_term'), 325, Y_ROW1, 14, OCR_W);
-        // ⑨出張
-        draw(v('ocr_9_trip'), 370, Y_ROW1, 14, OCR_W);
+        draw(v('ocr_1_gyomu'), 50+50, Y_ROW1, 14, OCR_W);
 
         // --- 2段目 (希望番号・車台番号) ---
         // ⑫希望番号 (hope_area 削除)
-        draw(v('hope_class'), 50, Y_ROW2, 14, OCR_W); // 分類
-        draw(v('hope_hira'), 110, Y_ROW2, 11); // ひらがな
-        draw(v('hope_no'), 145, Y_ROW2, 14, OCR_W); // 一連
+        draw(v('hope_class'), 50+80, Y_ROW2, 14, OCR_W); // 分類
+        draw(v('hope_hira'), 110+80, Y_ROW2, 11); // ひらがな
+        draw(v('hope_no'), 145+80, Y_ROW2, 14, OCR_W); // 一連
         
         // ㉒車台番号 (非常に長い枠)
         // 右側の長いエリア。開始X座標を調整
-        draw(v('chassis_no'), 355, Y_ROW2, 14, OCR_W);
+        draw(v('chassis_no'), 355+17, Y_ROW2, 14, OCR_W);
 
         // --- 3段目 (登録番号・整備工場) ---
         // ㉑登録番号
-        draw(v('reg_area'), 50, Y_ROW3, 11);
-        draw(v('reg_class'), 160, Y_ROW3, 14, OCR_W);
-        draw(v('reg_hira'), 220, Y_ROW3, 11);
-        draw(v('reg_no'), 255, Y_ROW3, 14, OCR_W);
+        draw(v('reg_area'), 53, Y_ROW3, 11,29);
+        draw(v('reg_class'), 183, Y_ROW3, 11, OCR_W);
+        draw(v('reg_hira'), 220+23, Y_ROW3, 11);
+        draw(v('reg_no'), 255+23, Y_ROW3, 11, OCR_W);
 
         // ㉓整備工場コード
-        draw(v('garage_code_1'), 700, Y_ROW3, 14, OCR_W); // 前2桁
-        draw(v('garage_code_2'), 750, Y_ROW3, 14, OCR_W); // 後5桁
+        draw(v('garage_code_1'), 700-20, Y_ROW3, 14, OCR_W); // 前2桁
+        draw(v('garage_code_2'), 750-20, Y_ROW3, 14, OCR_W); // 後5桁
 
-        // --- 下部 (４．申請人：氏名・住所のみ) ---
+        // --- 下部 (４．申請人：所有者・使用者の氏名・住所) ---
         let y = Y_ADDR_START;
         const X_TEXT = 100;
 
-        draw(v('app_name'), X_TEXT, y, 10);
+        // 所有者
+        draw(v('app_owner_name'), X_TEXT, y, 10);
         y -= LINE_H;
-        draw(v('app_addr'), X_TEXT, y, 10);
+        draw(v('app_owner_addr'), X_TEXT, y, 10);
+        y -= LINE_H;
+        // 使用者
+        draw(v('app_user_name'), X_TEXT, y, 10);
+        y -= LINE_H;
+        draw(v('app_user_addr'), X_TEXT, y, 10);
 
         // --- ５．その他：申請又は請求の理由 ---
-        const Y_REASON = 120;
-        draw(v('reason_text'), X_TEXT, Y_REASON, 10);
+        const Y_REASON = 140;
+        draw(v('reason_text'), X_TEXT+200, Y_REASON, 10);
 
 
         // ファイル保存・ダウンロード（ファイル名: ダウンロード日付_申請人名_第3号様式.pdf）
         const now = new Date();
         const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-        const applicant = (v('app_name') || '申請書').replace(/[\\/:*?"<>|]/g, '');
+        const applicant = (v('app_owner_name') || v('app_user_name') || '申請書').replace(/[\\/:*?"<>|]/g, '');
         const fileName = `${dateStr}_${applicant}_第3号様式.pdf`;
         const pdfBytesOut = await pdfDoc.save();
         const blob = new Blob([pdfBytesOut], { type: 'application/pdf' });
