@@ -206,7 +206,7 @@
         const drawCheck = (id, x, y) => {
             if (document.getElementById(id).checked) {
                 // チェックマークの代わりに■やレ点を描画
-                page.drawText('レ', { x, y, size: 14, font: customFont, color: rgb(0, 0, 0) });
+                page.drawText('レ', { x, y, size: 10, font: customFont, color: rgb(0, 0, 0) });
             }
         };
 
@@ -255,14 +255,14 @@
         const X_TEXT = 130; // テキスト開始位置
 
         // 申請人・届出人（所有者 → 使用者）
-        draw(v('owner_name'), X_TEXT, y, 10);
+        draw(v('owner_name'), X_TEXT, y);
         y -= LINE_H;
-        draw(v('owner_address'), X_TEXT, y, 10);
+        draw(v('owner_address'), X_TEXT, y);
         y -= (LINE_H * 1.8);
 
-        draw(v('user_name'), X_TEXT, y, 10);
+        draw(v('user_name'), X_TEXT, y);
         y -= LINE_H;
-        draw(v('user_address'), X_TEXT, y, 10);
+        draw(v('user_address'), X_TEXT, y);
 
         // --- 4. 右下：原因・使用の本拠 ---
         // 原因チェックボックス（滅失を1番目に）
