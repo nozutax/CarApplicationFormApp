@@ -71,7 +71,10 @@
             </div>
             <div class="col">
                 <label>⑪処理</label>
-                <input type="text" id="code_shori" maxlength="1" class="ocr-input">
+                <div style="display:flex; gap:6px; align-items:center;">
+                    <input type="text" id="code_shori_1" maxlength="1" class="ocr-input" style="width:2.5em; text-align:center;">
+                    <input type="text" id="code_shori_2" maxlength="1" class="ocr-input" style="width:2.5em; text-align:center;">
+                </div>
             </div>
             <div class="col">
                 <label>⑰制限</label>
@@ -214,41 +217,42 @@
         // ==========================================
 
         const OCR_W = 18; // OCRマスの幅
-        const Y_OCR_TOP = height - 100; // 最上段（業務種別など）
-        const Y_CAR_INFO = height - 170; // 自動車登録番号など
-        const Y_NAMES = height - 250; // 氏名欄の開始位置
+        const Y_OCR_TOP = height - 65; // 最上段（業務種別など）
+        const Y_CAR_INFO = height - 150; // 自動車登録番号など
+        const Y_NAMES = height - 320; // 氏名欄の開始位置
         const LINE_H = 24; // 行間
 
         // --- 1. 最上段 OCRコード ---
         // ①業務種別 (左端)
-        draw(v('code_gyomu'), 55, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_gyomu'), 130, Y_OCR_TOP, 14, OCR_W);
         // ②手数料
-        draw(v('code_tesuryo'), 125, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_tesuryo'), 190, Y_OCR_TOP, 14, OCR_W);
         // ⑨出張
-        draw(v('code_shucho'), 245, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_shucho'), 248, Y_OCR_TOP, 14, OCR_W);
         // ⑫抹消
-        draw(v('code_massho'), 290, Y_OCR_TOP, 14, OCR_W);
-        // ⑪処理
-        draw(v('code_shori'), 360, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_massho'), 295, Y_OCR_TOP, 14, OCR_W);
+        // ⑪処理（2桁）
+        draw(v('code_shori_1'), 360, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_shori_2'), 396, Y_OCR_TOP, 14, OCR_W);
         // ⑰制限解除
-        draw(v('code_seigen'), 440, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_seigen'), 435, Y_OCR_TOP, 14, OCR_W);
 
         // --- 2. 車両情報 ---
         // ㉑自動車登録番号
-        draw(v('car_area'), 55, Y_CAR_INFO, 12); // 品川
-        draw(v('car_class'), 160, Y_CAR_INFO, 14, OCR_W); // 300
-        draw(v('car_hiragana'), 230, Y_CAR_INFO, 12); // あ
-        draw(v('car_no'), 265, Y_CAR_INFO, 14, OCR_W); // 1234
+        draw(v('car_area'), 55, Y_CAR_INFO, 14,OCR_W); // 品川
+        draw(v('car_class'), 177, Y_CAR_INFO, 14, OCR_W); // 300
+        draw(v('car_hiragana'), 247, Y_CAR_INFO, 14); // あ
+        draw(v('car_no'), 275, Y_CAR_INFO, 14, OCR_W); // 1234
         
         // ㉒車台番号 (下7桁)
-        draw(v('chassis_no'), 380, Y_CAR_INFO, 14, OCR_W);
+        draw(v('chassis_no'), 370, Y_CAR_INFO, 14, OCR_W);
 
         // --- 3. 申請人・使用者・所有者 ---
         // 画像の「申請人・届出人」欄の位置に合わせて座標を設定します
         // 左側の枠内
         let y = 380; // 左下の開始位置（推定）
         const X_LABEL = 40; // ラベル位置の右横
-        const X_TEXT = 120; // テキスト開始位置
+        const X_TEXT = 130; // テキスト開始位置
 
         // 申請人・届出人（所有者 → 使用者）
         draw(v('owner_name'), X_TEXT, y, 10);
