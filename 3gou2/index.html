@@ -220,20 +220,20 @@
         const Y_OCR_TOP = height - 60; // 最上段（業務種別など）
         const Y_CAR_INFO = height - 147; // 自動車登録番号など
         const Y_NAMES = height - 320; // 氏名欄の開始位置
-        const LINE_H = 24; // 行間
+        const LINE_H = 28; // 行間
 
         // --- 1. 最上段 OCRコード ---
         // ①業務種別 (左端)
-        draw(v('code_gyomu'), 135, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_gyomu'), 138, Y_OCR_TOP, 14, OCR_W);
         // ②手数料
-        draw(v('code_tesuryo'), 190, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_tesuryo'), 192, Y_OCR_TOP, 14, OCR_W);
         // ⑨出張
         draw(v('code_shucho'), 248, Y_OCR_TOP, 14, OCR_W);
         // ⑫抹消
         draw(v('code_massho'), 295, Y_OCR_TOP, 14, OCR_W);
         // ⑪処理（2桁）
-        draw(v('code_shori_1'), 343, Y_OCR_TOP, 14, OCR_W);
-        draw(v('code_shori_2'), 380, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_shori_1'), 345, Y_OCR_TOP, 14, OCR_W);
+        draw(v('code_shori_2'), 379, Y_OCR_TOP, 14, OCR_W);
         // ⑰制限解除
         draw(v('code_seigen'), 433, Y_OCR_TOP, 14, OCR_W);
 
@@ -267,7 +267,7 @@
         // --- 4. 右下：原因・使用の本拠 ---
         // 原因チェックボックス（滅失を1番目に）
         const X_REASON = 450;
-        let yReason = 210;
+        let yReason = 170;
         const R_GAP = 18;
 
         drawCheck('check_messhitsu', X_REASON, yReason); // 滅失（1番目）
@@ -281,14 +281,14 @@
         drawCheck('check_temp_stop', X_REASON, yReason); // 一時使用中止
 
         // 使用の本拠の位置
-        draw(v('base_location'), X_REASON, 330, 10);
+        draw(v('base_location'), X_REASON, 252, 10);
 
         // 日付（令和〇年〇月〇日）
         const X_DATE = 690;
-        const Y_DATE = 135; // 右下の方
+        const Y_DATE = 130; // 右下の方
         draw(v('reason_year'), X_DATE, Y_DATE, 12);
-        draw(v('reason_month'), X_DATE + 35, Y_DATE, 12);
-        draw(v('reason_day'), X_DATE + 70, Y_DATE, 12);
+        draw(v('reason_month'), X_DATE + 32, Y_DATE, 12);
+        draw(v('reason_day'), X_DATE + 64, Y_DATE, 12);
 
 
         // --- ダウンロード処理 ---
