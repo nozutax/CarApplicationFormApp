@@ -387,8 +387,8 @@
         // 行の高さ（Y座標）の基準
         // PDF-Libは左下が(0,0)です。A4横向き想定か縦向きかで大きく変わります。
         // 一般的なOCRシート(A4横配置)を想定したY座標です。ズレる場合はここを変更してください。
-        const Y_ROW_TOP = 500;   // 業務種別など
-        const Y_ROW_CAR = 440;   // 自動車登録番号
+        const Y_ROW_TOP = 530;   // 業務種別など
+        const Y_ROW_CAR = 470;   // 自動車登録番号
         const Y_ROW_ADD = 250;   // 住所・氏名欄
         const Y_ROW_BTM = 100;   // 走行距離など
 
@@ -398,21 +398,21 @@
         const ONE_BASE_SAME = { x: 350, y: Y_ROW_ADD - 75 };   // 使用の本拠「使用者住所と同じ」の「１」
 
         // ①業務種別
-        drawText(v('job_type'), 45, Y_ROW_TOP, 14, BOX_W);
+        drawText(v('job_type'), 110, Y_ROW_TOP, 14, BOX_W);
 
         // ６番号指示（種別1桁・用途2桁・標板2桁）
-        const Y_NUMBER_IND = Y_ROW_TOP - 35;
-        drawText(v('number_indication_type'), 45, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_use_1'), 65, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_use_2'), 82, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_hyo_1'), 115, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_hyo_2'), 132, Y_NUMBER_IND, 14, BOX_W);
+        const Y_NUMBER_IND = Y_ROW_TOP ;
+        drawText(v('number_indication_type'), 120, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_use_1'), 137, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_use_2'), 154, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_1'), 171, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_2'), 188, Y_NUMBER_IND, 14, BOX_W);
 
         // 希望番号（3桁＋1桁＋4桁）
-        const Y_HOPE = Y_ROW_TOP - 70;
-        drawText(v('hope_num_1'), 45, Y_HOPE, 14, BOX_W);
-        drawText(v('hope_num_2'), 98, Y_HOPE, 14, BOX_W);
-        drawText(v('hope_num_3'), 115, Y_HOPE, 14, BOX_W);
+        const Y_HOPE = Y_ROW_TOP - 45;
+        drawText(v('hope_num_1'), 90, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_2'), 143, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_3'), 160, Y_HOPE, 14, BOX_W);
 
         // ㉑自動車登録番号 (地域、分類、ひらがな、一連番号)
         // 座標は画像のマス目に合わせて調整
