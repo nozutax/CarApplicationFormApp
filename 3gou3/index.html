@@ -380,29 +380,29 @@
         const Y_MYNUM = 245+3;
 
         // ㉒金融機関名称
-        draw(v('bank_name'), 52, Y_BANK_1, 14, 29); 
+        draw(v('bank_name'), 52, Y_BANK_1, 14, 28.5); 
         // ⑰金融機関種別
-        draw(v('bank_type'), 568, Y_BANK_1, 14); 
+        draw(v('bank_type'), 571, Y_BANK_1, 14); 
 
         // ㉓支店名
-        draw(v('branch_name'), 52, Y_BANK_2, 14, 29);
+        draw(v('branch_name'), 52, Y_BANK_2, 14, 28.5);
         // ⑲支店種別
-        draw(v('branch_type'), 568, Y_BANK_2, 14);
+        draw(v('branch_type'), 571, Y_BANK_2, 14);
 
         // ㉔口座番号
         draw(v('account_no'), 48, Y_MYNUM, 14, OCR_S);
         // ㉕口座種類
-        draw(v('account_type'), 400, Y_MYNUM, 14);
+        draw(v('account_type'), 400-100, Y_MYNUM, 14);
 
         // ㉗マイナンバー (個人番号)
-        draw(v('my_number'), 568, Y_MYNUM, 14, OCR_S);
+        draw(v('my_number'), 571, Y_MYNUM, 14, OCR_S);
 
 
         // 4. 申請人・届出人（所有者氏名・所有者住所）
-        const Y_APPLICANT_NAME = 70;
-        const Y_APPLICANT_ADDR = 45;
-        draw(v('applicant_owner_name'), 75, Y_APPLICANT_NAME, 11);
-        draw(v('applicant_owner_address'), 75, Y_APPLICANT_ADDR, 11);
+        const Y_APPLICANT_NAME = 55;
+        const Y_APPLICANT_ADDR = 40;
+        draw(v('applicant_owner_name'), 95, Y_APPLICANT_NAME, 11);
+        draw(v('applicant_owner_address'), 95, Y_APPLICANT_ADDR, 11);
 
 
         // 保存
