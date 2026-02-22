@@ -426,9 +426,9 @@
         drawText(v('chassis_num'), 351, CAR_Y, 14, BOX_W);
 
         // 所有者欄（氏名・住所3マス）
-        const Y_OWNER = Y_ROW_ADD + 138;
+        const Y_OWNER = Y_ROW_ADD + 139;
         drawText(v('owner_name'), 98, Y_OWNER,14, 31);
-        drawText(v('owner_address_code'), 92, Y_OWNER - 32,14, BOX_W);
+        drawText(v('owner_address_code'), 90, Y_OWNER - 32,14, BOX_W);
         drawText(v('owner_chome'), 299, Y_OWNER - 32, 14,BOX_W);
         drawText(v('owner_banchi'), 342, Y_OWNER - 32, 14,BOX_W);
 
@@ -444,7 +444,7 @@
         if (userSameAddr) {
             drawText('１', 44, Y_USER - 42, 11);
         } else {
-            drawText(v('user_address_code'), 95, Y_USER - 42, 14,BOX_W);
+            drawText(v('user_address_code'), 90, Y_USER - 42, 14,BOX_W);
             drawText(v('user_chome'), 299, Y_USER - 42, 14, BOX_W);
             drawText(v('user_banchi'), 342, Y_USER - 42, 14, BOX_W);
         }
@@ -455,7 +455,7 @@
         if (baseSameAsUser) {
             drawText('１', 44, Y_BASE, 11);
         } else {
-            drawText(v('base_address_code'), 95, Y_BASE,14, 11);
+            drawText(v('base_address_code'), 90, Y_BASE,14, 11);
             drawText(v('base_chome'), 299, Y_BASE,14, 11);
             drawText(v('base_banchi'), 342, Y_BASE,14, 11);
         }
