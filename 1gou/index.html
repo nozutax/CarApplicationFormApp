@@ -80,11 +80,17 @@
         <div class="form-group">
             <label>①業務種別</label>
             <select id="job_type">
-                <option value="1">1: 新規登録</option>
-                <option value="3">3: 移転登録</option>
-                <option value="4">4: 変更登録</option>
-                <option value="5">5: 更正登録</option>
-                <option value="6">6: 番号変更</option>
+                <option value="">選択</option>
+                <option value="1">１新登検</option>
+                <option value="2">２新登検完検切</option>
+                <option value="3">３移転</option>
+                <option value="4">４変更</option>
+                <option value="5">５更正</option>
+                <option value="6">６番号変更</option>
+                <option value="7">７構造変更</option>
+                <option value="8">８記載変更</option>
+                <option value="9">９予備検</option>
+                <option value="11">11所有者変更記録</option>
             </select>
         </div>
 
@@ -218,6 +224,16 @@
             </div>
         </div>
 
+        <h2>整備工場コード</h2>
+        <div class="form-group">
+            <label>整備工場コード（2桁－5桁）</label>
+            <div class="row" style="align-items: center; gap: 8px;">
+                <input type="text" id="factory_code_1" maxlength="2" placeholder="2桁" style="width: 60px; text-align: center;">
+                <span style="color:#666;">－</span>
+                <input type="text" id="factory_code_2" maxlength="5" placeholder="5桁" style="width: 90px; text-align: center;">
+            </div>
+        </div>
+
         <h2>申請人</h2>
         <div class="applicant-section">
             <div class="applicant-block">
@@ -252,45 +268,6 @@
 
             <div class="applicant-block">
                 <div class="block-title-row">
-                    <div class="block-title">旧所有者</div>
-                    <label class="block-check"><input type="checkbox" id="check_same_ininjo_old_owner" onchange="toggleSameIninjo('old_owner')"> 委任状記載事項に同じ</label>
-                </div>
-                <div class="form-group">
-                    <label>氏名又は名称</label>
-                    <input type="text" id="app_old_owner_name" placeholder="山田 太郎">
-                </div>
-                <div class="form-group">
-                    <label>住所</label>
-                    <input type="text" id="app_old_owner_address" placeholder="東京都千代田区...">
-                </div>
-            </div>
-
-            <div class="applicant-block">
-                <div class="block-title">申請代理人</div>
-                <div class="form-group">
-                    <label>氏名又は名称</label>
-                    <input type="text" id="app_agent_name" placeholder="山田 太郎">
-                </div>
-                <div class="form-group">
-                    <label>住所</label>
-                    <input type="text" id="app_agent_address" placeholder="東京都千代田区...">
-                </div>
-            </div>
-
-            <div class="applicant-block">
-                <div class="block-title">受検者</div>
-                <div class="form-group">
-                    <label>氏名又は名称</label>
-                    <input type="text" id="app_examiner_name" placeholder="山田 太郎">
-                </div>
-                <div class="form-group">
-                    <label>住所</label>
-                    <input type="text" id="app_examiner_address" placeholder="東京都千代田区...">
-                </div>
-            </div>
-
-            <div class="applicant-block">
-                <div class="block-title-row">
                     <div class="block-title">使用者本拠の位置</div>
                     <label class="block-check"><input type="checkbox" id="check_same_user_address_base" onchange="toggleSameUserAddressBase()"> 使用者住所に同じ</label>
                 </div>
@@ -314,10 +291,9 @@
     function toggleSameIninjo(which) {
         const ids = {
             new_owner: ['app_new_owner_name', 'app_new_owner_address'],
-            user: ['app_user_name', 'app_user_address'],
-            old_owner: ['app_old_owner_name', 'app_old_owner_address']
+            user: ['app_user_name', 'app_user_address']
         };
-        const checkIds = { new_owner: 'check_same_ininjo_new_owner', user: 'check_same_ininjo_user', old_owner: 'check_same_ininjo_old_owner' };
+        const checkIds = { new_owner: 'check_same_ininjo_new_owner', user: 'check_same_ininjo_user' };
         const names = ids[which];
         const chk = document.getElementById(checkIds[which]);
         const value = chk.checked ? SAME_ININJO : '';
@@ -437,7 +413,7 @@
         const userSameName = document.getElementById('check_user_same_as_owner').checked;
         const userSameAddr = document.getElementById('check_user_same_as_owner_addr').checked;
         if (userSameName) {
-            drawText('１', 44, Y_USER-3, 11);
+            drawText('１', 44, Y_USER, 11);
         } else {
             drawText(v('user_name'), 100, Y_USER-3,14, 31);
         }
@@ -460,7 +436,7 @@
             drawText(v('base_banchi'), 342, Y_BASE,14, BOX_W);
         }
 
-        // 申請人（新所有者・使用者・旧所有者・申請代理人・受検者：各氏名・住所）
+        // 申請人（新所有者・使用者・使用者本拠の位置：各氏名・住所）
         const Y_APP_BASE = Y_ROW_ADD - 120;
         const APP_LINE = 22;
         let yApp = Y_APP_BASE;
@@ -469,15 +445,6 @@
         yApp -= APP_LINE * 2;
         drawText(v('app_user_name'), 100, yApp, 10);
         drawText(v('app_user_address'), 100, yApp - APP_LINE, 9);
-        yApp -= APP_LINE * 2;
-        drawText(v('app_old_owner_name'), 100, yApp, 10);
-        drawText(v('app_old_owner_address'), 100, yApp - APP_LINE, 9);
-        yApp -= APP_LINE * 2;
-        drawText(v('app_agent_name'), 100, yApp, 10);
-        drawText(v('app_agent_address'), 100, yApp - APP_LINE, 9);
-        yApp -= APP_LINE * 2;
-        drawText(v('app_examiner_name'), 100, yApp, 10);
-        drawText(v('app_examiner_address'), 100, yApp - APP_LINE, 9);
         yApp -= APP_LINE * 2;
         drawText(v('app_user_base_address'), 100, yApp, 9);
 
