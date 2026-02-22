@@ -399,9 +399,9 @@
         // ㉑自動車登録番号 (地域、分類、ひらがな、一連番号)
         // 座標は画像のマス目に合わせて調整
         const CAR_Y = Y_ROW_CAR-19.7; 
-        drawText(v('car_num_1'), 45,  CAR_Y, 14, 31);     // 地域名（漢字）はマスが広い
+        drawText(v('car_num_1'), 43,  CAR_Y, 14, 31);     // 地域名（漢字）はマスが広い
         drawText(v('car_num_2'), 169, CAR_Y, 14, BOX_W);  // 3桁数字
-        drawText(v('car_num_3'), 237.5, CAR_Y, 14);         // ひらがな
+        drawText(v('car_num_3'), 237, CAR_Y, 14);         // ひらがな
         drawText(v('car_num_4'), 267.5, CAR_Y, 14, BOX_W);  // 4桁一連番号
 
         // ㉒車台番号（下7桁）
@@ -409,7 +409,7 @@
 
         // 所有者欄（氏名・住所3マス）
         const Y_OWNER = Y_ROW_ADD + 139;
-        drawText(v('owner_name'), 98, Y_OWNER,14, 31);
+        drawText(v('owner_name'), 96, Y_OWNER+2,14, 31);
         drawText(v('owner_address_code'), 89.5, Y_OWNER - 32,14, BOX_W);
         drawText(v('owner_chome'), 299, Y_OWNER - 32, 14,BOX_W);
         drawText(v('owner_banchi'), 342, Y_OWNER - 32, 14,BOX_W);
@@ -443,7 +443,7 @@
         }
 
         // 整備工場コード（2桁－5桁）
-        const Y_FACTORY = Y_BASE - 44;
+        const Y_FACTORY = Y_BASE - 45;
         drawText(v('factory_code_1'), 567, Y_FACTORY, 14, BOX_W);
         drawText(v('factory_code_2'), 608, Y_FACTORY, 14, BOX_W);
 
