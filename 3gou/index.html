@@ -195,24 +195,24 @@
         //  ※印刷結果を見て微調整してください
         // ==========================================
         
-        const OCR_W = 17.6; // OCRマスの幅
+        const OCR_W = 17.4; // OCRマスの幅
         // 行の高さ基準 (上から)
-        const Y_ROW1 = 515+20; // ①業務種別などの行
-        const Y_ROW2 = 450+5; // ⑫希望番号、㉒車台番号
-        const Y_ROW3 = 385+8; // ㉑登録番号、㉓整備工場
+        const Y_ROW1 = 535; // ①業務種別などの行
+        const Y_ROW2 = 457; // ⑫希望番号、㉒車台番号
+        const Y_ROW3 = 396; // ㉑登録番号、㉓整備工場
         
         const Y_ADDR_START = 265; // 申請人欄の開始Y座標
         const LINE_H = 18; // 住所欄の行間
 
         // --- 1段目 (OCRコード群) ---
         // ①業務
-        draw(v('ocr_1_gyomu'), 50+50, Y_ROW1, 14, OCR_W);
+        draw(v('ocr_1_gyomu'), 50+75, Y_ROW1, 14, OCR_W);
 
         // --- 2段目 (希望番号・車台番号) ---
         // ⑫希望番号 (hope_area 削除)
-        draw(v('hope_class'), 50+80, Y_ROW2, 14, OCR_W); // 分類
-        draw(v('hope_hira'), 110+80, Y_ROW2, 11); // ひらがな
-        draw(v('hope_no'), 145+80, Y_ROW2, 14, OCR_W); // 一連
+        draw(v('hope_class'), 50+80+55, Y_ROW2, 14, OCR_W); // 分類
+        draw(v('hope_hira'), 110+80+55, Y_ROW2, 11); // ひらがな
+        draw(v('hope_no'), 145+80+55, Y_ROW2, 14, OCR_W); // 一連
         
         // ㉒車台番号 (非常に長い枠)
         // 右側の長いエリア。開始X座標を調整
@@ -220,23 +220,23 @@
 
         // --- 3段目 (登録番号・整備工場) ---
         // ㉑登録番号
-        draw(v('reg_area'), 53, Y_ROW3, 11,29);
+        draw(v('reg_area'), 53, Y_ROW3, 12,30);
         draw(v('reg_class'), 183, Y_ROW3, 11, OCR_W);
         draw(v('reg_hira'), 220+23, Y_ROW3, 11);
-        draw(v('reg_no'), 255+23, Y_ROW3, 11, OCR_W);
+        draw(v('reg_no'), 255+23+5, Y_ROW3, 11, OCR_W);
 
         // ㉓整備工場コード
-        draw(v('garage_code_1'), 700-20, Y_ROW3, 14, OCR_W); // 前2桁
-        draw(v('garage_code_2'), 750-20, Y_ROW3, 14, OCR_W); // 後5桁
+        draw(v('garage_code_1'), 700-20-3, Y_ROW3, 14, OCR_W); // 前2桁
+        draw(v('garage_code_2'), 750-20-8, Y_ROW3, 14, OCR_W); // 後5桁
 
         // --- 下部 (４．申請人：所有者・使用者の氏名・住所) ---
         let y = Y_ADDR_START;
-        const X_TEXT = 100;
+        const X_TEXT = 120;
 
         // 所有者
-        draw(v('app_owner_name'), X_TEXT, y, 10);
+        draw(v('app_owner_name'), X_TEXT, y+10, 10);
         y -= LINE_H;
-        draw(v('app_owner_addr'), X_TEXT, y, 10);
+        draw(v('app_owner_addr'), X_TEXT, y+5, 10);
         y -= LINE_H;
         // 使用者
         draw(v('app_user_name'), X_TEXT, y, 10);
@@ -244,8 +244,8 @@
         draw(v('app_user_addr'), X_TEXT, y, 10);
 
         // --- ５．その他：申請又は請求の理由 ---
-        const Y_REASON = 140;
-        draw(v('reason_text'), X_TEXT+200, Y_REASON, 10);
+        const Y_REASON = 160;
+        draw(v('reason_text'), X_TEXT+300, Y_REASON, 10);
 
 
         // ファイル保存・ダウンロード（ファイル名: ダウンロード日付_申請人名_第3号様式.pdf）
