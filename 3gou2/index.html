@@ -258,7 +258,7 @@
         draw(v('owner_name'), X_TEXT, y, 10);
         y -= LINE_H;
         draw(v('owner_address'), X_TEXT, y, 10);
-        y -= (LINE_H * 1.5);
+        y -= (LINE_H * 1.6);
 
         draw(v('user_name'), X_TEXT, y, 10);
         y -= LINE_H;
@@ -267,18 +267,18 @@
         // --- 4. 右下：原因・使用の本拠 ---
         // 原因チェックボックス（滅失を1番目に）
         const X_REASON = 450;
-        let yReason = 170;
-        const R_GAP = 18;
+        let yReason = 182;
+        const R_GAP = 12;
 
-        drawCheck('check_messhitsu', X_REASON, yReason); // 滅失（1番目）
+        drawCheck('check_messhitsu', X_REASON, yReason,9); // 滅失（1番目）
         yReason -= R_GAP;
-        drawCheck('check_kaitai', X_REASON, yReason); // 解体
+        drawCheck('check_kaitai', X_REASON, yReason,9); // 解体
         yReason -= R_GAP;
-        drawCheck('check_yoto_haishi', X_REASON, yReason); // 用途廃止
+        drawCheck('check_yoto_haishi', X_REASON, yReason,9); // 用途廃止
         yReason -= R_GAP;
-        drawCheck('check_no_exist', X_REASON, yReason); // 車台が新規登録～
+        drawCheck('check_no_exist', X_REASON, yReason,9); // 車台が新規登録～
         yReason -= R_GAP;
-        drawCheck('check_temp_stop', X_REASON, yReason); // 一時使用中止
+        drawCheck('check_temp_stop', X_REASON, yReason,9); // 一時使用中止
 
         // 使用の本拠の位置
         draw(v('base_location'), X_REASON, 252, 10);
@@ -287,8 +287,8 @@
         const X_DATE = 690;
         const Y_DATE = 130; // 右下の方
         draw(v('reason_year'), X_DATE, Y_DATE, 12);
-        draw(v('reason_month'), X_DATE + 32, Y_DATE, 12);
-        draw(v('reason_day'), X_DATE + 64, Y_DATE, 12);
+        draw(v('reason_month'), X_DATE + 29, Y_DATE, 12);
+        draw(v('reason_day'), X_DATE + 58, Y_DATE, 12);
 
 
         // --- ダウンロード処理 ---
