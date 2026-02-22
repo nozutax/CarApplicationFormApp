@@ -4,122 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>継続検査申請書作成ツール</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
-            font-family: sans-serif;
+            font-family: "Noto Sans JP", "Helvetica Neue", sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
+            background: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: #1e293b;
         }
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .page {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+        }
+        .header {
             text-align: center;
-            max-width: 600px;
-            width: 90%;
+            margin-bottom: 40px;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 24px;
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.02em;
         }
-        p {
-            color: #666;
-            margin-bottom: 30px;
+        .header p {
+            font-size: 0.9375rem;
+            color: #64748b;
+            margin: 0;
         }
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.06);
         }
-        .group-title {
-            margin-top: 30px;
-            margin-bottom: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #444;
-            text-align: left;
+        .section-title {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .group-title:first-child {
+        .section:first-of-type .section-title {
             margin-top: 0;
         }
-        .btn {
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .link-card {
             display: block;
-            padding: 20px;
             text-decoration: none;
-            color: white;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            transition: opacity 0.3s, transform 0.2s;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #fafafa;
+            color: #1e293b;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        .link-card:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
-        /* 軽自動車用の色（青系） */
-        .btn-kei {
-            background-color: #007bff;
+        .link-card .title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        /* 普通車（専用3号）用の色（緑系） */
-        .btn-senyo {
-            background-color: #28a745;
+        .link-card .title .icon {
+            font-size: 1.25rem;
         }
-        /* 車庫証明図用の色（オレンジ系） */
-        .btn-shako {
-            background-color: #e67e22;
+        .link-card .desc {
+            font-size: 0.8125rem;
+            color: #64748b;
+            margin: 6px 0 0 34px;
+            line-height: 1.4;
         }
-        .icon {
-            font-size: 24px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
+        /* 普通自動車：緑系 */
+        .section.section-futsu .link-card:hover { border-color: #86efac; background: #f0fdf4; }
+        .section.section-futsu .section-title { color: #15803d; }
+        /* 軽自動車：青系 */
+        .section.section-kei .link-card:hover { border-color: #93c5fd; background: #eff6ff; }
+        .section.section-kei .section-title { color: #1d4ed8; }
+        /* 車庫証明：オレンジ系 */
+        .section.section-shako .link-card:hover { border-color: #fdba74; background: #fff7ed; }
+        .section.section-shako .section-title { color: #c2410c; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>継続検査申請書 作成ポータル</h1>
-    <p>作成したい様式を選択してください。</p>
+<div class="page">
+    <header class="header">
+        <h1>継続検査申請書 作成ポータル</h1>
+        <p>作成したい様式を選択してください</p>
+    </header>
 
-    <div class="btn-container">
-        <!-- 普通自動車 -->
-        <div class="group-title">普通自動車</div>
-        <a href="1gou/index.html" class="btn btn-senyo">
-            <span class="icon">📄</span>第1号様式
-            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">自動車登録申請書（新規・移転・変更等）</div>
-        </a>
-        <a href="senyo3/index.html" class="btn btn-senyo">
-            <span class="icon">🚗</span>専用 第3号様式
-            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">登録自動車の継続検査用</div>
-        </a>
+    <!-- 普通自動車 -->
+    <section class="section section-futsu">
+        <h2 class="section-title">普通自動車</h2>
+        <div class="link-list">
+            <a href="1gou/index.html" class="link-card">
+                <span class="title"><span class="icon">📄</span>第1号様式</span>
+                <div class="desc">自動車登録申請書（新規・移転・変更等）</div>
+            </a>
+            <a href="senyo3/index.html" class="link-card">
+                <span class="title"><span class="icon">🚗</span>専用 第3号様式</span>
+                <div class="desc">登録自動車の継続検査用</div>
+            </a>
+        </div>
+    </section>
 
-        <!-- 軽自動車 -->
-        <div class="group-title">軽自動車</div>
-        <a href="keisenn1/index.html" class="btn btn-kei">
-            <span class="icon">📋</span>軽専用 第1号様式
-            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">自動車検査証記入申請書</div>
-        </a>
-        <a href="keisenn2/index.html" class="btn btn-kei">
-            <span class="icon">🚙</span>軽専用 第2号様式
-            <div style="font-size: 0.8em; font-weight: normal; margin-top:5px;">軽自動車の継続検査用</div>
-        </a>
+    <!-- 軽自動車 -->
+    <section class="section section-kei">
+        <h2 class="section-title">軽自動車</h2>
+        <div class="link-list">
+            <a href="keisenn1/index.html" class="link-card">
+                <span class="title"><span class="icon">📋</span>軽専用 第1号様式</span>
+                <div class="desc">自動車検査証記入申請書</div>
+            </a>
+            <a href="keisenn2/index.html" class="link-card">
+                <span class="title"><span class="icon">🚙</span>軽専用 第2号様式</span>
+                <div class="desc">軽自動車の継続検査用</div>
+            </a>
+        </div>
+    </section>
 
-        <!-- 車庫証明 -->
-        <div class="group-title">車庫証明</div>
-        <a href="shako_houkoku/index.html" class="btn btn-shako">
-            <span class="icon">📝</span>自動車保管場所現地調査結果報告書
-        </a>
-        <a href="shako_zu/index.html" class="btn btn-shako">
-            <span class="icon">📐</span>車庫証明図
-        </a>
-    </div>
+    <!-- 車庫証明 -->
+    <section class="section section-shako">
+        <h2 class="section-title">車庫証明</h2>
+        <div class="link-list">
+            <a href="shako_houkoku/index.html" class="link-card">
+                <span class="title"><span class="icon">📝</span>自動車保管場所現地調査結果報告書</span>
+            </a>
+            <a href="shako_zu/index.html" class="link-card">
+                <span class="title"><span class="icon">📐</span>車庫証明図</span>
+            </a>
+        </div>
+    </section>
 </div>
 
 </body>
