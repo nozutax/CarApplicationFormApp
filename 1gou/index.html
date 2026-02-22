@@ -398,21 +398,21 @@
         const ONE_BASE_SAME = { x: 350, y: Y_ROW_ADD - 75 };   // 使用の本拠「使用者住所と同じ」の「１」
 
         // ①業務種別
-        drawText(v('job_type'), 131, Y_ROW_TOP, 14, BOX_W);
+        drawText(v('job_type'), 129, Y_ROW_TOP, 14, BOX_W);
 
         // ６番号指示（種別1桁・用途2桁・標板2桁）
         const Y_NUMBER_IND = Y_ROW_TOP ;
         drawText(v('number_indication_type'), 317, Y_NUMBER_IND, 14, BOX_W);
         drawText(v('number_indication_use_1'), 342, Y_NUMBER_IND, 14, BOX_W);
         drawText(v('number_indication_use_2'), 368, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_hyo_1'), 394.5, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_hyo_2'),419.5, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_1'), 395.5, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_2'),420.5, Y_NUMBER_IND, 14, BOX_W);
 
         // 希望番号（3桁＋1桁＋4桁）
         const Y_HOPE = Y_ROW_TOP - 38;
         drawText(v('hope_num_1'), 140, Y_HOPE, 14, BOX_W);
         drawText(v('hope_num_2'), 208, Y_HOPE, 14, BOX_W);
-        drawText(v('hope_num_3'), 240.5, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_3'), 240, Y_HOPE, 14, BOX_W);
 
         // ㉑自動車登録番号 (地域、分類、ひらがな、一連番号)
         // 座標は画像のマス目に合わせて調整
@@ -423,14 +423,14 @@
         drawText(v('car_num_4'), 267.5, CAR_Y, 14, BOX_W);  // 4桁一連番号
 
         // ㉒車台番号（下7桁）
-        drawText(v('chassis_num'), 355, CAR_Y, 14, BOX_W);
+        drawText(v('chassis_num'), 353, CAR_Y, 14, BOX_W);
 
         // 所有者欄（氏名・住所3マス）
-        const Y_OWNER = Y_ROW_ADD + 130;
+        const Y_OWNER = Y_ROW_ADD + 133;
         drawText(v('owner_name'), 98, Y_OWNER,14, 31);
-        drawText(v('owner_address_code'), 95, Y_OWNER - 30,14, BOX_W);
-        drawText(v('owner_chome'), 295, Y_OWNER - 30, 14,BOX_W);
-        drawText(v('owner_banchi'), 320, Y_OWNER - 30, 14,BOX_W);
+        drawText(v('owner_address_code'), 92, Y_OWNER - 30,14, BOX_W);
+        drawText(v('owner_chome'), 298, Y_OWNER - 30, 14,BOX_W);
+        drawText(v('owner_banchi'), 330, Y_OWNER - 30, 14,BOX_W);
 
         // 使用者欄（氏名・住所3マス）※「所有者と同じ」チェック時は「１」を ONE_USER_NAME / ONE_USER_ADDR の位置に出力
         const Y_USER = Y_ROW_ADD +50;
@@ -439,18 +439,18 @@
         if (userSameName) {
             drawText('１', 44, Y_USER, 11);
         } else {
-            drawText(v('user_name'), 100, Y_USER, 31);
+            drawText(v('user_name'), 100, Y_USER,14, 31);
         }
         if (userSameAddr) {
-            drawText('１', 44, Y_USER - 30, 11);
+            drawText('１', 44, Y_USER - 40, 11);
         } else {
-            drawText(v('user_address_code'), 95, Y_USER - 50, BOX_W);
-            drawText(v('user_chome'), 280, Y_USER - 25,  BOX_W);
-            drawText(v('user_banchi'), 380, Y_USER - 25, BOX_W);
+            drawText(v('user_address_code'), 95, Y_USER - 50, 14,BOX_W);
+            drawText(v('user_chome'), 280, Y_USER - 25, 14, BOX_W);
+            drawText(v('user_banchi'), 380, Y_USER - 25, 14, BOX_W);
         }
 
         // 使用の本拠の位置（住所3マス）※「使用者住所と同じ」チェック時は「１」を ONE_BASE_SAME の位置に出力
-        const Y_BASE = Y_USER - 80;
+        const Y_BASE = Y_USER - 90;
         const baseSameAsUser = document.getElementById('check_base_same_as_user').checked;
         if (baseSameAsUser) {
             drawText('１', 44, Y_BASE, 11);
