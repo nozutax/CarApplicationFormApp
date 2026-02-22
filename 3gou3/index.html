@@ -285,7 +285,7 @@
         
         // OCR用のマス目幅（Spacing）定義
         // 第3号様式の3はマス目が細かいため、印刷結果を見て調整してください。
-        const OCR_S = 17.5; // 標準的なマス幅
+        const OCR_S = 17.1; // 標準的なマス幅
         const OCR_NARROW = 14; // 少し狭い箇所の幅（もしあれば）
 
         // 描画関数
@@ -320,28 +320,28 @@
         
         // 1. 上部エリア
         const Y_TOP = 535; 
-        draw(v('code_gyomu'), 130, Y_TOP, 14, OCR_S);    // ①業務
-        draw(v('code_shucho'), 155, Y_TOP, 14, OCR_S);  // ⑨出張
-        draw(v('code_shori'), 195, Y_TOP, 14, OCR_S);   // ⑪処理
+        draw(v('code_gyomu'), 128, Y_TOP, 14, OCR_S);    // ①業務
+        draw(v('code_shucho'), 165, Y_TOP, 14, OCR_S);  // ⑨出張
+        draw(v('code_shori'), 200, Y_TOP, 14, OCR_S);   // ⑪処理
         draw(v('code_seigen'), 245, Y_TOP, 14, OCR_S);  // ⑰制限
-        draw(v('code_kanpu'), 295, Y_TOP, 14, OCR_S);   // ⑩重還付(0/1)
+        draw(v('code_kanpu'), 292, Y_TOP, 14, OCR_S);   // ⑩重還付(0/1)
 
         // 自動車登録番号
-        draw(v('car_area'), 380, Y_TOP, 14, 30);            // 品川
-        draw(v('car_class'), 465, Y_TOP, 14, OCR_S);    // 300
-        draw(v('car_hira'), 560, Y_TOP, 14);            // あ
-        draw(v('car_no'), 595, Y_TOP, 14, OCR_S);       // 1234
+        draw(v('car_area'), 385, Y_TOP, 14, 30);            // 品川
+        draw(v('car_class'), 495, Y_TOP, 14, OCR_S);    // 300
+        draw(v('car_hira'), 565, Y_TOP, 14);            // あ
+        draw(v('car_no'), 610, Y_TOP, 14, OCR_S);       // 1234
         
         // 車台番号 (下7桁)
         draw(v('chassis_no'), 695, Y_TOP, 14, OCR_S);
         
         // 移動報告番号 (2段目右)
-        draw(v('mobile_report_no'), 593, Y_TOP-35, 14, OCR_S);
+        draw(v('mobile_report_no'), 618, Y_TOP-36, 14, OCR_S);
 
 
         // 2. 申請者（所有者）エリア
         // 座標基準
-        const Y_APP_KANA = 465;
+        const Y_APP_KANA = 467;
         const Y_APP_KANJI = 430;
         const Y_APP_ADDR = 360;
         const Y_APP_INFO = 325; // 郵便番号や電話番号
@@ -351,10 +351,10 @@
         if (v('applicant_type') === '2') draw('2', 50, Y_APP_KANA - 15, 12); // 法人
 
         // ⑪氏名カナ
-        draw(v('app_kana'), 80, Y_APP_KANA, 14, OCR_S);
+        draw(v('app_kana'), 80, Y_APP_KANA, 14, 20);
 
         // ⑪氏名漢字
-        draw(v('app_kanji'), 80, Y_APP_KANJI, 14, 30);
+        draw(v('app_kanji'), 82, Y_APP_KANJI, 14, 28);
 
         // ⑫住所コード (12桁を2+3+4の位置に分割して出力)
         const addrCode = v('addr_code') || '';
