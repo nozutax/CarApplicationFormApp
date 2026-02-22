@@ -49,7 +49,7 @@
             <div class="row">
                 <div class="col-narrow">
                     <label>①業務</label>
-                    <input type="text" id="code_gyomu" maxlength="2" placeholder="91" class="ocr">
+                    <input type="text" id="code_gyomu" maxlength="1" placeholder="9抹消" class="ocr">
                 </div>
                 <div class="col-narrow">
                     <label>⑨出張</label>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-narrow">
                     <label>⑩重還付</label>
-                    <input type="text" id="code_kanpu" maxlength="1" placeholder="1" class="ocr">
+                    <input type="text" id="code_kanpu" maxlength="1" placeholder="0なし" class="ocr">
                 </div>
             </div>
             <div class="row">
@@ -321,19 +321,19 @@
         // 1. 上部エリア
         const Y_TOP = 535; 
         draw(v('code_gyomu'), 128, Y_TOP, 14, OCR_S);    // ①業務
-        draw(v('code_shucho'), 165, Y_TOP, 14, OCR_S);  // ⑨出張
-        draw(v('code_shori'), 200, Y_TOP, 14, OCR_S);   // ⑪処理
-        draw(v('code_seigen'), 245, Y_TOP, 14, OCR_S);  // ⑰制限
+        draw(v('code_shucho'), 175, Y_TOP, 14, OCR_S);  // ⑨出張
+        draw(v('code_shori'), 203, Y_TOP, 14, OCR_S);   // ⑪処理
+        draw(v('code_seigen'), 244, Y_TOP, 14, OCR_S);  // ⑰制限
         draw(v('code_kanpu'), 292, Y_TOP, 14, OCR_S);   // ⑩重還付(0/1)
 
         // 自動車登録番号
-        draw(v('car_area'), 385, Y_TOP, 14, 30);            // 品川
-        draw(v('car_class'), 495, Y_TOP, 14, OCR_S);    // 300
-        draw(v('car_hira'), 565, Y_TOP, 14);            // あ
-        draw(v('car_no'), 610, Y_TOP, 14, OCR_S);       // 1234
+        draw(v('car_area'), 390, Y_TOP, 14, 29);            // 品川
+        draw(v('car_class'), 512, Y_TOP, 14, OCR_S);    // 300
+        draw(v('car_hira'), 568, Y_TOP, 14);            // あ
+        draw(v('car_no'), 607, Y_TOP, 14, OCR_S);       // 1234
         
         // 車台番号 (下7桁)
-        draw(v('chassis_no'), 695, Y_TOP, 14, OCR_S);
+        draw(v('chassis_no'), 685, Y_TOP, 14, OCR_S);
         
         // 移動報告番号 (2段目右)
         draw(v('mobile_report_no'), 618, Y_TOP-36, 14, OCR_S);
@@ -343,8 +343,8 @@
         // 座標基準
         const Y_APP_KANA = 467;
         const Y_APP_KANJI = 430;
-        const Y_APP_ADDR = 360;
-        const Y_APP_INFO = 325; // 郵便番号や電話番号
+        const Y_APP_ADDR = 395;
+        const Y_APP_INFO = 355; // 郵便番号や電話番号
 
         // 人格区分 (左端)
         if (v('applicant_type') === '1') draw('1', 50, Y_APP_KANA, 12); // 個人
@@ -354,22 +354,19 @@
         draw(v('app_kana'), 80, Y_APP_KANA, 14, 20);
 
         // ⑪氏名漢字
-        draw(v('app_kanji'), 82, Y_APP_KANJI, 14, 28);
+        draw(v('app_kanji'), 82, Y_APP_KANJI, 14, 29);
 
-        // ⑫住所コード (12桁を2+3+4の位置に分割して出力)
-        const addrCode = v('addr_code') || '';
-        draw(addrCode.substring(0, 2), 65, Y_APP_ADDR, 14, OCR_S);
-        draw(addrCode.substring(2, 5), 118, Y_APP_ADDR, 14, OCR_S);
-        draw(addrCode.substring(5, 9), 188, Y_APP_ADDR, 14, OCR_S);
+        // ⑫住所コード (12桁をまとめて出力)
+        draw(v('addr_code'), 80, Y_APP_ADDR, 14, OCR_S);
         draw(v('addr_chome'), 295, Y_APP_ADDR, 14, OCR_S);
-        draw(v('addr_banchi'), 345, Y_APP_ADDR, 14, OCR_S);
+        draw(v('addr_banchi'), 340, Y_APP_ADDR, 14, OCR_S);
 
         // ⑬郵便番号 (3桁-4桁)・⑭電話番号 (6-4-4)・その他
-        draw(v('app_zip_1'), 65, Y_APP_INFO, 14, OCR_S);
-        draw(v('app_zip_2'), 118, Y_APP_INFO, 14, OCR_S);
-        draw(v('app_tel_1'), 188, Y_APP_INFO, 14, OCR_S);
-        draw(v('app_tel_2'), 295, Y_APP_INFO, 14, OCR_S);
-        draw(v('app_tel_3'), 345, Y_APP_INFO, 14, OCR_S);
+        draw(v('app_zip_1'), 48, Y_APP_INFO, 14, OCR_S);
+        draw(v('app_zip_2'), 109, Y_APP_INFO, 14, OCR_S);
+        draw(v('app_tel_1'), 190, Y_APP_INFO, 14, OCR_S);
+        draw(v('app_tel_2'), 300, Y_APP_INFO, 14, OCR_S);
+        draw(v('app_tel_3'), 375, Y_APP_INFO, 14, OCR_S);
         
         // ⑯共同所有 (1:有)
         if (v('joint_owner_flag') === '1') draw('1', 615, Y_APP_INFO, 14);
