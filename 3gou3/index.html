@@ -375,34 +375,34 @@
 
 
         // 3. 振込先口座エリア
-        const Y_BANK_1 = 315;
-        const Y_BANK_2 = 280;
-        const Y_MYNUM = 245;
+        const Y_BANK_1 = 315+5;
+        const Y_BANK_2 = 280+3;
+        const Y_MYNUM = 245+3;
 
-        // ⑰金融機関種別
-        draw(v('bank_type'), 512, Y_BANK_1, 14); 
         // ㉒金融機関名称
-        draw(v('bank_name'), 56, Y_BANK_1, 14, OCR_S); 
+        draw(v('bank_name'), 52, Y_BANK_1, 14, 29); 
+        // ⑰金融機関種別
+        draw(v('bank_type'), 568, Y_BANK_1, 14); 
 
         // ㉓支店名
-        draw(v('branch_name'), 56, Y_BANK_2, 14, OCR_S);
+        draw(v('branch_name'), 52, Y_BANK_2, 14, 29);
         // ⑲支店種別
-        draw(v('branch_type'), 512, Y_BANK_2, 14);
+        draw(v('branch_type'), 568, Y_BANK_2, 14);
 
-        // ㉕口座種類
-        draw(v('account_type'), 400, Y_MYNUM, 14);
         // ㉔口座番号
         draw(v('account_no'), 48, Y_MYNUM, 14, OCR_S);
+        // ㉕口座種類
+        draw(v('account_type'), 400, Y_MYNUM, 14);
 
         // ㉗マイナンバー (個人番号)
-        draw(v('my_number'), 512, Y_MYNUM, 14, OCR_S);
+        draw(v('my_number'), 568, Y_MYNUM, 14, OCR_S);
 
 
         // 4. 申請人・届出人（所有者氏名・所有者住所）
-        const Y_APPLICANT_NAME = 175;
-        const Y_APPLICANT_ADDR = 140;
-        draw(v('applicant_owner_name'), 65, Y_APPLICANT_NAME, 14, OCR_S);
-        draw(v('applicant_owner_address'), 65, Y_APPLICANT_ADDR, 14, OCR_S);
+        const Y_APPLICANT_NAME = 70;
+        const Y_APPLICANT_ADDR = 45;
+        draw(v('applicant_owner_name'), 75, Y_APPLICANT_NAME, 11);
+        draw(v('applicant_owner_address'), 75, Y_APPLICANT_ADDR, 11);
 
 
         // 保存
