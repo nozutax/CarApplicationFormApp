@@ -387,7 +387,7 @@
         // 行の高さ（Y座標）の基準
         // PDF-Libは左下が(0,0)です。A4横向き想定か縦向きかで大きく変わります。
         // 一般的なOCRシート(A4横配置)を想定したY座標です。ズレる場合はここを変更してください。
-        const Y_ROW_TOP = 530;   // 業務種別など
+        const Y_ROW_TOP = 533;   // 業務種別など
         const Y_ROW_CAR = 470;   // 自動車登録番号
         const Y_ROW_ADD = 250;   // 住所・氏名欄
         const Y_ROW_BTM = 100;   // 走行距離など
@@ -398,29 +398,29 @@
         const ONE_BASE_SAME = { x: 350, y: Y_ROW_ADD - 75 };   // 使用の本拠「使用者住所と同じ」の「１」
 
         // ①業務種別
-        drawText(v('job_type'), 110, Y_ROW_TOP, 14, BOX_W);
+        drawText(v('job_type'), 122, Y_ROW_TOP, 14, BOX_W);
 
         // ６番号指示（種別1桁・用途2桁・標板2桁）
         const Y_NUMBER_IND = Y_ROW_TOP ;
-        drawText(v('number_indication_type'), 120, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_use_1'), 137, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_use_2'), 154, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_hyo_1'), 171, Y_NUMBER_IND, 14, BOX_W);
-        drawText(v('number_indication_hyo_2'), 188, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_type'), 300, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_use_1'), 317, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_use_2'), 334, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_1'), 351, Y_NUMBER_IND, 14, BOX_W);
+        drawText(v('number_indication_hyo_2'),368, Y_NUMBER_IND, 14, BOX_W);
 
         // 希望番号（3桁＋1桁＋4桁）
-        const Y_HOPE = Y_ROW_TOP - 45;
-        drawText(v('hope_num_1'), 90, Y_HOPE, 14, BOX_W);
-        drawText(v('hope_num_2'), 143, Y_HOPE, 14, BOX_W);
-        drawText(v('hope_num_3'), 160, Y_HOPE, 14, BOX_W);
+        const Y_HOPE = Y_ROW_TOP - 40;
+        drawText(v('hope_num_1'), 140, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_2'), 193, Y_HOPE, 14, BOX_W);
+        drawText(v('hope_num_3'), 210, Y_HOPE, 14, BOX_W);
 
         // ㉑自動車登録番号 (地域、分類、ひらがな、一連番号)
         // 座標は画像のマス目に合わせて調整
-        const CAR_Y = Y_ROW_CAR; 
-        drawText(v('car_num_1'), 45,  CAR_Y, 12, 33);     // 地域名（漢字）はマスが広い
-        drawText(v('car_num_2'), 175, CAR_Y, 14, BOX_W);  // 3桁数字
-        drawText(v('car_num_3'), 245, CAR_Y, 12);         // ひらがな
-        drawText(v('car_num_4'), 280, CAR_Y, 14, BOX_W);  // 4桁一連番号
+        const CAR_Y = Y_ROW_CAR-15; 
+        drawText(v('car_num_1'), 45,  CAR_Y, 12, 32);     // 地域名（漢字）はマスが広い
+        drawText(v('car_num_2'), 170, CAR_Y, 14, BOX_W);  // 3桁数字
+        drawText(v('car_num_3'), 240, CAR_Y, 12);         // ひらがな
+        drawText(v('car_num_4'), 270, CAR_Y, 14, BOX_W);  // 4桁一連番号
 
         // ㉒車台番号（下7桁）
         drawText(v('chassis_num'), 400, CAR_Y, 14, BOX_W);
