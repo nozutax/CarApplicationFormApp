@@ -344,22 +344,21 @@
 
         const v = (id) => document.getElementById(id).value;
 
-        // ==========================================
-        //  座標定義 (2026/02/23 調整版)
-        //  ※全体的にY座標を上げ(+4pt程度)、Xを左寄せに修正
+    // ==========================================
+        //  座標定義 (ブロック別 固定座標指定版)
+        //  ※PDFの左下原点 (0,0)。A4縦 (幅595 x 高842)
         // ==========================================
         
-        // OCR設定
-        const OCR_W = 17.2; // 枠幅ピッチ（微調整）
-        const LINE_H = 45.2; // 行の高さピッチ
+        // --- 設定値 ---
+        const OCR_W = 17.6;  // OCRマスの横幅（少し広めに設定）
+        const SZ_NUM = 12;   // 数字のフォントサイズ
+        const SZ_TXT = 11;   // 漢字・氏名のフォントサイズ（枠に収まるよう調整）
 
-        // フォントサイズ定義
-        const SZ_NUM = 12; // 数字用
-        const SZ_TXT = 13; // 漢字・氏名用（少し小さくして枠内に収める）
-
-        // 1. ヘッダー・コード類 (上部)
-        // 元535 -> 539 (+4)
-        const Y_HEADER = 539;
+        // -----------------------------------------------------------
+        // 1. 最上部ヘッダー (業務種別・番号指示など)
+        // -----------------------------------------------------------
+        const Y_HEADER = 538; 
+        
         draw(v('code_50_gyomu'), 130, Y_HEADER, SZ_NUM, OCR_W);   // 50業務
         draw(v('code_51_num'), 237, Y_HEADER, SZ_NUM, OCR_W);     // 51番号
         draw(v('code_55_use_1'), 385, Y_HEADER, SZ_NUM, OCR_W);   // 55用途１
@@ -367,120 +366,124 @@
         draw(v('code_55_hyo_1'), 476, Y_HEADER, SZ_NUM, OCR_W);   // 55標板１
         draw(v('code_55_hyo_2'), 516, Y_HEADER, SZ_NUM, OCR_W);   // 55標板２
 
-        // 2. 車両番号など
-        // ②希望番号
-        // 元495 -> 499 (+4)
-        const Y_HOPE = 499;
+        // -----------------------------------------------------------
+        // 2. 希望番号 (②の行)
+        // -----------------------------------------------------------
+        const Y_HOPE = 495;
+
         draw(v('hope_no_1'), 170, Y_HOPE, SZ_NUM, OCR_W);      // 3桁
         draw(v('hope_no_2'), 236, Y_HOPE, SZ_TXT);             // ひらがな
         draw(v('hope_no_3'), 268, Y_HOPE, SZ_NUM, OCR_W);      // 4桁
 
+        // -----------------------------------------------------------
+        // 3. 車両番号・車台番号 (①・③の行)
+        // -----------------------------------------------------------
+        const Y_CAR = 452;
+
         // ①車両番号
-        // 元450 -> 454 (+4) ※これを基準位置とする
-        const Y_CAR = 454; 
-        draw(v('car_no_1'), 40, Y_CAR, SZ_TXT, 28);            // 漢字 (X:45->40へ左寄せ)
+        draw(v('car_no_1'), 45,  Y_CAR, SZ_TXT, 28);           // 練馬(漢字)
         draw(v('car_no_2'), 170, Y_CAR, SZ_NUM, OCR_W);        // 580
         draw(v('car_no_3'), 286, Y_CAR, SZ_TXT);               // ひらがな
         draw(v('car_no_4'), 308, Y_CAR, SZ_NUM, OCR_W);        // 4桁
 
-        // ③車台番号 (OCR枠)
-        // 元375 -> 374 (微調整)
-        draw(v('chassis_no'), 374, Y_CAR, SZ_NUM, OCR_W);
+        // ③車台番号 (右側の長い枠)
+        draw(v('chassis_no'), 375, Y_CAR, SZ_NUM, OCR_W);
 
+        // -----------------------------------------------------------
+        // 4. 使用者欄 (④氏名・⑤住所)
+        // -----------------------------------------------------------
+        const Y_USER_NAME = 408; // 氏名(漢字)の行
+        const Y_USER_ADDR = 365; // 住所コードの行
 
-        // ==========================================
-        // 3. 使用者・所有者・本拠
-        // ==========================================
+        // 氏名
+        draw(v('user_name'), 76, Y_USER_NAME, SZ_TXT, 25); 
 
-        // 共通X座標の定義（微修正）
-        const X_CHECK = 38;      // 左端チェックマーク
-        const X_NAME = 76;       // 氏名(漢字)開始位置 (元78->76)
-        const X_CODE = 76;       // 住所コード開始位置 (元78->76)
-        const X_CHOME = 300;     // 丁目枠開始位置
-        const X_BANCHI = 368;    // 番地枠開始位置
-
-        // ④使用者 氏名
-        const Y_USER_NAME = Y_CAR - LINE_H; // 408.8
-        draw(v('user_name'), X_NAME, Y_USER_NAME, SZ_TXT, 25); // ピッチを少し狭く(25)
-
-        // ⑤使用者 住所
-        const Y_USER_ADDR = Y_USER_NAME - LINE_H; // 363.6
+        // 住所 (コード12桁, 丁目, 番地)
         var userCode = (v('user_address_code') || '').substring(0, 12);
-        draw(userCode, X_CODE, Y_USER_ADDR, SZ_NUM, OCR_W);
-        draw(v('user_addr_chome'), X_CHOME, Y_USER_ADDR, SZ_NUM, OCR_W);
-        draw(v('user_addr_banchi'), X_BANCHI, Y_USER_ADDR, SZ_NUM, OCR_W);
+        draw(userCode, 76, Y_USER_ADDR, SZ_NUM, OCR_W);
+        draw(v('user_addr_chome'), 305, Y_USER_ADDR, SZ_NUM, OCR_W);
+        draw(v('user_addr_banchi'), 375, Y_USER_ADDR, SZ_NUM, OCR_W);
 
-        // ⑥所有者 氏名
-        const Y_OWNER_NAME = Y_USER_ADDR - LINE_H; // 318.4
+        // -----------------------------------------------------------
+        // 5. 所有者欄 (⑥氏名・⑧コード・⑦住所)
+        // -----------------------------------------------------------
+        const Y_OWNER_NAME = 320; // 氏名(漢字)の行
+        const Y_OWNER_ADDR = 278; // 住所コードの行
+        const X_CHECK = 38;       // 左端のチェックマーク位置
+
+        // 氏名
         drawCheck('chk_owner_same_as_user', X_CHECK, Y_OWNER_NAME);
-        draw(v('owner_name'), X_NAME, Y_OWNER_NAME, SZ_TXT, 25);
-        
-        // ⑧所有者コード (所有者氏名の行の右端)
-        draw(v('owner_code'), 470, Y_OWNER_NAME, SZ_NUM, OCR_W);
+        draw(v('owner_name'), 76, Y_OWNER_NAME, SZ_TXT, 25);
 
-        // ⑦所有者 住所
-        const Y_OWNER_ADDR = Y_OWNER_NAME - LINE_H; // 273.2
+        // 所有者コード (氏名の行の右端にある5桁枠)
+        draw(v('owner_code'), 480, Y_OWNER_NAME, SZ_NUM, OCR_W);
+
+        // 住所
         drawCheck('chk_owner_addr_same', X_CHECK, Y_OWNER_ADDR);
         if (!document.getElementById('chk_owner_addr_same').checked) {
             var ownerCode = (v('owner_address_code') || '').substring(0, 12);
-            draw(ownerCode, X_CODE, Y_OWNER_ADDR, SZ_NUM, OCR_W);
-            draw(v('owner_addr_chome'), X_CHOME, Y_OWNER_ADDR, SZ_NUM, OCR_W);
-            draw(v('owner_addr_banchi'), X_BANCHI, Y_OWNER_ADDR, SZ_NUM, OCR_W);
+            draw(ownerCode, 76, Y_OWNER_ADDR, SZ_NUM, OCR_W);
+            draw(v('owner_addr_chome'), 305, Y_OWNER_ADDR, SZ_NUM, OCR_W);
+            draw(v('owner_addr_banchi'), 375, Y_OWNER_ADDR, SZ_NUM, OCR_W);
         }
 
-        // ⑨使用の本拠
-        const Y_BASE = Y_OWNER_ADDR - LINE_H; // 228
+        // -----------------------------------------------------------
+        // 6. 使用の本拠 (⑧チェック・⑨住所)
+        // -----------------------------------------------------------
+        // 所有者住所のすぐ下ではなく、少し間隔が空くことが多い
+        const Y_BASE = 235;
+
         drawCheck('chk_base_same', X_CHECK, Y_BASE);
         if (!document.getElementById('chk_base_same').checked) {
             var baseCode = (v('base_address_code') || '').substring(0, 12);
-            draw(baseCode, X_CODE, Y_BASE, SZ_NUM, OCR_W);
-            draw(v('base_addr_chome'), X_CHOME, Y_BASE, SZ_NUM, OCR_W);
-            draw(v('base_addr_banchi'), X_BANCHI, Y_BASE, SZ_NUM, OCR_W);
+            draw(baseCode, 76, Y_BASE, SZ_NUM, OCR_W);
+            draw(v('base_addr_chome'), 305, Y_BASE, SZ_NUM, OCR_W);
+            draw(v('base_addr_banchi'), 375, Y_BASE, SZ_NUM, OCR_W);
         }
 
-        // ==========================================
-        // 4. その他詳細 (下部)
-        // ==========================================
+        // -----------------------------------------------------------
+        // 7. その他詳細 (⑩型式類別・57工場・走行距離)
+        // -----------------------------------------------------------
+        const Y_MODEL = 192; // 型式・類別の行
+        const Y_METER = 148; // 走行距離の行
 
-        // ⑩型式・類別 / 57整備工場
-        // 元180 -> 183 (+3)
-        const Y_MODEL = 183;
-        draw(v('model_no'), 60, Y_MODEL, SZ_NUM, OCR_W);       // 型式5桁
-        draw(v('class_no'), 175, Y_MODEL, SZ_NUM, OCR_W);      // 類別4桁
-        
-        // 整備工場コード
-        draw(v('factory_code_1'), 350, Y_MODEL, SZ_NUM, OCR_W); // 2桁
-        draw(v('factory_code_2'), 398, Y_MODEL, SZ_NUM, OCR_W); // 5桁
+        // ⑩型式・類別
+        draw(v('model_no'), 60, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('class_no'), 175, Y_MODEL, SZ_NUM, OCR_W);
 
-        // 走行距離計表示値
-        // 元135 -> 138 (+3)
-        const Y_METER = 138;
-        const X_METER = 370; 
-        draw(v('run_km_1'), X_METER, Y_METER, SZ_NUM, OCR_W);        // 123
-        draw(v('run_km_2'), X_METER + (3*OCR_W) + 12, Y_METER, SZ_NUM, OCR_W); // 4
-        draw(v('run_mile_1'), X_METER + (5*OCR_W) + 40, Y_METER, SZ_NUM, OCR_W); // mile
+        // 57整備工場 (右側)
+        draw(v('factory_code_1'), 355, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('factory_code_2'), 408, Y_MODEL, SZ_NUM, OCR_W);
 
-        // ==========================================
-        // 5. 申請人テキスト欄 (最下部・手書き欄への印字)
-        // ==========================================
-        // 画像の位置に合わせて調整
-        // 申請者（使用者）: Y=100付近
-        let yText = 95; 
-        const xLeft = 55;
-        const xRight = 320;
-        const fontSizeApp = 10;
-        
+        // 走行距離 (右下)
+        const X_METER = 380;
+        draw(v('run_km_1'), X_METER, Y_METER, SZ_NUM, OCR_W);
+        draw(v('run_km_2'), X_METER + (3 * OCR_W) + 10, Y_METER, SZ_NUM, OCR_W); // カンマの後
+        draw(v('run_mile_1'), X_METER + (5 * OCR_W) + 35, Y_METER, SZ_NUM, OCR_W); // mile
+
+        // -----------------------------------------------------------
+        // 8. 下部 申請人テキスト欄 (手書き欄への印字)
+        // -----------------------------------------------------------
+        // OCR枠外の下部エリア。Y=100付近から下へ
+        const Y_TEXT_START = 100;
+        const X_TEXT_LEFT = 50;   // 左側 (申請者)
+        const X_TEXT_RIGHT = 320; // 右側 (受検者)
+        const SZ_APP = 10;        // 少し小さめのフォント
+
         // 申請者（使用者）
-        draw(v('app_user_name'), xLeft, yText, fontSizeApp);
-        draw(v('app_user_addr'), xLeft, yText - 12, fontSizeApp);
+        draw(v('app_user_name'), X_TEXT_LEFT, Y_TEXT_START, SZ_APP);
+        draw(v('app_user_addr'), X_TEXT_LEFT, Y_TEXT_START - 12, SZ_APP);
         
         // 申請者（所有者）
-        draw(v('app_owner_name'), xLeft, yText - 42, fontSizeApp);
-        draw(v('app_owner_addr'), xLeft, yText - 54, fontSizeApp);
+        draw(v('app_owner_name'), X_TEXT_LEFT, Y_TEXT_START - 45, SZ_APP);
+        draw(v('app_owner_addr'), X_TEXT_LEFT, Y_TEXT_START - 57, SZ_APP);
 
         // 受検者
-        draw(v('examiner_name'), xRight, yText - 42, fontSizeApp);
-        draw(v('examiner_addr'), xRight, yText - 54, fontSizeApp);
+        draw(v('examiner_name'), X_TEXT_RIGHT, Y_TEXT_START - 45, SZ_APP);
+        draw(v('examiner_addr'), X_TEXT_RIGHT, Y_TEXT_START - 57, SZ_APP);
+
+
+        
         // ファイル保存
         const d = new Date();
         const dateStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('');
