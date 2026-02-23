@@ -350,7 +350,7 @@
         // ==========================================
         
         // --- 設定値 ---
-        const OCR_W = 17.4;  // OCRマスの横幅（少し広めに設定）
+        const OCR_W = 17.2;  // OCRマスの横幅（少し広めに設定）
         const SZ_NUM = 12;   // 数字のフォントサイズ
         const SZ_TXT = 11;   // 漢字・氏名のフォントサイズ（枠に収まるよう調整）
 
@@ -392,11 +392,11 @@
         // -----------------------------------------------------------
         // 4. 使用者欄 (④氏名・⑤住所)
         // -----------------------------------------------------------
-        const Y_USER_NAME = 405; // 氏名(漢字)の行
-        const Y_USER_ADDR = 362; // 住所コードの行
+        const Y_USER_NAME = 403; // 氏名(漢字)の行
+        const Y_USER_ADDR = 360; // 住所コードの行
 
         // 氏名
-        draw(v('user_name'), 73, Y_USER_NAME, SZ_TXT, 28); 
+        draw(v('user_name'), 73, Y_USER_NAME, SZ_TXT, 29); 
 
         // 住所 (コード12桁, 丁目, 番地)
         var userCode = (v('user_address_code') || '').substring(0, 12);
@@ -407,59 +407,59 @@
         // -----------------------------------------------------------
         // 5. 所有者欄 (⑥氏名・⑧コード・⑦住所)
         // -----------------------------------------------------------
-        const Y_OWNER_NAME = 303; // 氏名(漢字)の行
-        const Y_OWNER_ADDR = 261; // 住所コードの行
+        const Y_OWNER_NAME = 301; // 氏名(漢字)の行
+        const Y_OWNER_ADDR = 255; // 住所コードの行
         const X_CHECK = 36;       // 左端のチェックマーク位置
 
         // 氏名
         drawCheck('chk_owner_same_as_user', X_CHECK, Y_OWNER_NAME);
-        draw(v('owner_name'), 70, Y_OWNER_NAME, SZ_TXT, 25);
+        draw(v('owner_name'), 70, Y_OWNER_NAME, SZ_TXT, 29);
 
         // 所有者コード (氏名の行の右端にある5桁枠)
-        draw(v('owner_code'), 480, Y_OWNER_NAME, SZ_NUM, OCR_W);
+        draw(v('owner_code'), 580, Y_OWNER_NAME, SZ_NUM, OCR_W);
 
         // 住所
         drawCheck('chk_owner_addr_same', X_CHECK, Y_OWNER_ADDR);
         if (!document.getElementById('chk_owner_addr_same').checked) {
             var ownerCode = (v('owner_address_code') || '').substring(0, 12);
             draw(ownerCode, 70, Y_OWNER_ADDR, SZ_NUM, OCR_W);
-            draw(v('owner_addr_chome'), 305, Y_OWNER_ADDR, SZ_NUM, OCR_W);
-            draw(v('owner_addr_banchi'), 375, Y_OWNER_ADDR, SZ_NUM, OCR_W);
+            draw(v('owner_addr_chome'), 283, Y_OWNER_ADDR, SZ_NUM, OCR_W);
+            draw(v('owner_addr_banchi'), 323, Y_OWNER_ADDR, SZ_NUM, OCR_W);
         }
 
         // -----------------------------------------------------------
         // 6. 使用の本拠 (⑧チェック・⑨住所)
         // -----------------------------------------------------------
         // 所有者住所のすぐ下ではなく、少し間隔が空くことが多い
-        const Y_BASE = 228;
+        const Y_BASE = 200;
 
         drawCheck('chk_base_same', X_CHECK, Y_BASE);
         if (!document.getElementById('chk_base_same').checked) {
             var baseCode = (v('base_address_code') || '').substring(0, 12);
             draw(baseCode, 70, Y_BASE, SZ_NUM, OCR_W);
-            draw(v('base_addr_chome'), 305, Y_BASE, SZ_NUM, OCR_W);
-            draw(v('base_addr_banchi'), 375, Y_BASE, SZ_NUM, OCR_W);
+            draw(v('base_addr_chome'), 283, Y_BASE, SZ_NUM, OCR_W);
+            draw(v('base_addr_banchi'), 323, Y_BASE, SZ_NUM, OCR_W);
         }
 
         // -----------------------------------------------------------
         // 7. その他詳細 (⑩型式類別・57工場・走行距離)
         // -----------------------------------------------------------
-        const Y_MODEL = 192; // 型式・類別の行
+        const Y_MODEL = 148; // 型式・類別の行
         const Y_METER = 148; // 走行距離の行
 
         // ⑩型式・類別
-        draw(v('model_no'), 60, Y_MODEL, SZ_NUM, OCR_W);
-        draw(v('class_no'), 175, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('model_no'), 36, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('class_no'), 130, Y_MODEL, SZ_NUM, OCR_W);
 
         // 57整備工場 (右側)
-        draw(v('factory_code_1'), 355, Y_MODEL, SZ_NUM, OCR_W);
-        draw(v('factory_code_2'), 408, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('factory_code_1'), 500, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('factory_code_2'), 540, Y_MODEL, SZ_NUM, OCR_W);
 
         // 走行距離 (右下)
         const X_METER = 380;
         draw(v('run_km_1'), X_METER, Y_METER, SZ_NUM, OCR_W);
-        draw(v('run_km_2'), X_METER + (3 * OCR_W) + 10, Y_METER, SZ_NUM, OCR_W); // カンマの後
-        draw(v('run_mile_1'), X_METER + (5 * OCR_W) + 35, Y_METER, SZ_NUM, OCR_W); // mile
+        draw(v('run_km_2'), X_METER + (1 * OCR_W) , Y_METER, SZ_NUM, OCR_W); // カンマの後
+        draw(v('run_mile_1'), X_METER + (4 * OCR_W) + 35, Y_METER, SZ_NUM, OCR_W); // mile
 
         // -----------------------------------------------------------
         // 8. 下部 申請人テキスト欄 (手書き欄への印字)
