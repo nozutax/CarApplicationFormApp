@@ -396,11 +396,11 @@
         const Y_USER_ADDR = 360; // 住所コードの行
 
         // 氏名
-        draw(v('user_name'), 73, Y_USER_NAME, SZ_TXT, 30+2); 
+        draw(v('user_name'), 73, Y_USER_NAME, SZ_TXT, 31.5); 
 
         // 住所 (コード12桁, 丁目, 番地)
         var userCode = (v('user_address_code') || '').substring(0, 12);
-        draw(userCode, 70, Y_USER_ADDR, SZ_NUM, OCR_W);
+        draw(userCode, 68, Y_USER_ADDR, SZ_NUM, OCR_W);
         draw(v('user_addr_chome'), 283, Y_USER_ADDR, SZ_NUM, OCR_W);
         draw(v('user_addr_banchi'), 323, Y_USER_ADDR, SZ_NUM, OCR_W);
 
@@ -413,10 +413,10 @@
 
         // 氏名
         drawCheck('chk_owner_same_as_user', X_CHECK, Y_OWNER_NAME);
-        draw(v('owner_name'), 70, Y_OWNER_NAME, SZ_TXT, 29);
+        draw(v('owner_name'), 73, Y_OWNER_NAME, SZ_TXT, 31.5);
 
         // 所有者コード (氏名の行の右端にある5桁枠)
-        draw(v('owner_code'), 580, Y_OWNER_NAME, SZ_NUM, OCR_W);
+        draw(v('owner_code'), 730, Y_OWNER_NAME, SZ_NUM, OCR_W);
 
         // 住所
         drawCheck('chk_owner_addr_same', X_CHECK, Y_OWNER_ADDR);
