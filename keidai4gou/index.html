@@ -172,14 +172,14 @@
         // 3. 返納の原因（下部・チェックマーク）
         const reason = document.querySelector('input[name="return_reason"]:checked').value;
         const CHECK_MARK = 'レ'; // または 'レ' や '■'
-        const CHECK_SIZE = 16;
+        const CHECK_SIZE = 11;
         
         if (reason === '1') {
             // 滅失、解体等
-            drawText(CHECK_MARK, 78, 120, CHECK_SIZE); 
+            drawText(CHECK_MARK, 65, 160, CHECK_SIZE); 
         } else if (reason === '2') {
             // 一時使用中止
-            drawText(CHECK_MARK, 78, 100, CHECK_SIZE); 
+            drawText(CHECK_MARK, 65, 150, CHECK_SIZE); 
         }
 
         // --- ファイル出力 ---
