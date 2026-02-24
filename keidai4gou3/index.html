@@ -44,9 +44,12 @@
         <!-- 最上段 -->
         <div class="row">
             <div class="col-narrow">
+                <label>71返納</label>
+                <input type="text" id="code_71" maxlength="1" class="ocr" placeholder="1">
+            </div>
+            <div class="col-narrow">
                 <label>80重還</label>
                 <input type="text" id="code_80" maxlength="1" class="ocr" placeholder="1">
-                <div class="hint">1:有 0:無</div>
             </div>
             <div class="col">
                 <label>29移動報告番号</label>
@@ -125,6 +128,8 @@
                     <input type="text" id="app_tel_3" maxlength="4" class="ocr" placeholder="5678" style="width:55px; text-align:center;">
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-mid">
                 <label>35代理受領</label>
                 <select id="proxy_flag">
@@ -301,7 +306,8 @@
         
         // 1. コード行 (最上段)
         const Y_CODE = 790;
-        draw(v('code_80'), 360, Y_CODE, 14, OCR_W); // 80 (重還付有無)
+        draw(v('code_71'), 320, Y_CODE, 14, OCR_W); // 71 返納
+        draw(v('code_80'), 360, Y_CODE, 14, OCR_W); // 80 重還付有無
 
         // 29 移動報告番号
         draw(v('code_29'), 415, Y_CODE, 14, OCR_W);
