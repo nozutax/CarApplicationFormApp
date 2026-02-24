@@ -156,6 +156,10 @@
             <input type="text" id="owner_name" placeholder="山田 太郎">
         </div>
         <div class="form-group">
+            <label>所有者コード</label>
+            <input type="text" id="owner_code" maxlength="5" placeholder="5桁" pattern="[0-9]*" inputmode="numeric" style="width: 120px;">
+        </div>
+        <div class="form-group">
             <label>住所（3つのマス）</label>
             <div class="row" style="align-items: flex-end;">
                 <div class="col">
@@ -268,6 +272,21 @@
 
             <div class="applicant-block">
                 <div class="block-title-row">
+                    <div class="block-title">旧所有者</div>
+                    <label class="block-check"><input type="checkbox" id="check_same_ininjo_old_owner" onchange="toggleSameIninjo('old_owner')"> 委任状記載事項に同じ</label>
+                </div>
+                <div class="form-group">
+                    <label>氏名又は名称</label>
+                    <input type="text" id="app_old_owner_name" placeholder="山田 太郎">
+                </div>
+                <div class="form-group">
+                    <label>住所</label>
+                    <input type="text" id="app_old_owner_address" placeholder="東京都千代田区...">
+                </div>
+            </div>
+
+            <div class="applicant-block">
+                <div class="block-title-row">
                     <div class="block-title">使用者本拠の位置</div>
                     <label class="block-check"><input type="checkbox" id="check_same_user_address_base" onchange="toggleSameUserAddressBase()"> 使用者住所に同じ</label>
                 </div>
@@ -291,9 +310,10 @@
     function toggleSameIninjo(which) {
         const ids = {
             new_owner: ['app_new_owner_name', 'app_new_owner_address'],
-            user: ['app_user_name', 'app_user_address']
+            user: ['app_user_name', 'app_user_address'],
+            old_owner: ['app_old_owner_name', 'app_old_owner_address']
         };
-        const checkIds = { new_owner: 'check_same_ininjo_new_owner', user: 'check_same_ininjo_user' };
+        const checkIds = { new_owner: 'check_same_ininjo_new_owner', user: 'check_same_ininjo_user', old_owner: 'check_same_ininjo_old_owner' };
         const names = ids[which];
         const chk = document.getElementById(checkIds[which]);
         const value = chk.checked ? SAME_ININJO : '';
@@ -407,9 +427,10 @@
         // ㉒車台番号（下7桁）
         drawText(v('chassis_num'), 350, CAR_Y, 14, BOX_W);
 
-        // 所有者欄（氏名・住所3マス）
+        // 所有者欄（氏名・所有者コード5桁・住所3マス）
         const Y_OWNER = Y_ROW_ADD + 139;
         drawText(v('owner_name'), 96, Y_OWNER+2,14, 31);
+        drawText(v('owner_code'), 700, Y_OWNER +2, 14, BOX_W);
         drawText(v('owner_address_code'), 89.5, Y_OWNER - 32,14, BOX_W);
         drawText(v('owner_chome'), 299, Y_OWNER - 32, 14,BOX_W);
         drawText(v('owner_banchi'), 342, Y_OWNER - 32, 14,BOX_W);
@@ -421,7 +442,7 @@
         if (userSameName) {
             drawText('１', 44, Y_USER, 11);
         } else {
-            drawText(v('user_name'), 100, Y_USER-3,14, 31);
+            drawText(v('user_name'), 96, Y_USER-3,14, 31);
         }
         if (userSameAddr) {
             drawText('１', 44, Y_USER - 42, 11);
@@ -454,10 +475,13 @@
         drawText(v('app_new_owner_name'), 100, yApp, 8);
         drawText(v('app_new_owner_address'), 100, yApp - APP_LINE, 8);
         
-        drawText(v('app_user_name'), 100, yApp- APP_LINE*2, 8);
+        drawText(v('app_user_name'), 100, yApp - APP_LINE*2, 8);
         drawText(v('app_user_address'), 100, yApp - APP_LINE*3, 8);
         
-        drawText(v('app_user_base_address'), 660, yApp- APP_LINE, 8);
+        drawText(v('app_old_owner_name'), 250, yApp + APP_LINE*0.5, 8);
+        drawText(v('app_old_owner_address'), 250, yApp - APP_LINE*0.5, 8);
+        
+        drawText(v('app_user_base_address'), 660, yApp - APP_LINE, 8);
 
         // --- ファイル名生成とダウンロード ---
         const now = new Date();
