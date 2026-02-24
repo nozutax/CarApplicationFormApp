@@ -97,21 +97,13 @@
         </div>
         <div class="row">
             <div class="col">
-                <label>32住所コード（3欄・計12桁）</label>
+                <label>32住所コード（3欄：12桁／2桁／22桁）</label>
                 <div class="multi-input">
-                    <input type="text" id="addr_code_1" maxlength="2" class="ocr" placeholder="2桁" style="width:50px; text-align:center;">
+                    <input type="text" id="addr_code_1" maxlength="12" class="ocr" placeholder="12桁" style="width:140px; text-align:center;">
                     <span>-</span>
-                    <input type="text" id="addr_code_2" maxlength="5" class="ocr" placeholder="5桁" style="width:80px; text-align:center;">
+                    <input type="text" id="addr_code_2" maxlength="2" class="ocr" placeholder="2桁" style="width:60px; text-align:center;">
                     <span>-</span>
-                    <input type="text" id="addr_code_3" maxlength="5" class="ocr" placeholder="5桁" style="width:80px; text-align:center;">
-                </div>
-            </div>
-            <div class="col">
-                <label>丁目・小字コード・番地</label>
-                <div class="multi-input">
-                    <input type="text" id="addr_chome" class="ocr" placeholder="丁目/字" style="flex:1">
-                    <span>-</span>
-                    <input type="text" id="addr_banchi" class="ocr" placeholder="番地・号・棟" style="flex:2; text-align:left;">
+                    <input type="text" id="addr_code_3" maxlength="22" class="ocr" placeholder="22桁" style="width:260px; text-align:center;">
                 </div>
             </div>
         </div>
@@ -311,7 +303,7 @@
         // ==========================================
         
         // 1. コード行 (最上段)
-        const Y_CODE = 510+25;
+        const Y_CODE = 535;
         draw(v('code_71'), 395, Y_CODE, 12, OCR_W); // 71 返納
         draw(v('code_80'), 500, Y_CODE, 12, OCR_W); // 80 重還付有無
 
@@ -319,14 +311,14 @@
         draw(v('code_29'), 620, Y_CODE, 12, OCR_W);
 
         // 2. 車両情報 (1車両番号, 3車台番号)
-        const Y_CAR = 485;
+        const Y_CAR = 489;
         // ①車両番号
-        draw(v('car_no_1'), 254, Y_CAR, 12,30);          // 漢字(練馬)
-        draw(v('car_no_2'), 380, Y_CAR, 12, OCR_W);   // 580
-        draw(v('car_no_3'), 420, Y_CAR, 12);          // あ
+        draw(v('car_no_1'), 256, Y_CAR, 12,32);          // 漢字(練馬)
+        draw(v('car_no_2'), 387, Y_CAR, 12, OCR_W);   // 580
+        draw(v('car_no_3'), 445, Y_CAR, 12);          // あ
         draw(v('car_no_4'), 485, Y_CAR, 12, OCR_W);   // 1234
         // ③車台番号 (枠位置推定)
-        draw(v('chassis_no'), 590, Y_CAR, 12, OCR_W);
+        draw(v('chassis_no'), 595, Y_CAR, 12, OCR_W);
 
         // 3. 申請者情報
         // 人格区分 (左端)
@@ -336,28 +328,28 @@
         // 31 氏名
         const Y_NAME_KANA = 450;
         const Y_NAME_KANJI = 419;
-        draw(v('app_kana'), 87, Y_NAME_KANA, 12, OCR_W+3);
-        draw(v('app_kanji'), 92, Y_NAME_KANJI, 12, 30);
+        draw(v('app_kana'), 86, Y_NAME_KANA, 12, OCR_W+2.5);
+        draw(v('app_kanji'), 92, Y_NAME_KANJI, 12, 32);
 
-        // 32 住所コード（3欄・2桁／5桁／5桁）
+        // 32 住所コード（3欄・12桁／2桁／22桁）
         const Y_ADDR = 380;
         draw(v('addr_code_1'),  85, Y_ADDR, 12, OCR_W);
-        draw(v('addr_code_2'), 296, Y_ADDR, 12, OCR_W);
-        draw(v('addr_code_3'), 333, Y_ADDR, 12, OCR_W);
+        draw(v('addr_code_2'), 297, Y_ADDR, 12, OCR_W);
+        draw(v('addr_code_3'), 340, Y_ADDR, 12, OCR_W);
 
         // 33 郵便番号・34 電話番号等
         const Y_INFO = 342;
         draw(v('app_zip_1'), 43, Y_INFO, 12, OCR_W);
         draw(v('app_zip_2'), 104, Y_INFO, 12, OCR_W);
         draw(v('app_tel_1'), 186, Y_INFO, 12, OCR_W);
-        draw(v('app_tel_2'), 293, Y_INFO, 12, OCR_W);
+        draw(v('app_tel_2'), 294, Y_INFO, 12, OCR_W);
         draw(v('app_tel_3'), 374, Y_INFO, 12, OCR_W);
 
         // 35 代理, 36 共同
-        if (v('proxy_flag') === '1') draw('1', 500, Y_INFO, 14);
-        if (v('joint_flag') === '1') draw('1', 570, Y_INFO, 14);
+        if (v('proxy_flag') === '1') draw('1', 483, Y_INFO, 12);
+        if (v('joint_flag') === '1') draw('1', 570, Y_INFO, 12);
         
-        draw(v('owner_code'), 731, Y_INFO, 14, OCR_W); // 18コード
+        draw(v('owner_code'), 730, Y_INFO, 12, OCR_W); // 18コード
 
         // 4. 振込先口座
         const Y_BANK_1 = 300;
@@ -366,11 +358,11 @@
         const Y_MYNUM = Y_BANK_3;
 
         // 37機関種別, 41金融機関名
-        draw(v('bank_name'), 49, Y_BANK_1, 12,30);
-        draw(v('bank_type'), 625, Y_BANK_1, 12, 30);
+        draw(v('bank_name'), 49, Y_BANK_1, 12,32);
+        draw(v('bank_type'), 625, Y_BANK_1, 12 );
         
         // 38支店種別, 42支店名
-        draw(v('branch_name'), 49, Y_BANK_2, 12, OCR_W);
+        draw(v('branch_name'), 49, Y_BANK_2, 12, 32);
         draw(v('branch_type'), 625, Y_BANK_2, 12, OCR_W);
 
         // 43口座種別, 40口座番号
@@ -382,9 +374,9 @@
 
         // 5. 下部テキスト欄
         const Y_DATE = 73;
-        draw(v('kaitai_year'), 480, Y_DATE, 9);
-        draw(v('kaitai_month'),510, Y_DATE, 9);
-        draw(v('kaitai_day'), 530, Y_DATE, 9);
+        draw(v('kaitai_year'), 478, Y_DATE, 9);
+        draw(v('kaitai_month'),502, Y_DATE, 9);
+        draw(v('kaitai_day'), 522, Y_DATE, 9);
 
         const Y_TXT = 45;
         // 届出者（使用者）
