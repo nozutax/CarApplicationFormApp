@@ -313,9 +313,9 @@
         // 2. 車両情報 (1車両番号, 3車台番号)
         const Y_CAR = 489;
         // ①車両番号
-        draw(v('car_no_1'), 256, Y_CAR, 12,32);          // 漢字(練馬)
+        draw(v('car_no_1'), 256, Y_CAR, 12,31);          // 漢字(練馬)
         draw(v('car_no_2'), 387, Y_CAR, 12, OCR_W);   // 580
-        draw(v('car_no_3'), 445, Y_CAR, 12);          // あ
+        draw(v('car_no_3'), 448, Y_CAR, 12);          // あ
         draw(v('car_no_4'), 485, Y_CAR, 12, OCR_W);   // 1234
         // ③車台番号 (枠位置推定)
         draw(v('chassis_no'), 595, Y_CAR, 12, OCR_W);
@@ -329,7 +329,7 @@
         const Y_NAME_KANA = 450;
         const Y_NAME_KANJI = 419;
         draw(v('app_kana'), 86, Y_NAME_KANA, 12, OCR_W+2.5);
-        draw(v('app_kanji'), 92, Y_NAME_KANJI, 12, 32);
+        draw(v('app_kanji'), 92, Y_NAME_KANJI, 12, 31);
 
         // 32 住所コード（3欄・12桁／2桁／22桁）
         const Y_ADDR = 380;
@@ -346,10 +346,10 @@
         draw(v('app_tel_3'), 374, Y_INFO, 12, OCR_W);
 
         // 35 代理, 36 共同
-        if (v('proxy_flag') === '1') draw('1', 483, Y_INFO, 12);
-        if (v('joint_flag') === '1') draw('1', 570, Y_INFO, 12);
+        if (v('proxy_flag') === '1') draw('1', 484, Y_INFO, 12);
+        if (v('joint_flag') === '1') draw('1', 573, Y_INFO, 12);
         
-        draw(v('owner_code'), 730, Y_INFO, 12, OCR_W); // 18コード
+        draw(v('owner_code'), 729, Y_INFO, 12, OCR_W); // 18申請者所有者コード
 
         // 4. 振込先口座
         const Y_BANK_1 = 300;
@@ -358,11 +358,11 @@
         const Y_MYNUM = Y_BANK_3;
 
         // 37機関種別, 41金融機関名
-        draw(v('bank_name'), 49, Y_BANK_1, 12,32);
+        draw(v('bank_name'), 49, Y_BANK_1, 12,31);
         draw(v('bank_type'), 625, Y_BANK_1, 12 );
         
         // 38支店種別, 42支店名
-        draw(v('branch_name'), 49, Y_BANK_2, 12, 32);
+        draw(v('branch_name'), 49, Y_BANK_2, 12, 31);
         draw(v('branch_type'), 625, Y_BANK_2, 12, OCR_W);
 
         // 43口座種別, 40口座番号
@@ -374,9 +374,9 @@
 
         // 5. 下部テキスト欄
         const Y_DATE = 73;
-        draw(v('kaitai_year'), 478, Y_DATE, 9);
-        draw(v('kaitai_month'),502, Y_DATE, 9);
-        draw(v('kaitai_day'), 522, Y_DATE, 9);
+        draw(v('kaitai_year'), 476, Y_DATE, 9);
+        draw(v('kaitai_month'),499, Y_DATE, 9);
+        draw(v('kaitai_day'), 521, Y_DATE, 9);
 
         const Y_TXT = 45;
         // 届出者（使用者）
