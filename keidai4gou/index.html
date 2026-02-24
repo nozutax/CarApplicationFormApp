@@ -144,30 +144,30 @@
         // ===============================================
 
         // 1. OCRエリア（最上段）
-        const Y_OCR = 480; // OCR行の高さ
-        const BOX_W = 21;  // マスの幅(軽自動車様式は少し広い場合があります)
+        const Y_OCR = 483; // OCR行の高さ
+        const BOX_W = 18.5;  // マスの幅(軽自動車様式は少し広い場合があります)
 
         // 1 車両番号
         // 左側の余白やマスのピッチを調整してください
-        drawText(v('car_num_1'), 45,  Y_OCR, 12, 0);     // 地域(品川) ※マスがない場合が多いのでベタ打ち
-        drawText(v('car_num_2'), 115, Y_OCR, 16, BOX_W); // 580 (マスあり)
-        drawText(v('car_num_3'), 200, Y_OCR, 14);        // あ (マスあり)
-        drawText(v('car_num_4'), 235, Y_OCR, 16, BOX_W); // 1234 (マスあり)
+        drawText(v('car_num_1'), 45,  Y_OCR, 12, 30);     // 地域(品川) ※マスがない場合が多いのでベタ打ち
+        drawText(v('car_num_2'), 165, Y_OCR, 12, BOX_W); // 580 (マスあり)
+        drawText(v('car_num_3'), 230, Y_OCR, 12);        // あ (マスあり)
+        drawText(v('car_num_4'), 265, Y_OCR, 12, BOX_W); // 1234 (マスあり)
 
         // 3 車台番号 (下7桁)
-        drawText(v('chassis_num'), 440, Y_OCR, 16, BOX_W); // 右側のマス
+        drawText(v('chassis_num'), 360, Y_OCR, 16, BOX_W); // 右側のマス
 
         // 2. 申請者・所有者情報（中段・テキスト）
         // 座標は「左下」が基準です
-        const X_TEXT = 60;
+        const X_TEXT = 140;
 
         // 使用者
-        drawText(v('user_name'),    X_TEXT, 330, 12); // 氏名
-        drawText(v('user_address'), X_TEXT, 275, 11); // 住所
+        drawText(v('user_name'),    X_TEXT, 385, 12); // 氏名
+        drawText(v('user_address'), X_TEXT, 330, 11); // 住所
 
         // 所有者
-        drawText(v('owner_name'),    X_TEXT, 220, 12); // 氏名
-        drawText(v('owner_address'), X_TEXT, 175, 11); // 住所
+        drawText(v('owner_name'),    X_TEXT, 275, 12); // 氏名
+        drawText(v('owner_address'), X_TEXT, 220, 11); // 住所
 
         // 3. 返納の原因（下部・チェックマーク）
         const reason = document.querySelector('input[name="return_reason"]:checked').value;
