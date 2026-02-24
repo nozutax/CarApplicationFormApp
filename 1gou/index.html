@@ -430,7 +430,7 @@
         // 所有者欄（氏名・所有者コード5桁・住所3マス）
         const Y_OWNER = Y_ROW_ADD + 139;
         drawText(v('owner_name'), 96, Y_OWNER+2,14, 31);
-        drawText(v('owner_code'), 700, Y_OWNER +2, 14, BOX_W);
+        drawText(v('owner_code'), 725, Y_OWNER +2, 14, BOX_W);
         drawText(v('owner_address_code'), 89.5, Y_OWNER - 32,14, BOX_W);
         drawText(v('owner_chome'), 299, Y_OWNER - 32, 14,BOX_W);
         drawText(v('owner_banchi'), 342, Y_OWNER - 32, 14,BOX_W);
@@ -445,15 +445,15 @@
             drawText(v('user_name'), 96, Y_USER-3,14, 31);
         }
         if (userSameAddr) {
-            drawText('１', 44, Y_USER - 42, 11);
+            drawText('１', 44, Y_USER - 43, 11);
         } else {
-            drawText(v('user_address_code'), 89.5, Y_USER - 42, 14,BOX_W);
-            drawText(v('user_chome'), 299, Y_USER - 42, 14, BOX_W);
-            drawText(v('user_banchi'), 342, Y_USER - 42, 14, BOX_W);
+            drawText(v('user_address_code'), 89.5, Y_USER - 43, 14,BOX_W);
+            drawText(v('user_chome'), 299, Y_USER - 43, 14, BOX_W);
+            drawText(v('user_banchi'), 342, Y_USER - 43, 14, BOX_W);
         }
 
         // 使用の本拠の位置（住所3マス）※「使用者住所と同じ」チェック時は「１」を ONE_BASE_SAME の位置に出力
-        const Y_BASE = Y_USER - 90;
+        const Y_BASE = Y_USER - 91;
         const baseSameAsUser = document.getElementById('check_base_same_as_user').checked;
         if (baseSameAsUser) {
             drawText('１', 44, Y_BASE, 11);
@@ -478,8 +478,8 @@
         drawText(v('app_user_name'), 100, yApp - APP_LINE*2, 8);
         drawText(v('app_user_address'), 100, yApp - APP_LINE*3, 8);
         
-        drawText(v('app_old_owner_name'), 250, yApp + APP_LINE*0.5, 8);
-        drawText(v('app_old_owner_address'), 250, yApp - APP_LINE*0.5, 8);
+        drawText(v('app_old_owner_name'), 380, yApp + APP_LINE*0.6, 8);
+        drawText(v('app_old_owner_address'), 380, yApp - APP_LINE, 8);
         
         drawText(v('app_user_base_address'), 660, yApp - APP_LINE, 8);
 
