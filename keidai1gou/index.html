@@ -234,7 +234,7 @@
         <div class="form-group">
             <label class="hint" style="margin-bottom:6px;">走行距離計表示値（□□□,□00km-□2mile）</label>
             <div class="row" style="align-items: center; gap: 4px; flex-wrap: nowrap;">
-                <input type="text" id="run_km_1" maxlength="3" placeholder="123" style="width: 52px; text-align: center;">
+                <input type="text" id="run_km_1" maxlength="3" placeholder="123" style="width: 52px; text-align: right;">
                 <span style="color:#666;">,</span>
                 <input type="text" id="run_km_2" maxlength="1" placeholder="4" style="width: 32px; text-align: center;">
                 <span style="color:#666;">00km－</span>
@@ -396,7 +396,7 @@
         const Y_USER_ADDR = 360; // 住所コードの行
 
         // 氏名
-        draw(v('user_name'), 73, Y_USER_NAME, SZ_TXT, 29); 
+        draw(v('user_name'), 73, Y_USER_NAME, SZ_TXT, 30); 
 
         // 住所 (コード12桁, 丁目, 番地)
         var userCode = (v('user_address_code') || '').substring(0, 12);
@@ -408,7 +408,7 @@
         // 5. 所有者欄 (⑥氏名・⑧コード・⑦住所)
         // -----------------------------------------------------------
         const Y_OWNER_NAME = 301; // 氏名(漢字)の行
-        const Y_OWNER_ADDR = 255; // 住所コードの行
+        const Y_OWNER_ADDR = 253; // 住所コードの行
         const X_CHECK = 36;       // 左端のチェックマーク位置
 
         // 氏名
@@ -452,35 +452,41 @@
         draw(v('class_no'), 130, Y_MODEL, SZ_NUM, OCR_W);
 
         // 57整備工場 (右側)
-        draw(v('factory_code_1'), 500, Y_MODEL, SZ_NUM, OCR_W);
-        draw(v('factory_code_2'), 540, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('factory_code_1'), 530, Y_MODEL, SZ_NUM, OCR_W);
+        draw(v('factory_code_2'), 570, Y_MODEL, SZ_NUM, OCR_W);
 
-        // 走行距離 (右下)
-        const X_METER = 380;
-        draw(v('run_km_1'), X_METER, Y_METER, SZ_NUM, OCR_W);
-        draw(v('run_km_2'), X_METER + (1 * OCR_W) , Y_METER, SZ_NUM, OCR_W); // カンマの後
+        // 走行距離 (右下) ※run_km_1は3桁枠内で右詰め
+        const X_METER = 380-17;
+        const RUN_KM_1_LEN = 3;
+        (function() {
+            const t = v('run_km_1');
+            if (!t) return;
+            const startX = X_METER + (RUN_KM_1_LEN - Math.min(t.length, RUN_KM_1_LEN)) * OCR_W;
+            draw(t, startX, Y_METER, SZ_NUM, OCR_W);
+        })();
+        draw(v('run_km_2'), X_METER + (2 * OCR_W) , Y_METER, SZ_NUM, OCR_W); // カンマの後
         draw(v('run_mile_1'), X_METER + (4 * OCR_W) + 35, Y_METER, SZ_NUM, OCR_W); // mile
 
         // -----------------------------------------------------------
         // 8. 下部 申請人テキスト欄 (手書き欄への印字)
         // -----------------------------------------------------------
         // OCR枠外の下部エリア。Y=100付近から下へ
-        const Y_TEXT_START = 100;
-        const X_TEXT_LEFT = 50;   // 左側 (申請者)
-        const X_TEXT_RIGHT = 320; // 右側 (受検者)
+        const Y_TEXT_START = 80;
+        const X_TEXT_LEFT = 120;   // 左側 (申請者)
+        const X_TEXT_RIGHT = 570; // 右側 (受検者)
         const SZ_APP = 10;        // 少し小さめのフォント
 
         // 申請者（使用者）
         draw(v('app_user_name'), X_TEXT_LEFT, Y_TEXT_START, SZ_APP);
-        draw(v('app_user_addr'), X_TEXT_LEFT, Y_TEXT_START - 12, SZ_APP);
+        draw(v('app_user_addr'), X_TEXT_LEFT, Y_TEXT_START - 15, SZ_APP);
         
         // 申請者（所有者）
         draw(v('app_owner_name'), X_TEXT_LEFT, Y_TEXT_START - 45, SZ_APP);
-        draw(v('app_owner_addr'), X_TEXT_LEFT, Y_TEXT_START - 57, SZ_APP);
+        draw(v('app_owner_addr'), X_TEXT_LEFT, Y_TEXT_START - 60, SZ_APP);
 
         // 受検者
         draw(v('examiner_name'), X_TEXT_RIGHT, Y_TEXT_START - 45, SZ_APP);
-        draw(v('examiner_addr'), X_TEXT_RIGHT, Y_TEXT_START - 57, SZ_APP);
+        draw(v('examiner_addr'), X_TEXT_RIGHT, Y_TEXT_START - 60, SZ_APP);
 
 
 
