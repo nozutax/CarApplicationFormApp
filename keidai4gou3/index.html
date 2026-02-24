@@ -97,8 +97,14 @@
         </div>
         <div class="row">
             <div class="col">
-                <label>32住所コード（12桁）</label>
-                <input type="text" id="addr_code" maxlength="12" class="ocr" placeholder="都道府県市区町村コード">
+                <label>32住所コード（3欄・計12桁）</label>
+                <div class="multi-input">
+                    <input type="text" id="addr_code_1" maxlength="2" class="ocr" placeholder="2桁" style="width:50px; text-align:center;">
+                    <span>-</span>
+                    <input type="text" id="addr_code_2" maxlength="5" class="ocr" placeholder="5桁" style="width:80px; text-align:center;">
+                    <span>-</span>
+                    <input type="text" id="addr_code_3" maxlength="5" class="ocr" placeholder="5桁" style="width:80px; text-align:center;">
+                </div>
             </div>
             <div class="col">
                 <label>丁目・小字コード・番地</label>
@@ -279,7 +285,7 @@
         
         // 描画ヘルパー (A4縦想定)
         // 軽自動車様式はOCR枠が標準18pt前後
-        const OCR_W = 18; 
+        const OCR_W = 17.2; 
         
         const draw = (text, x, y, size = 10, spacing = 0) => {
             if (!text) return;
@@ -305,52 +311,53 @@
         // ==========================================
         
         // 1. コード行 (最上段)
-        const Y_CODE = 510;
+        const Y_CODE = 510+25;
         draw(v('code_71'), 395, Y_CODE, 12, OCR_W); // 71 返納
-        draw(v('code_80'), 470, Y_CODE, 12, OCR_W); // 80 重還付有無
+        draw(v('code_80'), 500, Y_CODE, 12, OCR_W); // 80 重還付有無
 
         // 29 移動報告番号
-        draw(v('code_29'), 560, Y_CODE, 12, OCR_W);
+        draw(v('code_29'), 620, Y_CODE, 12, OCR_W);
 
         // 2. 車両情報 (1車両番号, 3車台番号)
-        const Y_CAR = 480;
+        const Y_CAR = 485;
         // ①車両番号
-        draw(v('car_no_1'), 250, Y_CAR, 12);          // 漢字(練馬)
-        draw(v('car_no_2'), 300, Y_CAR, 12, OCR_W);   // 580
-        draw(v('car_no_3'), 350, Y_CAR, 12);          // あ
-        draw(v('car_no_4'), 372, Y_CAR, 12, OCR_W);   // 1234
+        draw(v('car_no_1'), 254, Y_CAR, 12,30);          // 漢字(練馬)
+        draw(v('car_no_2'), 380, Y_CAR, 12, OCR_W);   // 580
+        draw(v('car_no_3'), 420, Y_CAR, 12);          // あ
+        draw(v('car_no_4'), 485, Y_CAR, 12, OCR_W);   // 1234
         // ③車台番号 (枠位置推定)
-        draw(v('chassis_no'), 480, Y_CAR, 12, OCR_W);
+        draw(v('chassis_no'), 590, Y_CAR, 12, OCR_W);
 
         // 3. 申請者情報
         // 人格区分 (左端)
-        if (v('app_type') === '1') draw('1', 40, 450, 12); 
-        if (v('app_type') === '2') draw('2', 40, 450, 12);
+        if (v('app_type') === '1') draw('1', 44, 450, 12); 
+        if (v('app_type') === '2') draw('2', 44, 450, 12);
 
         // 31 氏名
         const Y_NAME_KANA = 450;
-        const Y_NAME_KANJI = 422;
-        draw(v('app_kana'), 88, Y_NAME_KANA, 12, OCR_W);
-        draw(v('app_kanji'), 92, Y_NAME_KANJI, 12, OCR_W);
+        const Y_NAME_KANJI = 419;
+        draw(v('app_kana'), 87, Y_NAME_KANA, 12, OCR_W+3);
+        draw(v('app_kanji'), 92, Y_NAME_KANJI, 12, 30);
 
-        // 32 住所コード（1欄12桁）
+        // 32 住所コード（3欄・2桁／5桁／5桁）
         const Y_ADDR = 380;
-        const addrCode = v('addr_code') || '';
-        draw(addrCode, 88, Y_ADDR, 12, OCR_W);
+        draw(v('addr_code_1'),  85, Y_ADDR, 12, OCR_W);
+        draw(v('addr_code_2'), 296, Y_ADDR, 12, OCR_W);
+        draw(v('addr_code_3'), 333, Y_ADDR, 12, OCR_W);
 
         // 33 郵便番号・34 電話番号等
         const Y_INFO = 342;
-        draw(v('app_zip_1'), 42, Y_INFO, 14, OCR_W);
-        draw(v('app_zip_2'), 104, Y_INFO, 14, OCR_W);
-        draw(v('app_tel_1'), 186, Y_INFO, 14, OCR_W);
-        draw(v('app_tel_2'), 290, Y_INFO, 14, OCR_W);
-        draw(v('app_tel_3'), 376, Y_INFO, 14, OCR_W);
+        draw(v('app_zip_1'), 43, Y_INFO, 12, OCR_W);
+        draw(v('app_zip_2'), 104, Y_INFO, 12, OCR_W);
+        draw(v('app_tel_1'), 186, Y_INFO, 12, OCR_W);
+        draw(v('app_tel_2'), 293, Y_INFO, 12, OCR_W);
+        draw(v('app_tel_3'), 374, Y_INFO, 12, OCR_W);
 
         // 35 代理, 36 共同
-        if (v('proxy_flag') === '1') draw('1', 355, Y_INFO, 14);
-        if (v('joint_flag') === '1') draw('1', 400, Y_INFO, 14);
+        if (v('proxy_flag') === '1') draw('1', 500, Y_INFO, 14);
+        if (v('joint_flag') === '1') draw('1', 570, Y_INFO, 14);
         
-        draw(v('owner_code'), 715, Y_INFO, 14, OCR_W); // 18コード
+        draw(v('owner_code'), 731, Y_INFO, 14, OCR_W); // 18コード
 
         // 4. 振込先口座
         const Y_BANK_1 = 300;
@@ -359,25 +366,25 @@
         const Y_MYNUM = Y_BANK_3;
 
         // 37機関種別, 41金融機関名
-        draw(v('bank_name'), 49, Y_BANK_1, 12, OCR_W);
-        draw(v('bank_type'), 600, Y_BANK_1, 12, OCR_W);
+        draw(v('bank_name'), 49, Y_BANK_1, 12,30);
+        draw(v('bank_type'), 625, Y_BANK_1, 12, 30);
         
         // 38支店種別, 42支店名
         draw(v('branch_name'), 49, Y_BANK_2, 12, OCR_W);
-        draw(v('branch_type'), 600, Y_BANK_2, 12, OCR_W);
+        draw(v('branch_type'), 625, Y_BANK_2, 12, OCR_W);
 
         // 43口座種別, 40口座番号
-         draw(v('account_no'), 42, Y_BANK_3, 12, OCR_W);
-         draw(v('account_type'), 290, Y_BANK_3, 12, OCR_W);
+         draw(v('account_no'), 44, Y_BANK_3, 12, OCR_W);
+         draw(v('account_type'), 293, Y_BANK_3, 12, OCR_W);
 
         // 19マイナンバー
-        draw(v('my_number'), 550, Y_MYNUM, 14, OCR_W);
+        draw(v('my_number'), 580, Y_MYNUM, 12, OCR_W);
 
         // 5. 下部テキスト欄
-        const Y_DATE = 70;
-        draw(v('kaitai_year'), 400, Y_DATE, 9);
-        draw(v('kaitai_month'),430, Y_DATE, 9);
-        draw(v('kaitai_day'), 460, Y_DATE, 9);
+        const Y_DATE = 73;
+        draw(v('kaitai_year'), 480, Y_DATE, 9);
+        draw(v('kaitai_month'),510, Y_DATE, 9);
+        draw(v('kaitai_day'), 530, Y_DATE, 9);
 
         const Y_TXT = 45;
         // 届出者（使用者）
@@ -385,8 +392,8 @@
         draw(v('txt_user_addr'), 120, Y_TXT - 25, 9);
 
         // 届出者（所有者）
-        draw(v('txt_owner_name'), 250, Y_TXT , 9);
-        draw(v('txt_owner_addr'), 250, Y_TXT -45, 9);
+        draw(v('txt_owner_name'), 300, Y_TXT , 9);
+        draw(v('txt_owner_addr'), 300, Y_TXT -25, 9);
 
         // ファイル保存
         const d = new Date();
