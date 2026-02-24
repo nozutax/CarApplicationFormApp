@@ -166,8 +166,8 @@
         drawText(v('user_address'), X_TEXT, 330, 11); // 住所
 
         // 所有者
-        drawText(v('owner_name'),    X_TEXT, 275, 12); // 氏名
-        drawText(v('owner_address'), X_TEXT, 220, 11); // 住所
+        drawText(v('owner_name'),    X_TEXT, 278, 12); // 氏名
+        drawText(v('owner_address'), X_TEXT, 223, 11); // 住所
 
         // 3. 返納の原因（下部・チェックマーク）
         const reason = document.querySelector('input[name="return_reason"]:checked').value;
@@ -176,7 +176,7 @@
         
         if (reason === '1') {
             // 滅失、解体等
-            drawText(CHECK_MARK, 66, 163, CHECK_SIZE); 
+            drawText(CHECK_MARK, 66, 165, CHECK_SIZE); 
         } else if (reason === '2') {
             // 一時使用中止
             drawText(CHECK_MARK, 66, 150, CHECK_SIZE); 
