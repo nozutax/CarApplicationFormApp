@@ -305,7 +305,7 @@
         // ==========================================
         
         // 1. コード行 (最上段)
-        const Y_CODE = 700;
+        const Y_CODE = 450;
         draw(v('code_71'), 320, Y_CODE, 14, OCR_W); // 71 返納
         draw(v('code_80'), 360, Y_CODE, 14, OCR_W); // 80 重還付有無
 
@@ -313,7 +313,7 @@
         draw(v('code_29'), 415, Y_CODE, 14, OCR_W);
 
         // 2. 車両情報 (1車両番号, 3車台番号)
-        const Y_CAR = 655;
+        const Y_CAR = 425;
         // ①車両番号
         draw(v('car_no_1'), 125, Y_CAR, 12);          // 漢字(練馬)
         draw(v('car_no_2'), 185, Y_CAR, 14, OCR_W);   // 580
@@ -328,21 +328,18 @@
         if (v('app_type') === '2') draw('2', 30, 665, 12);
 
         // 31 氏名
-        const Y_NAME_KANA = 615;
-        const Y_NAME_KANJI = 595;
+        const Y_NAME_KANA = 405;
+        const Y_NAME_KANJI = 390;
         draw(v('app_kana'), 60, Y_NAME_KANA, 14, OCR_W);
         draw(v('app_kanji'), 60, Y_NAME_KANJI, 14, OCR_W);
 
-        // 32 住所
-        const Y_ADDR = 565;
-        var addrCode = v('addr_code') || '';
-        draw(addrCode.substring(0, 2), 60, Y_ADDR, 14, OCR_W);
-        draw(addrCode.substring(2, 5), 110, Y_ADDR, 14, OCR_W);
-        draw(v('addr_chome'), 210, Y_ADDR, 14, OCR_W);
-        draw(v('addr_banchi'), 260, Y_ADDR, 14, OCR_W);
+        // 32 住所コード（1欄12桁）
+        const Y_ADDR = 375;
+        const addrCode = v('addr_code') || '';
+        draw(addrCode, 60, Y_ADDR, 14, OCR_W);
 
         // 33 郵便番号・34 電話番号等
-        const Y_INFO = 515;
+        const Y_INFO = 350;
         draw(v('app_zip_1'), 40, Y_INFO, 14, OCR_W);
         draw(v('app_zip_2'), 95, Y_INFO, 14, OCR_W);
         draw(v('app_tel_1'), 200, Y_INFO, 14, OCR_W);
@@ -356,9 +353,9 @@
         draw(v('owner_code'), 515, Y_INFO, 14, OCR_W); // 18コード
 
         // 4. 振込先口座
-        const Y_BANK_1 = 460;
-        const Y_BANK_2 = 410;
-        const Y_BANK_3 = 360;
+        const Y_BANK_1 = 280;
+        const Y_BANK_2 = 260;
+        const Y_BANK_3 = 240;
         const Y_MYNUM = Y_BANK_3;
 
         // 37機関種別, 41金融機関名
