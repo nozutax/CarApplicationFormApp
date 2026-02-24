@@ -145,17 +145,17 @@
 
         // 1. OCRエリア（最上段）
         const Y_OCR = 483; // OCR行の高さ
-        const BOX_W = 18.5;  // マスの幅(軽自動車様式は少し広い場合があります)
+        const BOX_W = 17.5;  // マスの幅(軽自動車様式は少し広い場合があります)
 
         // 1 車両番号
         // 左側の余白やマスのピッチを調整してください
         drawText(v('car_num_1'), 45,  Y_OCR, 12, 30);     // 地域(品川) ※マスがない場合が多いのでベタ打ち
-        drawText(v('car_num_2'), 165, Y_OCR, 12, BOX_W); // 580 (マスあり)
-        drawText(v('car_num_3'), 230, Y_OCR, 12);        // あ (マスあり)
-        drawText(v('car_num_4'), 265, Y_OCR, 12, BOX_W); // 1234 (マスあり)
+        drawText(v('car_num_2'), 170, Y_OCR, 12, BOX_W); // 580 (マスあり)
+        drawText(v('car_num_3'), 233, Y_OCR, 12);        // あ (マスあり)
+        drawText(v('car_num_4'), 270, Y_OCR, 12, BOX_W); // 1234 (マスあり)
 
         // 3 車台番号 (下7桁)
-        drawText(v('chassis_num'), 360, Y_OCR, 16, BOX_W); // 右側のマス
+        drawText(v('chassis_num'), 378, Y_OCR, 16, BOX_W); // 右側のマス
 
         // 2. 申請者・所有者情報（中段・テキスト）
         // 座標は「左下」が基準です
