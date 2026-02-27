@@ -119,8 +119,10 @@
 
 <div class="container">
     <h1>自動車検査証記入申請書データ入力アプリ（軽専用1号様式）</h1>
+    <p class="subtitle">軽専用1号様式への転記用入力フォーム</p>
     <form id="pdfForm">
         
+        <h2>1. 上部コード・番号提示</h2>
         <!-- 番号提示 用途（同一Y位置） -->
         <div class="row">
             <div class="col">
@@ -149,6 +151,7 @@
             </div>
         </div>
 
+        <h2>2. 希望番号・車両情報</h2>
         <!-- 希望車両番号 -->
         <div class="form-group">
             <label>希望車両番号</label>
@@ -177,8 +180,9 @@
             <input type="text" id="chassis_num" maxlength="7" class="box-input" placeholder="7文字以下">
         </div>
 
+        <h2>3. 使用者・所有者・本拠の住所</h2>
         <!-- 住所・氏名欄 -->
-        <hr>
+        <h2>4. 申請人情報（使用者・所有者・受検者）</h2>
         <div class="form-group">
             <label>４使用者 氏名又は名称</label>
             <input type="text" id="user_name" placeholder="氏と名の間を1マス開けて入力">
@@ -241,6 +245,7 @@
             <input type="text" id="body_color" maxlength="1" placeholder="1文字">
         </div>
         <hr>
+        <h2>4. 申請人情報（使用者・所有者・受検者）</h2>
         <div class="form-group form-block">
             <div class="form-block-title">申請者（使用者）</div>
             <label class="form-block-label">氏名又は名称</label>
