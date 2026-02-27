@@ -312,13 +312,16 @@
         const day = String(now.getDate()).padStart(2, '0');
         const dateStr = `${year}${month}${day}`;
 
-        let applicant = v('applicant_name');
-        if (!applicant) {
-            applicant = '名称未入力';
+        // 使用者氏名（４使用者 氏名又は名称）をファイル名に利用
+        let userName = v('user_name');
+        if (!userName) {
+            userName = '名称未入力';
         }
-        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+        // ファイル名で使えない文字はアンダースコアに置換
+        const safeUserName = userName.replace(/[\\/:*?"<>|]/g, '_');
 
-        const fileName = `${dateStr}_軽専用第1号様式_${applicant}.pdf`;
+        // 「ダウンロードした年月日_使用者氏名_軽専用第1号.pdf」形式
+        const fileName = `${dateStr}_${safeUserName}_軽専用第1号.pdf`;
 
         // 4. ダウンロード実行
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });

@@ -190,10 +190,11 @@
         if (!applicant) {
             applicant = '名称未入力';
         }
-        // 特殊文字の除去
-        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+        // 特殊文字の置換（ファイル名で使えない文字をアンダースコアに）
+        const safeApplicant = applicant.replace(/[\\/:*?"<>|]/g, '_');
 
-        const fileName = `${dateStr}_専用第3号様式_${applicant}.pdf`;
+        // 「ダウンロードした年月日_申請者氏名_書類の名前.pdf」形式
+        const fileName = `${dateStr}_${safeApplicant}_専用第3号様式.pdf`;
 
         // --- 統合機能 3: ダウンロード実行 ---
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });

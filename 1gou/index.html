@@ -487,10 +487,13 @@
         const now = new Date();
         const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
         
-        let applicant = v('owner_name') || '未入力';
-        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+        // 所有者氏名をファイル名に使用
+        let ownerName = v('owner_name') || '未入力';
+        // ファイル名で使えない文字をアンダースコアに置換
+        const safeOwnerName = ownerName.replace(/[\\/:*?"<>|]/g, '_');
 
-        const fileName = `${dateStr}_第1号様式_${applicant}.pdf`;
+        // 「ダウンロードした年月日_所有者氏名_書類名.pdf」形式
+        const fileName = `${dateStr}_${safeOwnerName}_第1号様式.pdf`;
 
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');

@@ -307,9 +307,11 @@
         const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
         
         let applicant = v('applicant_name') || '名称未設定';
-        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+        // ファイル名に使えない文字をアンダースコアに置換
+        const safeApplicant = applicant.replace(/[\\/:*?"<>|]/g, '_');
 
-        const fileName = `${dateStr}_現地調査報告書_${applicant}.pdf`;
+        // 「ダウンロードした年月日_申請者氏名_書類の名前.pdf」形式
+        const fileName = `${dateStr}_${safeApplicant}_現地調査報告書.pdf`;
 
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         const link = document.createElement('a');

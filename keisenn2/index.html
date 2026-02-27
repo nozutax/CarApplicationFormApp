@@ -215,9 +215,11 @@
         if (!applicant) {
             applicant = '名称未入力';
         }
-        applicant = applicant.replace(/[\\/:*?"<>|]/g, '');
+        // ファイル名で使えない文字をアンダースコアに置換
+        const safeApplicant = applicant.replace(/[\\/:*?"<>|]/g, '_');
 
-        const fileName = `${dateStr}_軽専用第2号様式_${applicant}.pdf`;
+        // 「ダウンロードした年月日_申請者氏名_書類の名前.pdf」形式
+        const fileName = `${dateStr}_${safeApplicant}_軽専用第2号様式.pdf`;
 
         // 4. ダウンロード実行
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
