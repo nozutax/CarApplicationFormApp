@@ -101,8 +101,10 @@
 
 <div class="container">
     <h1>継続検査用データ入力アプリ（専用３号様式）</h1>
+    <p class="subtitle">専用3号様式シートへの転記用入力フォーム</p>
     <form id="pdfForm">
         
+        <h2>1. 上部OCRコード・車両情報</h2>
         <div class="row">
             <div class="col" style="max-width: 200px;">
                 <div class="form-group">
@@ -137,7 +139,7 @@
         </div>
 
         <div class="section-divider"></div>
-
+        <h2>2. 申請者（使用者）・受検者情報</h2>
         <div class="form-group">
             <label>申請者（使用者）氏名又は名称</label>
             <input type="text" id="applicant_name" placeholder="山田 太郎">
@@ -148,6 +150,7 @@
         </div>
         
         <div class="section-divider"></div>
+
         <div class="form-group">
             <label>受検者 氏名又は名称</label>
             <input type="text" id="examinee_name" list="examinee_name_list" autocomplete="off" placeholder="山田 太郎">
