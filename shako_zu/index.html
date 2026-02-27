@@ -37,6 +37,14 @@
         }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; }
         .hint-bar { font-size: 12px; color: #666; margin-top: 5px; }
+        .name-input {
+            padding: 6px 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            min-width: 180px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body onmousemove="handleGlobalMouseMove(event)" onmousedown="handleGlobalMouseDown(event)" onmouseup="handleGlobalMouseUp(event)">
@@ -64,7 +72,11 @@
             <button onclick="setTool('text')" id="tool-text">文字</button>
             <button onclick="setTool('dist')" id="tool-dist" style="font-weight:bold;">距離</button>
         </div>
-        
+        <div class="group">
+            <label for="user-name">氏名</label>
+            <input type="text" id="user-name" class="name-input" placeholder="氏名を入力" />
+        </div>
+
         <button onclick="undo()">1つ戻す</button>
         <button onclick="clearCanvas()" style="color:#d9534f;">全消去</button>
         <button onclick="generateFinalPDF()" class="download-btn">完成PDF保存</button>
@@ -351,6 +363,23 @@
 
         async function generateFinalPDF() {
             try {
+                const nameInputEl = document.getElementById('user-name');
+                const rawName = nameInputEl ? nameInputEl.value.trim() : '';
+                if (!rawName) {
+                    alert('氏名を入力してください。');
+                    if (nameInputEl) {
+                        nameInputEl.focus();
+                    }
+                    return;
+                }
+
+                const safeName = rawName.replace(/[\/\\:*?"<>|]/g, '_');
+                const now = new Date();
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const dateStr = `${yyyy}${mm}${dd}`;
+
                 const bytes = await fetch(TEMPLATE_URL).then(res => res.arrayBuffer());
                 // PDF 用にはグリッドなしで一時描画したものを使用
                 const exCanvas = document.createElement('canvas');
@@ -396,7 +425,10 @@
                 const { width, height } = page.getSize();
                 page.drawImage(png, { x: width * 0.500, y: height * 0.271, width: width * 0.423, height: height * 0.555 });
                 const out = await doc.save();
-                const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([out], {type: 'application/pdf'})); link.download = "保管場所所在図・配置図_完成品.pdf"; link.click();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(new Blob([out], {type: 'application/pdf'}));
+                link.download = `${dateStr}_${safeName}_保管場所所在図.pdf`;
+                link.click();
             } catch (e) { alert(e); }
         }
 
