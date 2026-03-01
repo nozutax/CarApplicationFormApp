@@ -9,6 +9,8 @@
         .toolbar { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; align-items: flex-start; border: 1px solid #ddd; cursor: default; width: 220px; box-sizing: border-box; }
         .group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .group.group-sep { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 2px; }
+        .text-tool-section { width: 100%; padding-left: 10px; margin-left: 0; border-left: 3px solid #007bff; background: #f8f9fa; border-radius: 4px; padding-top: 6px; padding-right: 0; padding-bottom: 4px; margin-bottom: 2px; box-sizing: border-box; }
+        .text-tool-caption { font-size: 11px; color: #6c757d; margin-bottom: 6px; font-weight: bold; }
         
         #canvas-container { 
             position: relative; width: 708px; height: 681px; border: 2px solid #333; background: white; 
@@ -111,33 +113,36 @@
         </div>
 
         <div class="group">
-            <button onclick="setTool('dist')" id="tool-dist" style="font-weight:bold;">距離</button>
+            <button onclick="setTool('dist')" id="tool-dist" style="color:#d9534f;">距離</button>
         </div>
 
-        <!-- 注釈：1行ずつ -->
-        <div class="group">
-            <button onclick="setTool('text')" id="tool-text">文字</button>
-        </div>
-        <div class="group">
-            <label for="text-size">サイズ</label>
-            <select id="text-size" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
-                <option value="8">8</option>
-                <option value="10">10</option>
-                <option value="12">12</option>
-                <option value="14">14</option>
-                <option value="18">18</option>
-                <option value="24">24</option>
-                <option value="32" selected>32</option>
-            </select>
-        </div>
-        <div class="group group-sep">
-            <label for="text-line-height">行間</label>
-            <select id="text-line-height" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
-                <option value="1">1</option>
-                <option value="1.25" selected>1.25</option>
-                <option value="1.5">1.5</option>
-                <option value="2">2</option>
-            </select>
+        <!-- 文字ツールとその設定 -->
+        <div class="text-tool-section">
+            <div class="text-tool-caption">文字ツールの設定</div>
+            <div class="group">
+                <button onclick="setTool('text')" id="tool-text">文字</button>
+            </div>
+            <div class="group">
+                <label for="text-size">サイズ</label>
+                <select id="text-size" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="18">18</option>
+                    <option value="24">24</option>
+                    <option value="32" selected>32</option>
+                </select>
+            </div>
+            <div class="group group-sep">
+                <label for="text-line-height">行間</label>
+                <select id="text-line-height" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
+                    <option value="1">1</option>
+                    <option value="1.25" selected>1.25</option>
+                    <option value="1.5">1.5</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
         </div>
 
         <button onclick="undo()">1つ戻す</button>
