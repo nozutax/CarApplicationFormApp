@@ -70,6 +70,23 @@
         <!-- 注釈グループ -->
         <div class="group">
             <button onclick="setTool('text')" id="tool-text">文字</button>
+            <label for="text-size">サイズ</label>
+            <select id="text-size" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
+                <option value="8">8</option>
+                <option value="10">10</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="18">18</option>
+                <option value="24">24</option>
+                <option value="32" selected>32</option>
+            </select>
+            <label for="text-line-height">行間</label>
+            <select id="text-line-height" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
+                <option value="1">1</option>
+                <option value="1.25" selected>1.25</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2</option>
+            </select>
             <button onclick="setTool('dist')" id="tool-dist" style="font-weight:bold;">距離</button>
         </div>
         <div class="group">
@@ -97,6 +114,17 @@
             <button style="flex:1; background:#007bff; color:white;" onclick="confirmMulti('V')">縦に並べる</button>
             <button style="flex:1; background:#6c757d; color:white;" onclick="confirmMulti('H')">横に並べる</button>
             <button style="flex:1;" onclick="closeModal()">中止</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="text-modal-overlay"></div>
+    <div id="text-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:25px; border-radius:12px; box-shadow:0 5px 30px rgba(0,0,0,0.4); z-index:1001; cursor:default;">
+        <h3 style="margin-top:0">文字入力（複数行可）</h3>
+        <p style="color:#666; font-size:13px; margin-bottom:8px;">改行で複数段にできます。</p>
+        <textarea id="text-input-area" rows="5" style="width:100%; padding:10px; font-size:16px; box-sizing:border-box; border:1px solid #ccc; border-radius:6px; resize:vertical;" placeholder="1行目&#10;2行目&#10;3行目"></textarea>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+            <button style="flex:1; background:#007bff; color:white;" onclick="confirmText()">反映</button>
+            <button style="flex:1;" onclick="closeTextModal()">中止</button>
         </div>
     </div>
 
@@ -142,8 +170,10 @@
             if (drawing || hatchPoints.length > 0) redraw();
         }
 
+        let pendingTextPos = null;
+
         function handleGlobalMouseDown(e) {
-            if (e.target.closest('.toolbar') || e.target.closest('#multi-modal')) return;
+            if (e.target.closest('.toolbar') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
             
             const p = getPos(e.clientX, e.clientY);
 
@@ -162,10 +192,12 @@
             startX = p.x; startY = p.y; drawing = true;
 
             if (currentTool === 'text') {
-                const txt = prompt("文字入力:");
-                if (txt) shapes.push({type:'text', x:startX, y:startY, text:txt, color:currentColor});
+                document.getElementById('text-input-area').value = '';
+                document.getElementById('text-modal-overlay').style.display = 'block';
+                document.getElementById('text-modal').style.display = 'block';
+                document.getElementById('text-input-area').focus();
+                pendingTextPos = { x: startX, y: startY };
                 drawing = false;
-                redraw();
             }
         }
 
@@ -258,7 +290,18 @@
                         ctx.fillStyle = "white"; ctx.fillRect(mx-tw/2-6, my-15, tw+12, 30);
                         ctx.fillStyle = s.color; ctx.textAlign="center"; ctx.fillText(s.text, mx, my+9);
                     }
-                } else if(s.type==='text'){ ctx.font=FONT_SIZE_L; ctx.textAlign="left"; ctx.fillText(s.text, s.x, s.y); }
+                } else if(s.type==='text'){
+                    const fontSize = s.fontSize != null ? s.fontSize : 32;
+                    ctx.font = `bold ${fontSize}px sans-serif`;
+                    ctx.textAlign = 'left';
+                    const lineRatio = s.lineHeight != null ? s.lineHeight : 1.25;
+                    const lineHeight = fontSize * lineRatio;
+                    if (s.lines && s.lines.length > 0) {
+                        s.lines.forEach((line, i) => { ctx.fillText(line, s.x, s.y + i * lineHeight); });
+                    } else if (s.text != null) {
+                        ctx.fillText(s.text, s.x, s.y);
+                    }
+                }
 
             });
 
@@ -359,6 +402,24 @@
 
         function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; document.getElementById('multi-modal').style.display = 'none'; }
         function confirmMulti(d) { const c = parseInt(document.getElementById('multi-count').value); if(c>=2) shapes.push({type:'multi', ...tempMultiRect, count:c, dir:d}); closeModal(); redraw(); }
+
+        function closeTextModal() {
+            document.getElementById('text-modal-overlay').style.display = 'none';
+            document.getElementById('text-modal').style.display = 'none';
+            pendingTextPos = null;
+        }
+        function confirmText() {
+            if (!pendingTextPos) { closeTextModal(); return; }
+            const raw = document.getElementById('text-input-area').value;
+            if (!raw.trim()) { closeTextModal(); return; }
+            const lines = raw.split('\n').map(l => l); // 空行もそのまま
+            const fontSize = parseInt(document.getElementById('text-size').value, 10) || 32;
+            const lineHeight = parseFloat(document.getElementById('text-line-height').value) || 1.25;
+            shapes.push({ type: 'text', x: pendingTextPos.x, y: pendingTextPos.y, lines: lines, color: currentColor, fontSize: fontSize, lineHeight: lineHeight });
+            closeTextModal();
+            redraw();
+        }
+        document.getElementById('text-modal-overlay').addEventListener('click', closeTextModal);
         function undo() { shapes.pop(); hatchPoints=[]; redraw(); }
         function clearCanvas() { if(confirm("全消去しますか？")) { shapes = []; hatchPoints=[]; redraw(); } }
 
@@ -416,7 +477,18 @@
                             exCtx.fillStyle = "white"; exCtx.fillRect(mx-tw/2-6, my-15, tw+12, 30);
                             exCtx.fillStyle = s.color; exCtx.textAlign="center"; exCtx.fillText(s.text, mx, my+9);
                         }
-                    } else if(s.type==='text'){ exCtx.font=FONT_SIZE_L; exCtx.textAlign="left"; exCtx.fillText(s.text, s.x, s.y); }
+                    } else if(s.type==='text'){
+                        const fontSize = s.fontSize != null ? s.fontSize : 32;
+                        exCtx.font = `bold ${fontSize}px sans-serif`;
+                        exCtx.textAlign = 'left';
+                        const lineRatio = s.lineHeight != null ? s.lineHeight : 1.25;
+                        const lineHeight = fontSize * lineRatio;
+                        if (s.lines && s.lines.length > 0) {
+                            s.lines.forEach((line, i) => { exCtx.fillText(line, s.x, s.y + i * lineHeight); });
+                        } else if (s.text != null) {
+                            exCtx.fillText(s.text, s.x, s.y);
+                        }
+                    }
 
                 });
 
