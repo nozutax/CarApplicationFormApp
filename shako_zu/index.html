@@ -88,6 +88,7 @@
                 <option value="2">2</option>
             </select>
             <button onclick="setTool('dist')" id="tool-dist" style="font-weight:bold;">距離</button>
+            <button onclick="setTool('delete')" id="tool-delete" style="color:#d9534f;">削除</button>
         </div>
         <div class="group">
             <label for="user-name">氏名</label>
@@ -103,7 +104,7 @@
         <canvas id="draw-canvas" width="708" height="681"></canvas>
     </div>
 
-    <div class="hint-bar">Shiftキー：垂直・水平固定 | 領域外クリック：端にスナップして描画 | 斜線：クリックで点追加、ダブルクリックで完了 | ダブルクリック：図形・文字を削除</div>
+    <div class="hint-bar">Shiftキー：垂直・水平固定 | 領域外クリック：端にスナップして描画 | 斜線：クリックで点追加、ダブルクリックで完了 | 削除：ツールで選択してクリックで図形・文字を削除</div>
 
     <div class="modal-overlay" id="modal-overlay"></div>
     <div id="multi-modal">
@@ -176,6 +177,15 @@
             if (e.target.closest('.toolbar') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
             
             const p = getPos(e.clientX, e.clientY);
+
+            if (currentTool === 'delete') {
+                const idx = getShapeIndexAt(p.x, p.y);
+                if (idx >= 0) {
+                    shapes.splice(idx, 1);
+                    redraw();
+                }
+                return;
+            }
 
             if (currentTool === 'hatch') {
                 hatchPoints.push(p);
@@ -281,19 +291,7 @@
 
         window.addEventListener('dblclick', (e) => {
             if (e.target.closest('.toolbar') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
-            if (currentTool === 'hatch' && hatchPoints.length > 2) {
-                finishHatch();
-                return;
-            }
-            const inCanvas = e.target === canvas || (e.target.id === 'canvas-container');
-            if (inCanvas) {
-                const p = getPos(e.clientX, e.clientY);
-                const idx = getShapeIndexAt(p.x, p.y);
-                if (idx >= 0) {
-                    shapes.splice(idx, 1);
-                    redraw();
-                }
-            }
+            if (currentTool === 'hatch' && hatchPoints.length > 2) finishHatch();
         });
 
         function finishHatch() {
