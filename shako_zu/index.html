@@ -258,7 +258,16 @@
                         ctx.fillStyle = "white"; ctx.fillRect(mx-tw/2-6, my-15, tw+12, 30);
                         ctx.fillStyle = s.color; ctx.textAlign="center"; ctx.fillText(s.text, mx, my+9);
                     }
-                } else if(s.type==='text'){ ctx.font=FONT_SIZE_L; ctx.textAlign="left"; ctx.fillText(s.text, s.x, s.y); }
+                } else if(s.type==='text'){ 
+    ctx.font = FONT_SIZE_L; 
+    ctx.textAlign = "left"; 
+    // 改行コードで分割してループ処理
+    const lines = s.text.split(/\r\n|\r|\n/);
+    const lineHeight = 35; // 行の高さ（フォントサイズに合わせて調整）
+    lines.forEach((line, i) => {
+        ctx.fillText(line, s.x, s.y + (i * lineHeight));
+    });
+}
             });
 
             if (drawing) {
@@ -415,7 +424,15 @@
                             exCtx.fillStyle = "white"; exCtx.fillRect(mx-tw/2-6, my-15, tw+12, 30);
                             exCtx.fillStyle = s.color; exCtx.textAlign="center"; exCtx.fillText(s.text, mx, my+9);
                         }
-                    } else if(s.type==='text'){ exCtx.font=FONT_SIZE_L; exCtx.textAlign="left"; exCtx.fillText(s.text, s.x, s.y); }
+                    } else if(s.type==='text'){ 
+    exCtx.font = FONT_SIZE_L; 
+    exCtx.textAlign = "left"; 
+    const lines = s.text.split(/\r\n|\r|\n/);
+    const lineHeight = 35; 
+    lines.forEach((line, i) => {
+        exCtx.fillText(line, s.x, s.y + (i * lineHeight));
+    });
+}
                 });
 
                 const img = await fetch(exCanvas.toDataURL()).then(res => res.arrayBuffer());
