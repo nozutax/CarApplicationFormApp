@@ -96,17 +96,25 @@
             <button class="color-btn" id="col-red" style="background: #ff0000;" onclick="setColor('#ff0000')"></button>
         </div>
         
-        <!-- 図形グループ -->
+        <!-- 図形：1行ずつ -->
         <div class="group">
             <button onclick="setTool('rect')" id="tool-rect" class="active">長方形</button>
+        </div>
+        <div class="group">
             <button onclick="setTool('multi')" id="tool-multi">複数線</button>
+        </div>
+        <div class="group">
             <button onclick="setTool('line')" id="tool-line">直線</button>
+        </div>
+        <div class="group">
             <button onclick="setTool('hatch')" id="tool-hatch">斜線</button>
         </div>
 
-        <!-- 注釈グループ -->
+        <!-- 注釈：1行ずつ -->
         <div class="group">
             <button onclick="setTool('text')" id="tool-text">文字</button>
+        </div>
+        <div class="group">
             <label for="text-size">サイズ</label>
             <select id="text-size" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
                 <option value="8">8</option>
@@ -117,6 +125,8 @@
                 <option value="24">24</option>
                 <option value="32" selected>32</option>
             </select>
+        </div>
+        <div class="group">
             <label for="text-line-height">行間</label>
             <select id="text-line-height" style="padding:6px 8px; font-size:14px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
                 <option value="1">1</option>
@@ -124,6 +134,8 @@
                 <option value="1.5">1.5</option>
                 <option value="2">2</option>
             </select>
+        </div>
+        <div class="group">
             <button onclick="setTool('dist')" id="tool-dist" style="font-weight:bold;">距離</button>
         </div>
 
