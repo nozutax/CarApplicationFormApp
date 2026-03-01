@@ -10,6 +10,7 @@
         .group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .group.group-sep { border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 0; }
         .text-tool-section { width: 100%; padding-left: 8px; padding-top: 4px; padding-right: 0; padding-bottom: 4px; margin-bottom: 0; border-left: 3px solid #007bff; background: #f8f9fa; border-radius: 4px; box-sizing: border-box; }
+        .text-tool-section label, .text-tool-section select { font-size: 10px; }
         .toolbar .toolbar-btn { width: 100%; min-width: 0; box-sizing: border-box; }
         
         #canvas-container { 
@@ -126,7 +127,7 @@
             </div>
             <div class="group">
                 <label for="text-size">サイズ</label>
-                <select id="text-size" style="padding:6px 8px; font-size:12px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
+                <select id="text-size" style="padding:4px 6px; font-size:10px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
                     <option value="8">8</option>
                     <option value="10">10</option>
                     <option value="12">12</option>
@@ -138,7 +139,7 @@
             </div>
             <div class="group group-sep">
                 <label for="text-line-height">行間</label>
-                <select id="text-line-height" style="padding:6px 8px; font-size:12px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
+                <select id="text-line-height" style="padding:4px 6px; font-size:10px; border-radius:4px; border:1px solid #ccc; cursor:pointer;">
                     <option value="1">1</option>
                     <option value="1.25" selected>1.25</option>
                     <option value="1.5">1.5</option>
