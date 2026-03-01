@@ -98,6 +98,9 @@
             <button class="color-btn" id="col-red" style="background: #ff0000;" onclick="setColor('#ff0000')"></button>
         </div>
         
+        <div class="group">
+            <button onclick="setTool('select')" id="tool-select" class="toolbar-btn">選択</button>
+        </div>
         <!-- 図形：1行ずつ -->
         <div class="group">
             <button onclick="setTool('rect')" id="tool-rect" class="active toolbar-btn">長方形</button>
@@ -155,7 +158,7 @@
     </div>
     </div>
 
-    <div class="hint-bar">Shiftキー：垂直・水平固定 | 領域外クリック：端にスナップして描画 | 斜線：クリックで点追加、ダブルクリックで完了 | 削除：ツールで選択してクリックで図形・文字を削除</div>
+    <div class="hint-bar">Shiftキー：垂直・水平固定 | 領域外クリック：端にスナップして描画 | 斜線：クリックで点追加、ダブルクリックで完了 | 選択：ドラッグで図形・文字を移動 | 削除：ツールで選択してクリックで図形・文字を削除</div>
 
     <div class="modal-overlay" id="modal-overlay"></div>
     <div id="multi-modal">
@@ -193,6 +196,7 @@
         let hatchPoints = []; 
         let lastMouseX = 0, lastMouseY = 0; 
         let tempMultiRect = null; 
+        let draggingShapeIndex = -1, dragStartX = 0, dragStartY = 0;
 
         const FONT_SIZE_L = "bold 32px sans-serif";
         const FONT_SIZE_S = "bold 20px sans-serif"; 
@@ -220,6 +224,13 @@
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
             if (drawing || hatchPoints.length > 0) redraw();
+            if (draggingShapeIndex >= 0) {
+                const p = getPos(lastMouseX, lastMouseY);
+                const dx = p.x - dragStartX, dy = p.y - dragStartY;
+                applyDragMove(draggingShapeIndex, dx, dy);
+                dragStartX = p.x; dragStartY = p.y;
+                redraw();
+            }
         }
 
         let pendingTextPos = null;
@@ -234,6 +245,15 @@
                 if (idx >= 0) {
                     shapes.splice(idx, 1);
                     redraw();
+                }
+                return;
+            }
+
+            if (currentTool === 'select') {
+                const idx = getShapeIndexAt(p.x, p.y);
+                if (idx >= 0) {
+                    draggingShapeIndex = idx;
+                    dragStartX = p.x; dragStartY = p.y;
                 }
                 return;
             }
@@ -263,6 +283,10 @@
         }
 
         function handleGlobalMouseUp(e) {
+            if (currentTool === 'select' && draggingShapeIndex >= 0) {
+                draggingShapeIndex = -1;
+                return;
+            }
             if (!drawing || currentTool === 'hatch') return;
             
             const p = getPos(e.clientX, e.clientY);
@@ -338,6 +362,18 @@
                 }
             }
             return -1;
+        }
+
+        function applyDragMove(idx, dx, dy) {
+            const s = shapes[idx];
+            if (!s) return;
+            if (s.type === 'rect' || s.type === 'line' || s.type === 'multi' || s.type === 'dist') {
+                s.x1 += dx; s.y1 += dy; s.x2 += dx; s.y2 += dy;
+            } else if (s.type === 'hatch' && s.points) {
+                s.points.forEach(pt => { pt.x += dx; pt.y += dy; });
+            } else if (s.type === 'text') {
+                s.x += dx; s.y += dy;
+            }
         }
 
         window.addEventListener('dblclick', (e) => {
@@ -501,11 +537,12 @@
             document.querySelectorAll('.color-btn').forEach(b => b.classList.toggle('active', b.style.backgroundColor.rgb === c || (c==='#000000' && b.id==='col-black') || (c==='#ff0000' && b.id==='col-red'))); 
         }
 
-        function setTool(t) { 
-            currentTool = t; 
-            hatchPoints = []; 
-            drawing = false; 
-            
+        function setTool(t) {
+            currentTool = t;
+            hatchPoints = [];
+            drawing = false;
+            draggingShapeIndex = -1;
+
             // 色の自動切り替え
             if (t === 'hatch' || t === 'dist') {
                 setColor('#ff0000');
