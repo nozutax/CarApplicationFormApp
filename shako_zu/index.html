@@ -6,9 +6,9 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <style>
         body { font-family: 'Helvetica Neue', Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background: #f4f7f6; margin: 0; padding: 20px; cursor: none; }
-        .toolbar { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; border: 1px solid #ddd; cursor: default; }
-        .group { display: flex; align-items: center; gap: 8px; border-right: 1px solid #eee; padding-right: 12px; margin-right: 5px; }
-        .group:last-child { border-right: none; }
+        .toolbar { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; align-items: flex-start; border: 1px solid #ddd; cursor: default; width: 220px; box-sizing: border-box; }
+        .group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 2px; }
+        .group:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         
         #canvas-container { 
             position: relative; width: 708px; height: 681px; border: 2px solid #333; background: white; 
@@ -36,7 +36,7 @@
             background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 30px rgba(0,0,0,0.4); z-index: 1000; cursor: default;
         }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; }
-        .hint-bar { font-size: 12px; color: #666; margin-top: 5px; }
+        .hint-bar { font-size: 12px; color: #666; margin-top: 5px; width: 943px; box-sizing: border-box; }
         .name-input {
             padding: 6px 8px;
             font-size: 14px;
@@ -59,14 +59,19 @@
             gap: 12px;
         }
         .header-toolbar-wrap {
-            width: 708px;
+            width: 943px;
             display: flex;
             flex-direction: column;
             align-items: stretch;
         }
         .header-toolbar-wrap .toolbar {
-            width: 100%;
-            box-sizing: border-box;
+            width: 220px;
+        }
+        .toolbar-canvas-row {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 15px;
         }
     </style>
 </head>
@@ -84,6 +89,7 @@
             </div>
         </div>
 
+        <div class="toolbar-canvas-row">
         <div class="toolbar">
         <div class="group">
             <button class="color-btn active" id="col-black" style="background: #000;" onclick="setColor('#000000')"></button>
@@ -125,10 +131,11 @@
         <button onclick="setTool('delete')" id="tool-delete" style="color:#d9534f;">選択削除</button>
         <button onclick="clearCanvas()" style="color:#d9534f;">全消去</button>
     </div>
-    </div>
 
     <div id="canvas-container">
         <canvas id="draw-canvas" width="708" height="681"></canvas>
+    </div>
+    </div>
     </div>
 
     <div class="hint-bar">Shiftキー：垂直・水平固定 | 領域外クリック：端にスナップして描画 | 斜線：クリックで点追加、ダブルクリックで完了 | 削除：ツールで選択してクリックで図形・文字を削除</div>
