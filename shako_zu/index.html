@@ -107,7 +107,7 @@
             <button onclick="setTool('line')" id="tool-line">直線</button>
         </div>
         <div class="group group-sep">
-            <button onclick="setTool('hatch')" id="tool-hatch">斜線</button>
+            <button onclick="setTool('hatch')" id="tool-hatch" style="color:#d9534f;">網掛け</button>
         </div>
 
         <div class="group">
@@ -221,7 +221,7 @@
         let pendingTextPos = null;
 
         function handleGlobalMouseDown(e) {
-            if (e.target.closest('.toolbar') || e.target.closest('.title-row') || e.target.closest('.header-toolbar-wrap') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
+            if (e.target.closest('.toolbar') || e.target.closest('.title-row') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
             
             const p = getPos(e.clientX, e.clientY);
 
@@ -337,7 +337,7 @@
         }
 
         window.addEventListener('dblclick', (e) => {
-            if (e.target.closest('.toolbar') || e.target.closest('.title-row') || e.target.closest('.header-toolbar-wrap') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
+            if (e.target.closest('.toolbar') || e.target.closest('.title-row') || e.target.closest('#multi-modal') || e.target.closest('#text-modal')) return;
             if (currentTool === 'hatch' && hatchPoints.length > 2) finishHatch();
         });
 
